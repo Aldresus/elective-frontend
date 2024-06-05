@@ -15,6 +15,7 @@ function UserLayout() {
       <Navbar className="fixed top-0 left-0 w-full" />
       <div className="bg-red-50 mt-[50px] p-9 w-[1280px] mx-auto">
         <LoginBanner
+          className="mb-6"
           hidden={!isLoggedIn}
           onclose={() => setIsLoggedIn(false)}
         />

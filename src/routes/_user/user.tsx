@@ -1,7 +1,9 @@
+import FilterButton from "@/components/common/filterButton";
 import { RestaurantCard } from "@/components/common/restaurantCard";
-import { H1, H2 } from "@/components/typography";
+import { H2 } from "@/components/typography";
 import { Separator } from "@/components/ui/separator";
 import { createFileRoute } from "@tanstack/react-router";
+import { Beer, IceCreamBowl, Pizza, Sandwich, Vegan } from "lucide-react";
 
 export const Route = createFileRoute("/_user/user")({
   component: UserComponent,
@@ -10,6 +12,38 @@ export const Route = createFileRoute("/_user/user")({
 function UserComponent() {
   return (
     <div className="flex flex-col gap-6 w-full">
+      <div className="w-full flex justify-center gap-9">
+        <FilterButton>
+          <Pizza size={35} />
+        </FilterButton>
+        <FilterButton>
+          <IceCreamBowl size={35} />
+        </FilterButton>
+        <FilterButton>
+          <Beer size={35} />
+        </FilterButton>
+        <FilterButton>
+          <Sandwich size={35} />
+        </FilterButton>
+        <FilterButton>
+          <Vegan size={35} />
+        </FilterButton>
+        <FilterButton>
+          <Pizza size={35} />
+        </FilterButton>
+        <FilterButton>
+          <IceCreamBowl size={35} />
+        </FilterButton>
+        <FilterButton>
+          <Beer size={35} />
+        </FilterButton>
+        <FilterButton>
+          <Sandwich size={35} />
+        </FilterButton>
+        <FilterButton>
+          <Vegan size={35} />
+        </FilterButton>
+      </div>
       <div>
         <H2>En ce moment</H2>
         <div className="flex justify-between w-full gap-6">
