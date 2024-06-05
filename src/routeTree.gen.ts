@@ -12,14 +12,22 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as UserImport } from './routes/_user'
+import { Route as LoginImport } from './routes/_login'
 import { Route as IndexImport } from './routes/index'
 import { Route as ComponentsIndexImport } from './routes/components/index'
 import { Route as UserUserImport } from './routes/_user/user'
+import { Route as LoginSignupImport } from './routes/_login/signup'
+import { Route as LoginLoginImport } from './routes/_login/login'
 
 // Create/Update Routes
 
 const UserRoute = UserImport.update({
   id: '/_user',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoginRoute = LoginImport.update({
+  id: '/_login',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -38,6 +46,16 @@ const UserUserRoute = UserUserImport.update({
   getParentRoute: () => UserRoute,
 } as any)
 
+const LoginSignupRoute = LoginSignupImport.update({
+  path: '/signup',
+  getParentRoute: () => LoginRoute,
+} as any)
+
+const LoginLoginRoute = LoginLoginImport.update({
+  path: '/login',
+  getParentRoute: () => LoginRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -49,12 +67,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/_login': {
+      id: '/_login'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
     '/_user': {
       id: '/_user'
       path: ''
       fullPath: ''
       preLoaderRoute: typeof UserImport
       parentRoute: typeof rootRoute
+    }
+    '/_login/login': {
+      id: '/_login/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginLoginImport
+      parentRoute: typeof LoginImport
+    }
+    '/_login/signup': {
+      id: '/_login/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof LoginSignupImport
+      parentRoute: typeof LoginImport
     }
     '/_user/user': {
       id: '/_user/user'
@@ -77,6 +116,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
+  LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
   UserRoute: UserRoute.addChildren({ UserUserRoute }),
   ComponentsIndexRoute,
 })
@@ -90,6 +130,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/_login",
         "/_user",
         "/components/"
       ]
@@ -97,11 +138,26 @@ export const routeTree = rootRoute.addChildren({
     "/": {
       "filePath": "index.tsx"
     },
+    "/_login": {
+      "filePath": "_login.tsx",
+      "children": [
+        "/_login/login",
+        "/_login/signup"
+      ]
+    },
     "/_user": {
       "filePath": "_user.tsx",
       "children": [
         "/_user/user"
       ]
+    },
+    "/_login/login": {
+      "filePath": "_login/login.tsx",
+      "parent": "/_login"
+    },
+    "/_login/signup": {
+      "filePath": "_login/signup.tsx",
+      "parent": "/_login"
     },
     "/_user/user": {
       "filePath": "_user/user.tsx",

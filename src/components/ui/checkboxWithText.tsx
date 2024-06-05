@@ -5,18 +5,20 @@ interface CheckboxWithTextProps {
   label: string;
   description?: string;
   id?: string;
+  onCheckedChange: (checked: boolean) => void;
 }
 
 export function CheckboxWithText({
   label,
   id,
   description,
+  onCheckedChange,
 }: CheckboxWithTextProps) {
   id = id || idInator(label);
 
   return (
-    <div className="items-top flex space-x-2">
-      <Checkbox id={id} />
+    <div className="flex items-center space-x-2">
+      <Checkbox id={id} onCheckedChange={onCheckedChange} />
       <div className="grid gap-1.5 leading-none">
         <label
           htmlFor={id}
