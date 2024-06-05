@@ -1,22 +1,10 @@
 import { cn } from "@/lib/utils";
 
-interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
-  children: string;
-}
-
-interface BlockquoteProps extends React.HTMLAttributes<HTMLQuoteElement> {
-  children: string;
-}
-
-interface UlProps extends React.HTMLAttributes<HTMLUListElement> {
-  children: string;
-}
-
-interface LiProps extends React.HTMLAttributes<HTMLLIElement> {
-  children: string;
-}
-
-function H1({ children, className, ...props }: HeadingProps) {
+function H1({
+  children,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h1
       className={cn(
@@ -30,7 +18,11 @@ function H1({ children, className, ...props }: HeadingProps) {
   );
 }
 
-function H2({ children, className, ...props }: HeadingProps) {
+function H2({
+  children,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h2
       className={cn(
@@ -44,7 +36,11 @@ function H2({ children, className, ...props }: HeadingProps) {
   );
 }
 
-function H3({ children, className, ...props }: HeadingProps) {
+function H3({
+  children,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3
       className={cn(
@@ -58,7 +54,11 @@ function H3({ children, className, ...props }: HeadingProps) {
   );
 }
 
-function H4({ children, className, ...props }: HeadingProps) {
+function H4({
+  children,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h4
       className={cn(
@@ -72,7 +72,11 @@ function H4({ children, className, ...props }: HeadingProps) {
   );
 }
 
-function Blockquote({ children, className, ...props }: BlockquoteProps) {
+function Blockquote({
+  children,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLQuoteElement>) {
   return (
     <blockquote
       className={cn("mt-6 border-l-2 pl-6 italic", className)}
@@ -83,7 +87,11 @@ function Blockquote({ children, className, ...props }: BlockquoteProps) {
   );
 }
 
-function Ul({ children, className, ...props }: UlProps) {
+function Ul({
+  children,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLUListElement>) {
   return (
     <ul className={cn("my-6 ml-6 list-disc [&>li]:mt-2", className)} {...props}>
       {children}
@@ -91,8 +99,14 @@ function Ul({ children, className, ...props }: UlProps) {
   );
 }
 
-function Li({ children, ...props }: LiProps) {
+function Li({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) {
   return <li {...props}>{children}</li>;
 }
 
-export { H1, H2, H3, H4, Blockquote, Ul, Li };
+function Large({ children, className }: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("text-lg font-semibold", className)}>{children}</div>
+  );
+}
+
+export { H1, H2, H3, H4, Blockquote, Ul, Li, Large };
