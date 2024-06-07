@@ -18,7 +18,7 @@ function homeDeliveryLayout() {
       <Separator className="w-full" />
       <div className="h-full overflow-hidden">
         <H2>Choix d'une livraison</H2>
-        <div className="h-full space-y-2 pb-32 overflow-auto">
+        <div className="h-full space-y-4 pb-32 overflow-auto">
           <DeliveryChoice />
           <DeliveryChoice />
           <DeliveryChoice />
