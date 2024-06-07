@@ -13,11 +13,13 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as UserImport } from './routes/_user'
 import { Route as LoginImport } from './routes/_login'
+import { Route as DeliveryImport } from './routes/_delivery'
 import { Route as IndexImport } from './routes/index'
 import { Route as ComponentsIndexImport } from './routes/components/index'
 import { Route as UserUserImport } from './routes/_user/user'
 import { Route as LoginSignupImport } from './routes/_login/signup'
 import { Route as LoginLoginImport } from './routes/_login/login'
+import { Route as DeliveryDeliveryImport } from './routes/_delivery/delivery'
 
 // Create/Update Routes
 
@@ -28,6 +30,11 @@ const UserRoute = UserImport.update({
 
 const LoginRoute = LoginImport.update({
   id: '/_login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DeliveryRoute = DeliveryImport.update({
+  id: '/_delivery',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -56,6 +63,11 @@ const LoginLoginRoute = LoginLoginImport.update({
   getParentRoute: () => LoginRoute,
 } as any)
 
+const DeliveryDeliveryRoute = DeliveryDeliveryImport.update({
+  path: '/delivery',
+  getParentRoute: () => DeliveryRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -65,6 +77,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/_delivery': {
+      id: '/_delivery'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof DeliveryImport
       parentRoute: typeof rootRoute
     }
     '/_login': {
@@ -80,6 +99,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof UserImport
       parentRoute: typeof rootRoute
+    }
+    '/_delivery/delivery': {
+      id: '/_delivery/delivery'
+      path: '/delivery'
+      fullPath: '/delivery'
+      preLoaderRoute: typeof DeliveryDeliveryImport
+      parentRoute: typeof DeliveryImport
     }
     '/_login/login': {
       id: '/_login/login'
@@ -116,6 +142,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
+  DeliveryRoute: DeliveryRoute.addChildren({ DeliveryDeliveryRoute }),
   LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
   UserRoute: UserRoute.addChildren({ UserUserRoute }),
   ComponentsIndexRoute,
@@ -130,6 +157,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/_delivery",
         "/_login",
         "/_user",
         "/components/"
@@ -137,6 +165,12 @@ export const routeTree = rootRoute.addChildren({
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/_delivery": {
+      "filePath": "_delivery.tsx",
+      "children": [
+        "/_delivery/delivery"
+      ]
     },
     "/_login": {
       "filePath": "_login.tsx",
@@ -150,6 +184,10 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/_user/user"
       ]
+    },
+    "/_delivery/delivery": {
+      "filePath": "_delivery/delivery.tsx",
+      "parent": "/_delivery"
     },
     "/_login/login": {
       "filePath": "_login/login.tsx",
