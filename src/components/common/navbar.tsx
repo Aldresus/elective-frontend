@@ -4,9 +4,15 @@ import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 
-interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
+  isAdress?: boolean;
+}
 
-export default function Navbar({ className, ...props }: NavbarProps) {
+export default function Navbar({
+  isAdress = true,
+  className,
+  ...props
+}: NavbarProps) {
   return (
     <div
       className={cn(
@@ -18,7 +24,7 @@ export default function Navbar({ className, ...props }: NavbarProps) {
       <Link to="/" className="h-full">
         <Logo />
       </Link>
-      <div>l'adresse tmtc V</div>
+      {isAdress && <div>l'adresse tmtc V</div>}
       <Input className="w-full max-w-xs" placeholder="Rechercher" />
       <div className="flex items-center gap-2">
         jsp qui est ce texte
