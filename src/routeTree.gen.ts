@@ -20,6 +20,7 @@ import { Route as UserUserImport } from './routes/_user/user'
 import { Route as LoginSignupImport } from './routes/_login/signup'
 import { Route as LoginLoginImport } from './routes/_login/login'
 import { Route as DeliveryDeliveryImport } from './routes/_delivery/delivery'
+import { Route as DeliveryDeliveriesImport } from './routes/_delivery/deliveries'
 
 // Create/Update Routes
 
@@ -68,6 +69,11 @@ const DeliveryDeliveryRoute = DeliveryDeliveryImport.update({
   getParentRoute: () => DeliveryRoute,
 } as any)
 
+const DeliveryDeliveriesRoute = DeliveryDeliveriesImport.update({
+  path: '/deliveries',
+  getParentRoute: () => DeliveryRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -99,6 +105,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof UserImport
       parentRoute: typeof rootRoute
+    }
+    '/_delivery/deliveries': {
+      id: '/_delivery/deliveries'
+      path: '/deliveries'
+      fullPath: '/deliveries'
+      preLoaderRoute: typeof DeliveryDeliveriesImport
+      parentRoute: typeof DeliveryImport
     }
     '/_delivery/delivery': {
       id: '/_delivery/delivery'
@@ -142,7 +155,10 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  DeliveryRoute: DeliveryRoute.addChildren({ DeliveryDeliveryRoute }),
+  DeliveryRoute: DeliveryRoute.addChildren({
+    DeliveryDeliveriesRoute,
+    DeliveryDeliveryRoute,
+  }),
   LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
   UserRoute: UserRoute.addChildren({ UserUserRoute }),
   ComponentsIndexRoute,
@@ -169,6 +185,7 @@ export const routeTree = rootRoute.addChildren({
     "/_delivery": {
       "filePath": "_delivery.tsx",
       "children": [
+        "/_delivery/deliveries",
         "/_delivery/delivery"
       ]
     },
@@ -184,6 +201,10 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/_user/user"
       ]
+    },
+    "/_delivery/deliveries": {
+      "filePath": "_delivery/deliveries.tsx",
+      "parent": "/_delivery"
     },
     "/_delivery/delivery": {
       "filePath": "_delivery/delivery.tsx",
