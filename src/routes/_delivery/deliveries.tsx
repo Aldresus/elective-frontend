@@ -5,10 +5,10 @@ import { Separator } from "@/components/ui/separator";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_delivery/deliveries")({
-  component: deliveries,
+  component: Deliveries,
 });
 
-function deliveries() {
+function Deliveries() {
   return (
     <div className="flex flex-col mx-auto h-full pb-0 gap-2">
       <div className="flex flex-col justify-center min-h-[40vh] w-full">
