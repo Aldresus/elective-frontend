@@ -3,8 +3,15 @@ import { H1, H2, Large } from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { createFileRoute } from "@tanstack/react-router";
-import { QrCode } from "lucide-react";
-import { Dispatch, SetStateAction, createContext, useState } from "react";
+import { QrCode, X } from "lucide-react";
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import ReactModal from "react-modal";
 
 export const Route = createFileRoute("/_delivery/delivery")({
@@ -24,6 +31,10 @@ const DeliveriesContext = createContext<IDeliveriesContext>({
 function Delivery() {
   const [modalIsOpen, setIsOpen] = useState(false);
 
+  const videoRef = useRef(null);
+
+  //const [data, setData] = useState("No Result");
+
   function openModal() {
     setIsOpen(true);
   }
@@ -32,12 +43,29 @@ function Delivery() {
     setIsOpen(false);
   }
 
+  useEffect(() => {
+    async function getVideo() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    getVideo();
+  }, []);
+
   return (
     <DeliveriesContext.Provider value={{ modalIsOpen, setIsOpen }}>
       <div className="flex flex-col mx-auto h-full pb-0 gap-2">
         <div className="flex flex-col justify-center min-h-[40vh] w-full">
           <H1 className="mb-2">Detail livraison</H1>
-          <Map x={48.560679} y={7.694228} />
+          <Map x={48.560679} y={7.694228} className="z-0" />
         </div>
         <Separator className="w-full" />
         <div className="w-full flex justify-between items-center">
@@ -63,8 +91,20 @@ function Delivery() {
             isOpen={modalIsOpen}
             onRequestClose={closeModal}
             contentLabel="QR code scanner"
+            ariaHideApp={false}
           >
-            <H1>QR code scanner</H1>
+            <div className="flex w-full justify-end">
+              <X className="flex" onClick={closeModal} />
+            </div>
+            <Large>Scanner le QR Code du client</Large>
+            <div className="w-full h-[400px]">
+              <video
+                ref={videoRef}
+                muted
+                autoPlay
+                className="w-full h-full"
+              ></video>
+            </div>
           </ReactModal>
         </div>
       </div>
