@@ -12,11 +12,13 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as UserImport } from './routes/_user'
+import { Route as RestaurantImport } from './routes/_restaurant'
 import { Route as LoginImport } from './routes/_login'
 import { Route as DeliveryImport } from './routes/_delivery'
 import { Route as IndexImport } from './routes/index'
 import { Route as ComponentsIndexImport } from './routes/components/index'
 import { Route as UserUserImport } from './routes/_user/user'
+import { Route as RestaurantRestaurantImport } from './routes/_restaurant/restaurant'
 import { Route as LoginSignupImport } from './routes/_login/signup'
 import { Route as LoginLoginImport } from './routes/_login/login'
 import { Route as DeliveryDeliveryImport } from './routes/_delivery/delivery'
@@ -27,6 +29,11 @@ import { Route as DeliveryDeliveriesImport } from './routes/_delivery/deliveries
 
 const UserRoute = UserImport.update({
   id: '/_user',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RestaurantRoute = RestaurantImport.update({
+  id: '/_restaurant',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,6 +60,11 @@ const ComponentsIndexRoute = ComponentsIndexImport.update({
 const UserUserRoute = UserUserImport.update({
   path: '/user',
   getParentRoute: () => UserRoute,
+} as any)
+
+const RestaurantRestaurantRoute = RestaurantRestaurantImport.update({
+  path: '/restaurant',
+  getParentRoute: () => RestaurantRoute,
 } as any)
 
 const LoginSignupRoute = LoginSignupImport.update({
@@ -105,6 +117,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/_restaurant': {
+      id: '/_restaurant'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof RestaurantImport
+      parentRoute: typeof rootRoute
+    }
     '/_user': {
       id: '/_user'
       path: ''
@@ -147,6 +166,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginSignupImport
       parentRoute: typeof LoginImport
     }
+    '/_restaurant/restaurant': {
+      id: '/_restaurant/restaurant'
+      path: '/restaurant'
+      fullPath: '/restaurant'
+      preLoaderRoute: typeof RestaurantRestaurantImport
+      parentRoute: typeof RestaurantImport
+    }
     '/_user/user': {
       id: '/_user/user'
       path: '/user'
@@ -174,6 +200,7 @@ export const routeTree = rootRoute.addChildren({
     DeliveryDeliveryRoute,
   }),
   LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
+  RestaurantRoute: RestaurantRoute.addChildren({ RestaurantRestaurantRoute }),
   UserRoute: UserRoute.addChildren({ UserUserRoute }),
   ComponentsIndexRoute,
 })
@@ -189,6 +216,7 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/_delivery",
         "/_login",
+        "/_restaurant",
         "/_user",
         "/components/"
       ]
@@ -209,6 +237,12 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/_login/login",
         "/_login/signup"
+      ]
+    },
+    "/_restaurant": {
+      "filePath": "_restaurant.tsx",
+      "children": [
+        "/_restaurant/restaurant"
       ]
     },
     "/_user": {
@@ -236,6 +270,10 @@ export const routeTree = rootRoute.addChildren({
     "/_login/signup": {
       "filePath": "_login/signup.tsx",
       "parent": "/_login"
+    },
+    "/_restaurant/restaurant": {
+      "filePath": "_restaurant/restaurant.tsx",
+      "parent": "/_restaurant"
     },
     "/_user/user": {
       "filePath": "_user/user.tsx",
