@@ -14,6 +14,7 @@ import {
   useState,
 } from "react";
 import ReactModal from "react-modal";
+import QrScanner from "qr-scanner";
 
 export const Route = createFileRoute("/_delivery/delivery")({
   component: Delivery,
@@ -31,11 +32,13 @@ const DeliveriesContext = createContext<IDeliveriesContext>({
 
 function Delivery() {
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [qrCodeData, setQrCodeData] = useState<string | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(
     null
   ) as MutableRefObject<MediaStream | null>;
+  const qrScannerRef = useRef<QrScanner | null>(null);
 
   //const [data, setData] = useState("No Result");
 
@@ -55,6 +58,17 @@ function Delivery() {
         });
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+          qrScannerRef.current = new QrScanner(
+            videoRef.current,
+            (result) => {
+              setQrCodeData(result.data);
+            },
+            {
+              highlightScanRegion: true,
+              highlightCodeOutline: true,
+            }
+          );
+          qrScannerRef.current.start();
         }
         streamRef.current = stream;
       } catch (err) {
@@ -69,6 +83,11 @@ function Delivery() {
       if (videoRef.current) {
         videoRef.current.srcObject = null;
       }
+      if (qrScannerRef.current) {
+        qrScannerRef.current.stop();
+        qrScannerRef.current.destroy();
+        qrScannerRef.current = null;
+      }
       streamRef.current = null;
     }
 
@@ -77,6 +96,11 @@ function Delivery() {
         streamRef.current.getTracks().forEach((track) => track.stop());
         if (videoRef.current) {
           videoRef.current.srcObject = null;
+        }
+        if (qrScannerRef.current) {
+          qrScannerRef.current.stop();
+          qrScannerRef.current.destroy();
+          qrScannerRef.current = null;
         }
         streamRef.current = null;
       }
@@ -128,6 +152,7 @@ function Delivery() {
                 className="w-full h-full"
               ></video>
             </div>
+            <p>{qrCodeData}</p>
           </ReactModal>
         </div>
       </div>
