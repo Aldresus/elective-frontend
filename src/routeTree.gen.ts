@@ -20,6 +20,7 @@ import { Route as UserUserImport } from './routes/_user/user'
 import { Route as LoginSignupImport } from './routes/_login/signup'
 import { Route as LoginLoginImport } from './routes/_login/login'
 import { Route as DeliveryDeliveryImport } from './routes/_delivery/delivery'
+import { Route as DeliveryDeliveriesHistoryImport } from './routes/_delivery/deliveries-history'
 import { Route as DeliveryDeliveriesImport } from './routes/_delivery/deliveries'
 
 // Create/Update Routes
@@ -69,6 +70,11 @@ const DeliveryDeliveryRoute = DeliveryDeliveryImport.update({
   getParentRoute: () => DeliveryRoute,
 } as any)
 
+const DeliveryDeliveriesHistoryRoute = DeliveryDeliveriesHistoryImport.update({
+  path: '/deliveries-history',
+  getParentRoute: () => DeliveryRoute,
+} as any)
+
 const DeliveryDeliveriesRoute = DeliveryDeliveriesImport.update({
   path: '/deliveries',
   getParentRoute: () => DeliveryRoute,
@@ -111,6 +117,13 @@ declare module '@tanstack/react-router' {
       path: '/deliveries'
       fullPath: '/deliveries'
       preLoaderRoute: typeof DeliveryDeliveriesImport
+      parentRoute: typeof DeliveryImport
+    }
+    '/_delivery/deliveries-history': {
+      id: '/_delivery/deliveries-history'
+      path: '/deliveries-history'
+      fullPath: '/deliveries-history'
+      preLoaderRoute: typeof DeliveryDeliveriesHistoryImport
       parentRoute: typeof DeliveryImport
     }
     '/_delivery/delivery': {
@@ -157,6 +170,7 @@ export const routeTree = rootRoute.addChildren({
   IndexRoute,
   DeliveryRoute: DeliveryRoute.addChildren({
     DeliveryDeliveriesRoute,
+    DeliveryDeliveriesHistoryRoute,
     DeliveryDeliveryRoute,
   }),
   LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
@@ -186,6 +200,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_delivery.tsx",
       "children": [
         "/_delivery/deliveries",
+        "/_delivery/deliveries-history",
         "/_delivery/delivery"
       ]
     },
@@ -204,6 +219,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_delivery/deliveries": {
       "filePath": "_delivery/deliveries.tsx",
+      "parent": "/_delivery"
+    },
+    "/_delivery/deliveries-history": {
+      "filePath": "_delivery/deliveries-history.tsx",
       "parent": "/_delivery"
     },
     "/_delivery/delivery": {
