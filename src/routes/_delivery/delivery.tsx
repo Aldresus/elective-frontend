@@ -6,6 +6,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { QrCode, X } from "lucide-react";
 import {
   Dispatch,
+  MutableRefObject,
   SetStateAction,
   createContext,
   useEffect,
@@ -31,7 +32,10 @@ const DeliveriesContext = createContext<IDeliveriesContext>({
 function Delivery() {
   const [modalIsOpen, setIsOpen] = useState(false);
 
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(
+    null
+  ) as MutableRefObject<MediaStream | null>;
 
   //const [data, setData] = useState("No Result");
 
@@ -52,13 +56,32 @@ function Delivery() {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
+        streamRef.current = stream;
       } catch (err) {
         console.error(err);
       }
     }
 
-    getVideo();
-  }, []);
+    if (modalIsOpen) {
+      getVideo();
+    } else if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
+      }
+      streamRef.current = null;
+    }
+
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        if (videoRef.current) {
+          videoRef.current.srcObject = null;
+        }
+        streamRef.current = null;
+      }
+    };
+  }, [modalIsOpen]);
 
   return (
     <DeliveriesContext.Provider value={{ modalIsOpen, setIsOpen }}>
