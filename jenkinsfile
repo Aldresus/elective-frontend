@@ -28,7 +28,7 @@ pipeline {
         stage('deploy') {
             steps {
                 script {
-                    sh "docker run -d --name frontend -p 9015:3000 --restart unless-stopped frontend"
+                    sh "docker run -d --name frontend -p 9015:80 --restart unless-stopped frontend"
                 }
             }
         }
