@@ -5,14 +5,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { createFileRoute } from "@tanstack/react-router";
 import { Save } from "lucide-react";
 
-export const Route = createFileRoute("/_restaurant/create-edit-product")({
-  component: CreateEditProduct,
+export const Route = createFileRoute("/_restaurant/product-manager")({
+  component: ProductManager,
 });
 
-function CreateEditProduct() {
+function ProductManager() {
   return (
     <div className="h-full w-full">
-      <H1>Create/Edit Product</H1>
+      <H1>Product Manager</H1>
       <div className="h-full w-full flex flex-col justify-between pb-28">
         <div className="flex flex-col gap-4 mt-2">
           <div>

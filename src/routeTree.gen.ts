@@ -19,7 +19,8 @@ import { Route as IndexImport } from './routes/index'
 import { Route as ComponentsIndexImport } from './routes/components/index'
 import { Route as UserUserImport } from './routes/_user/user'
 import { Route as RestaurantRestaurantImport } from './routes/_restaurant/restaurant'
-import { Route as RestaurantCreateEditProductImport } from './routes/_restaurant/create-edit-product'
+import { Route as RestaurantProductManagerImport } from './routes/_restaurant/product-manager'
+import { Route as RestaurantMenuManagerImport } from './routes/_restaurant/menu-manager'
 import { Route as LoginSignupImport } from './routes/_login/signup'
 import { Route as LoginLoginImport } from './routes/_login/login'
 import { Route as DeliveryDeliveryImport } from './routes/_delivery/delivery'
@@ -68,11 +69,15 @@ const RestaurantRestaurantRoute = RestaurantRestaurantImport.update({
   getParentRoute: () => RestaurantRoute,
 } as any)
 
-const RestaurantCreateEditProductRoute =
-  RestaurantCreateEditProductImport.update({
-    path: '/create-edit-product',
-    getParentRoute: () => RestaurantRoute,
-  } as any)
+const RestaurantProductManagerRoute = RestaurantProductManagerImport.update({
+  path: '/product-manager',
+  getParentRoute: () => RestaurantRoute,
+} as any)
+
+const RestaurantMenuManagerRoute = RestaurantMenuManagerImport.update({
+  path: '/menu-manager',
+  getParentRoute: () => RestaurantRoute,
+} as any)
 
 const LoginSignupRoute = LoginSignupImport.update({
   path: '/signup',
@@ -173,11 +178,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginSignupImport
       parentRoute: typeof LoginImport
     }
-    '/_restaurant/create-edit-product': {
-      id: '/_restaurant/create-edit-product'
-      path: '/create-edit-product'
-      fullPath: '/create-edit-product'
-      preLoaderRoute: typeof RestaurantCreateEditProductImport
+    '/_restaurant/menu-manager': {
+      id: '/_restaurant/menu-manager'
+      path: '/menu-manager'
+      fullPath: '/menu-manager'
+      preLoaderRoute: typeof RestaurantMenuManagerImport
+      parentRoute: typeof RestaurantImport
+    }
+    '/_restaurant/product-manager': {
+      id: '/_restaurant/product-manager'
+      path: '/product-manager'
+      fullPath: '/product-manager'
+      preLoaderRoute: typeof RestaurantProductManagerImport
       parentRoute: typeof RestaurantImport
     }
     '/_restaurant/restaurant': {
@@ -215,7 +227,8 @@ export const routeTree = rootRoute.addChildren({
   }),
   LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
   RestaurantRoute: RestaurantRoute.addChildren({
-    RestaurantCreateEditProductRoute,
+    RestaurantMenuManagerRoute,
+    RestaurantProductManagerRoute,
     RestaurantRestaurantRoute,
   }),
   UserRoute: UserRoute.addChildren({ UserUserRoute }),
@@ -259,7 +272,8 @@ export const routeTree = rootRoute.addChildren({
     "/_restaurant": {
       "filePath": "_restaurant.tsx",
       "children": [
-        "/_restaurant/create-edit-product",
+        "/_restaurant/menu-manager",
+        "/_restaurant/product-manager",
         "/_restaurant/restaurant"
       ]
     },
@@ -289,8 +303,12 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_login/signup.tsx",
       "parent": "/_login"
     },
-    "/_restaurant/create-edit-product": {
-      "filePath": "_restaurant/create-edit-product.tsx",
+    "/_restaurant/menu-manager": {
+      "filePath": "_restaurant/menu-manager.tsx",
+      "parent": "/_restaurant"
+    },
+    "/_restaurant/product-manager": {
+      "filePath": "_restaurant/product-manager.tsx",
       "parent": "/_restaurant"
     },
     "/_restaurant/restaurant": {
