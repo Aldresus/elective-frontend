@@ -1,11 +1,11 @@
 # Étape 1: Build de l'application
-FROM node:18-alpine AS builder
+FROM node:22.2.0-alpine AS builder
 
 # Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
 # Copier les fichiers package.json et package-lock.json
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
 # Installer les dépendances
 RUN npm install
@@ -23,7 +23,7 @@ FROM nginx:stable-alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Copier la configuration Nginx personnalisée, si nécessaire
-# COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Exposer le port 80
 EXPOSE 80

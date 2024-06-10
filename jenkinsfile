@@ -28,12 +28,12 @@ pipeline {
         stage('deploy') {
             steps {
                 script {
-                    sh "docker run -d --name frontend -p 9001:80 --restart unless-stopped frontend"
+                    sh "docker run -d --name frontend -p 9015:80 --restart unless-stopped frontend"
                 }
             }
         }
     }
-}  
+}
 
 def dockerExec(command) {
     sh "docker exec ${CONTAINER_NAME} ${command}"
