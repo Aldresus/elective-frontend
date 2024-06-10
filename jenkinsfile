@@ -20,9 +20,6 @@ pipeline {
                 }
             }
             post {
-                success {
-                    discordSend description: "Cleared existing image and container successfully.", webhookURL: "${DISCORD_WEBHOOK_URL}"
-                }
                 failure {
                     discordSend description: "Failed to clear existing image and container.", webhookURL: "${DISCORD_WEBHOOK_URL}"
                 }
@@ -35,9 +32,6 @@ pipeline {
                 }
             }
             post {
-                success {
-                    discordSend description: "Build image successfully.", webhookURL: "${DISCORD_WEBHOOK_URL}"
-                }
                 failure {
                     discordSend description: "Failed to build image.", webhookURL: "${DISCORD_WEBHOOK_URL}"
                 }
