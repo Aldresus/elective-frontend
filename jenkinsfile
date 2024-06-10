@@ -1,0 +1,40 @@
+pipeline {
+    agent any 
+
+    stages {
+        stage('clear existing image and container') {
+            steps {
+                script {
+                    sh "echo deleting existing image and container"
+                    try {
+                        sh "docker kill frontend"
+                        sh "docker rm frontend"
+                        sh "docker rmi frontend"
+
+
+                    } catch (Exception e) {
+                        echo "No existing image or container to remove"
+                    }
+                }
+            }   
+        }
+        stage('build image') {
+            steps {
+                script {
+                    sh "docker build -t frontend ."
+                }
+            }
+        }
+        stage('deploy') {
+            steps {
+                script {
+                    sh "docker run -d --name frontend -p 9015:80 --restart unless-stopped frontend"
+                }
+            }
+        }
+    }
+}  
+
+def dockerExec(command) {
+    sh "docker exec ${CONTAINER_NAME} ${command}"
+}
