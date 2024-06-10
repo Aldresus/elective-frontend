@@ -24,7 +24,7 @@ pipeline {
                     discordSend description: "Failed to clear existing image and container.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
                 }
             }
-        }
+        } 
         stage('build image') {
             steps {
                 script {
