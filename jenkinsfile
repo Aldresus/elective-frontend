@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DISCORD_WEBHOOK_URL = credentials('DISCORD_WEBHOOK_URL') // Assurez-vous de configurer le webhook Discord comme une credential dans Jenkins
+        DISCORD_WEBHOOK_URL = credentials('DISCORD_WEBHOOK_URL')
     }
 
     stages {
