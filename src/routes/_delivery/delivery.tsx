@@ -5,14 +5,16 @@ import { Separator } from "@/components/ui/separator";
 import { createFileRoute } from "@tanstack/react-router";
 import { QrCode, X } from "lucide-react";
 import {
-  type Dispatch,
-  type SetStateAction,
+  Dispatch,
+  MutableRefObject,
+  SetStateAction,
   createContext,
   useEffect,
   useRef,
   useState,
 } from "react";
 import ReactModal from "react-modal";
+import QrScanner from "qr-scanner";
 
 export const Route = createFileRoute("/_delivery/delivery")({
   component: Delivery,
@@ -30,8 +32,13 @@ const DeliveriesContext = createContext<IDeliveriesContext>({
 
 function Delivery() {
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [qrCodeData, setQrCodeData] = useState<string | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(
+    null
+  ) as MutableRefObject<MediaStream | null>;
+  const qrScannerRef = useRef<QrScanner | null>(null);
 
   //const [data, setData] = useState("No Result");
 
@@ -51,14 +58,54 @@ function Delivery() {
         });
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+          qrScannerRef.current = new QrScanner(
+            videoRef.current,
+            (result) => {
+              setQrCodeData(result.data);
+            },
+            {
+              highlightScanRegion: true,
+              highlightCodeOutline: true,
+            }
+          );
+          qrScannerRef.current.start();
         }
+        streamRef.current = stream;
       } catch (err) {
         console.error(err);
       }
     }
 
-    getVideo();
-  }, []);
+    if (modalIsOpen) {
+      getVideo();
+    } else if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
+      }
+      if (qrScannerRef.current) {
+        qrScannerRef.current.stop();
+        qrScannerRef.current.destroy();
+        qrScannerRef.current = null;
+      }
+      streamRef.current = null;
+    }
+
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        if (videoRef.current) {
+          videoRef.current.srcObject = null;
+        }
+        if (qrScannerRef.current) {
+          qrScannerRef.current.stop();
+          qrScannerRef.current.destroy();
+          qrScannerRef.current = null;
+        }
+        streamRef.current = null;
+      }
+    };
+  }, [modalIsOpen]);
 
   return (
     <DeliveriesContext.Provider value={{ modalIsOpen, setIsOpen }}>
@@ -100,6 +147,7 @@ function Delivery() {
             <div className="w-full h-[400px]">
               <video ref={videoRef} muted autoPlay className="w-full h-full" />
             </div>
+            <p>{qrCodeData}</p>
           </ReactModal>
         </div>
       </div>
