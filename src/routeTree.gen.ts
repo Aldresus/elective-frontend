@@ -16,6 +16,7 @@ import { Route as LoginImport } from './routes/_login'
 import { Route as IndexImport } from './routes/index'
 import { Route as ComponentsIndexImport } from './routes/components/index'
 import { Route as UserUserImport } from './routes/_user/user'
+import { Route as UserRestaurantImport } from './routes/_user/restaurant'
 import { Route as LoginSignupImport } from './routes/_login/signup'
 import { Route as LoginLoginImport } from './routes/_login/login'
 
@@ -43,6 +44,11 @@ const ComponentsIndexRoute = ComponentsIndexImport.update({
 
 const UserUserRoute = UserUserImport.update({
   path: '/user',
+  getParentRoute: () => UserRoute,
+} as any)
+
+const UserRestaurantRoute = UserRestaurantImport.update({
+  path: '/restaurant',
   getParentRoute: () => UserRoute,
 } as any)
 
@@ -95,6 +101,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginSignupImport
       parentRoute: typeof LoginImport
     }
+    '/_user/restaurant': {
+      id: '/_user/restaurant'
+      path: '/restaurant'
+      fullPath: '/restaurant'
+      preLoaderRoute: typeof UserRestaurantImport
+      parentRoute: typeof UserImport
+    }
     '/_user/user': {
       id: '/_user/user'
       path: '/user'
@@ -117,7 +130,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
   LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
-  UserRoute: UserRoute.addChildren({ UserUserRoute }),
+  UserRoute: UserRoute.addChildren({ UserRestaurantRoute, UserUserRoute }),
   ComponentsIndexRoute,
 })
 
@@ -148,6 +161,7 @@ export const routeTree = rootRoute.addChildren({
     "/_user": {
       "filePath": "_user.tsx",
       "children": [
+        "/_user/restaurant",
         "/_user/user"
       ]
     },
@@ -158,6 +172,10 @@ export const routeTree = rootRoute.addChildren({
     "/_login/signup": {
       "filePath": "_login/signup.tsx",
       "parent": "/_login"
+    },
+    "/_user/restaurant": {
+      "filePath": "_user/restaurant.tsx",
+      "parent": "/_user"
     },
     "/_user/user": {
       "filePath": "_user/user.tsx",

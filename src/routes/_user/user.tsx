@@ -2,16 +2,25 @@ import FilterButton from "@/components/common/filterButton";
 import { RestaurantCard } from "@/components/common/restaurantCard";
 import { H2 } from "@/components/typography";
 import { Separator } from "@/components/ui/separator";
+import { LoginBanner } from "@/components/user/loginBanner";
 import { createFileRoute } from "@tanstack/react-router";
 import { Beer, IceCreamBowl, Pizza, Sandwich, Vegan } from "lucide-react";
+import { useState } from "react";
 
 export const Route = createFileRoute("/_user/user")({
   component: UserComponent,
 });
 
 function UserComponent() {
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
   return (
     <div className="flex flex-col gap-6 w-full">
+      <LoginBanner
+        className="mb-6"
+        hidden={!isLoggedIn}
+        onclose={() => setIsLoggedIn(false)}
+      />
       <div className="w-full flex justify-center gap-9">
         <FilterButton>
           <Pizza size={35} />
