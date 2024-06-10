@@ -13,8 +13,6 @@ COPY --chown=node:node package*.json ./
 # Install app dependencies
 RUN npm install
 
-RUN npm install serve -g
-
 # Bundle app source
 COPY --chown=node:node . .
 
