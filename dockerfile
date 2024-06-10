@@ -1,32 +1,25 @@
-# Étape 1: Build de l'application
-FROM node:22.2.0-alpine AS builder
+# Base image
+FROM node:22.2.0-alpine
 
-# Définir le répertoire de travail dans le conteneur
-WORKDIR /app
+# ENV NODE_ENV production # breaks nestjs because CLI is dev only
+USER node
 
-# Copier les fichiers package.json et package-lock.json
-COPY package.json package-lock.json ./
+# Create app directory
+WORKDIR /usr/src/app
 
-# Installer les dépendances
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY --chown=node:node package*.json ./
+
+# Install app dependencies
 RUN npm install
 
-# Copier le reste de l'application
-COPY . .
+# Bundle app source
+COPY --chown=node:node . .
 
-# Construire l'application
+# Creates a "dist" folder with the production build
 RUN npm run build
 
-# Étape 2: Créer une image légère pour servir le contenu statique
-FROM nginx:stable-alpine
+EXPOSE 3000
 
-# Copier les fichiers de build de l'étape précédente
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Copier la configuration Nginx personnalisée, si nécessaire
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Exposer le port 80
-EXPOSE 80
-
-# Démarrer Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start the server using the production build
+CMD [ "serve", "dist"]
