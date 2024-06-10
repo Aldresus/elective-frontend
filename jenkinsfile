@@ -45,7 +45,7 @@ pipeline {
             }
             post {
                 success {
-                    discordSend description: "Deployed image successfully.", webhookURL: "${DISCORD_WEBHOOK_URL}"
+                    discordSend description: "Deployed image successfully.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
                 }
                 failure {
                     discordSend description: "Failed to deploy image.", webhookURL: "${DISCORD_WEBHOOK_URL}"
