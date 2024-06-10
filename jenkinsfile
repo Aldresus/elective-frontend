@@ -1,5 +1,9 @@
 pipeline {
-    agent any 
+    agent any
+
+    environment {
+        DISCORD_WEBHOOK_URL = credentials('DISCORD_WEBHOOK_URL') // Assurez-vous de configurer le webhook Discord comme une credential dans Jenkins
+    }
 
     stages {
         stage('clear existing image and container') {
@@ -10,13 +14,19 @@ pipeline {
                         sh "docker kill frontend"
                         sh "docker rm frontend"
                         sh "docker rmi frontend"
-
-
                     } catch (Exception e) {
                         echo "No existing image or container to remove"
                     }
                 }
-            }   
+            }
+            post {
+                success {
+                    discordSend description: "Cleared existing image and container successfully.", webhookURL: "${DISCORD_WEBHOOK_URL}"
+                }
+                failure {
+                    discordSend description: "Failed to clear existing image and container.", webhookURL: "${DISCORD_WEBHOOK_URL}"
+                }
+            }
         }
         stage('build image') {
             steps {
@@ -24,11 +34,27 @@ pipeline {
                     sh "docker build -t frontend ."
                 }
             }
+            post {
+                success {
+                    discordSend description: "Build image successfully.", webhookURL: "${DISCORD_WEBHOOK_URL}"
+                }
+                failure {
+                    discordSend description: "Failed to build image.", webhookURL: "${DISCORD_WEBHOOK_URL}"
+                }
+            }
         }
         stage('deploy') {
             steps {
                 script {
                     sh "docker run -d --name frontend -p 9015:80 --restart unless-stopped -v frontend:/etc/nginx frontend"
+                }
+            }
+            post {
+                success {
+                    discordSend description: "Deployed image successfully.", webhookURL: "${DISCORD_WEBHOOK_URL}"
+                }
+                failure {
+                    discordSend description: "Failed to deploy image.", webhookURL: "${DISCORD_WEBHOOK_URL}"
                 }
             }
         }
