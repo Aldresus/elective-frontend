@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { Card, CardContent, CardTitle } from "../ui/card";
+import { Card } from "../ui/card";
 import { LoginCard } from "./loginCard";
 import { Large } from "../typography";
 import { Button } from "../ui/button";

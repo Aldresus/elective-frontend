@@ -96,9 +96,9 @@ function Login() {
     },
   });
 
-  const onSubmit = form.handleSubmit((values: z.infer<typeof signupSchema>) => {
+  const onSubmit = async (values: z.infer<typeof signupSchema>) => {
     console.log(values);
-  });
+  };
 
   return (
     <div>

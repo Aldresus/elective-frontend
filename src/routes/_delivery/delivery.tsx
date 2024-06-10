@@ -5,8 +5,8 @@ import { Separator } from "@/components/ui/separator";
 import { createFileRoute } from "@tanstack/react-router";
 import { QrCode, X } from "lucide-react";
 import {
-  Dispatch,
-  SetStateAction,
+  type Dispatch,
+  type SetStateAction,
   createContext,
   useEffect,
   useRef,
@@ -31,7 +31,7 @@ const DeliveriesContext = createContext<IDeliveriesContext>({
 function Delivery() {
   const [modalIsOpen, setIsOpen] = useState(false);
 
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   //const [data, setData] = useState("No Result");
 
@@ -98,12 +98,7 @@ function Delivery() {
             </div>
             <Large>Scanner le QR Code du client</Large>
             <div className="w-full h-[400px]">
-              <video
-                ref={videoRef}
-                muted
-                autoPlay
-                className="w-full h-full"
-              ></video>
+              <video ref={videoRef} muted autoPlay className="w-full h-full" />
             </div>
           </ReactModal>
         </div>
