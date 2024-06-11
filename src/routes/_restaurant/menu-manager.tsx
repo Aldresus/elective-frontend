@@ -7,15 +7,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { createFileRoute } from "@tanstack/react-router";
 import { Save } from "lucide-react";
 
+interface IProduct {
+  name: string;
+  id: string;
+}
+
 interface ICategoryManager {
   category_name: string;
-  product: { name: string; id: string }[];
+  category_id: string;
+  products: IProduct[];
 }
 
 const testData: Array<ICategoryManager> = [
   {
     category_name: "Category 1",
-    product: [
+    category_id: "1",
+    products: [
       { name: "Produit 1", id: "1" },
       { name: "Produit 2", id: "2" },
       { name: "Produit 3", id: "3" },
@@ -23,14 +30,16 @@ const testData: Array<ICategoryManager> = [
   },
   {
     category_name: "Category 2",
-    product: [
+    category_id: "2",
+    products: [
       { name: "Produit 2", id: "1" },
       { name: "Produit 3", id: "2" },
     ],
   },
   {
     category_name: "Category 3",
-    product: [
+    category_id: "3",
+    products: [
       { name: "Produit 1", id: "1" },
       { name: "Produit 3", id: "2" },
     ],
@@ -75,10 +84,10 @@ function MenuManager() {
           </div>
         </div>
         {testData.map((testDataItem) => (
-          <>
+          <div key={testDataItem.category_id}>
             <Separator />
             <CategoryManager {...testDataItem} />
-          </>
+          </div>
         ))}
         <Button className="w-full flex gap-1">
           <Save />
