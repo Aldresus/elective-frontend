@@ -20,6 +20,7 @@ import { Route as ComponentsIndexImport } from './routes/components/index'
 import { Route as UserUserImport } from './routes/_user/user'
 import { Route as RestaurantRestaurantImport } from './routes/_restaurant/restaurant'
 import { Route as RestaurantCreateEditProductImport } from './routes/_restaurant/create-edit-product'
+
 import { Route as LoginSignupImport } from './routes/_login/signup'
 import { Route as LoginLoginImport } from './routes/_login/login'
 import { Route as DeliveryDeliveryImport } from './routes/_delivery/delivery'
@@ -186,6 +187,7 @@ declare module '@tanstack/react-router' {
       fullPath: '/restaurant'
       preLoaderRoute: typeof RestaurantRestaurantImport
       parentRoute: typeof RestaurantImport
+
     }
     '/_user/user': {
       id: '/_user/user'
@@ -214,6 +216,7 @@ export const routeTree = rootRoute.addChildren({
     DeliveryDeliveryRoute,
   }),
   LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
+
   RestaurantRoute: RestaurantRoute.addChildren({
     RestaurantCreateEditProductRoute,
     RestaurantRestaurantRoute,
@@ -266,6 +269,7 @@ export const routeTree = rootRoute.addChildren({
     "/_user": {
       "filePath": "_user.tsx",
       "children": [
+        "/_user/restaurant",
         "/_user/user"
       ]
     },
@@ -289,6 +293,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_login/signup.tsx",
       "parent": "/_login"
     },
+
     "/_restaurant/create-edit-product": {
       "filePath": "_restaurant/create-edit-product.tsx",
       "parent": "/_restaurant"
