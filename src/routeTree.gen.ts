@@ -12,13 +12,20 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as UserImport } from './routes/_user'
+import { Route as RestaurantImport } from './routes/_restaurant'
 import { Route as LoginImport } from './routes/_login'
+import { Route as DeliveryImport } from './routes/_delivery'
 import { Route as IndexImport } from './routes/index'
 import { Route as ComponentsIndexImport } from './routes/components/index'
 import { Route as UserUserImport } from './routes/_user/user'
-import { Route as UserRestaurantImport } from './routes/_user/restaurant'
+import { Route as RestaurantRestaurantImport } from './routes/_restaurant/restaurant'
+import { Route as RestaurantCreateEditProductImport } from './routes/_restaurant/create-edit-product'
+
 import { Route as LoginSignupImport } from './routes/_login/signup'
 import { Route as LoginLoginImport } from './routes/_login/login'
+import { Route as DeliveryDeliveryImport } from './routes/_delivery/delivery'
+import { Route as DeliveryDeliveriesHistoryImport } from './routes/_delivery/deliveries-history'
+import { Route as DeliveryDeliveriesImport } from './routes/_delivery/deliveries'
 
 // Create/Update Routes
 
@@ -27,8 +34,18 @@ const UserRoute = UserImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const RestaurantRoute = RestaurantImport.update({
+  id: '/_restaurant',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const LoginRoute = LoginImport.update({
   id: '/_login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DeliveryRoute = DeliveryImport.update({
+  id: '/_delivery',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -47,10 +64,16 @@ const UserUserRoute = UserUserImport.update({
   getParentRoute: () => UserRoute,
 } as any)
 
-const UserRestaurantRoute = UserRestaurantImport.update({
+const RestaurantRestaurantRoute = RestaurantRestaurantImport.update({
   path: '/restaurant',
-  getParentRoute: () => UserRoute,
+  getParentRoute: () => RestaurantRoute,
 } as any)
+
+const RestaurantCreateEditProductRoute =
+  RestaurantCreateEditProductImport.update({
+    path: '/create-edit-product',
+    getParentRoute: () => RestaurantRoute,
+  } as any)
 
 const LoginSignupRoute = LoginSignupImport.update({
   path: '/signup',
@@ -60,6 +83,21 @@ const LoginSignupRoute = LoginSignupImport.update({
 const LoginLoginRoute = LoginLoginImport.update({
   path: '/login',
   getParentRoute: () => LoginRoute,
+} as any)
+
+const DeliveryDeliveryRoute = DeliveryDeliveryImport.update({
+  path: '/delivery',
+  getParentRoute: () => DeliveryRoute,
+} as any)
+
+const DeliveryDeliveriesHistoryRoute = DeliveryDeliveriesHistoryImport.update({
+  path: '/deliveries-history',
+  getParentRoute: () => DeliveryRoute,
+} as any)
+
+const DeliveryDeliveriesRoute = DeliveryDeliveriesImport.update({
+  path: '/deliveries',
+  getParentRoute: () => DeliveryRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -73,11 +111,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/_delivery': {
+      id: '/_delivery'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof DeliveryImport
+      parentRoute: typeof rootRoute
+    }
     '/_login': {
       id: '/_login'
       path: ''
       fullPath: ''
       preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/_restaurant': {
+      id: '/_restaurant'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof RestaurantImport
       parentRoute: typeof rootRoute
     }
     '/_user': {
@@ -86,6 +138,27 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof UserImport
       parentRoute: typeof rootRoute
+    }
+    '/_delivery/deliveries': {
+      id: '/_delivery/deliveries'
+      path: '/deliveries'
+      fullPath: '/deliveries'
+      preLoaderRoute: typeof DeliveryDeliveriesImport
+      parentRoute: typeof DeliveryImport
+    }
+    '/_delivery/deliveries-history': {
+      id: '/_delivery/deliveries-history'
+      path: '/deliveries-history'
+      fullPath: '/deliveries-history'
+      preLoaderRoute: typeof DeliveryDeliveriesHistoryImport
+      parentRoute: typeof DeliveryImport
+    }
+    '/_delivery/delivery': {
+      id: '/_delivery/delivery'
+      path: '/delivery'
+      fullPath: '/delivery'
+      preLoaderRoute: typeof DeliveryDeliveryImport
+      parentRoute: typeof DeliveryImport
     }
     '/_login/login': {
       id: '/_login/login'
@@ -101,12 +174,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginSignupImport
       parentRoute: typeof LoginImport
     }
-    '/_user/restaurant': {
-      id: '/_user/restaurant'
+    '/_restaurant/create-edit-product': {
+      id: '/_restaurant/create-edit-product'
+      path: '/create-edit-product'
+      fullPath: '/create-edit-product'
+      preLoaderRoute: typeof RestaurantCreateEditProductImport
+      parentRoute: typeof RestaurantImport
+    }
+    '/_restaurant/restaurant': {
+      id: '/_restaurant/restaurant'
       path: '/restaurant'
       fullPath: '/restaurant'
-      preLoaderRoute: typeof UserRestaurantImport
-      parentRoute: typeof UserImport
+      preLoaderRoute: typeof RestaurantRestaurantImport
+      parentRoute: typeof RestaurantImport
+
     }
     '/_user/user': {
       id: '/_user/user'
@@ -129,8 +210,18 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
+  DeliveryRoute: DeliveryRoute.addChildren({
+    DeliveryDeliveriesRoute,
+    DeliveryDeliveriesHistoryRoute,
+    DeliveryDeliveryRoute,
+  }),
   LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
-  UserRoute: UserRoute.addChildren({ UserRestaurantRoute, UserUserRoute }),
+
+  RestaurantRoute: RestaurantRoute.addChildren({
+    RestaurantCreateEditProductRoute,
+    RestaurantRestaurantRoute,
+  }),
+  UserRoute: UserRoute.addChildren({ UserUserRoute }),
   ComponentsIndexRoute,
 })
 
@@ -143,7 +234,9 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/_delivery",
         "/_login",
+        "/_restaurant",
         "/_user",
         "/components/"
       ]
@@ -151,11 +244,26 @@ export const routeTree = rootRoute.addChildren({
     "/": {
       "filePath": "index.tsx"
     },
+    "/_delivery": {
+      "filePath": "_delivery.tsx",
+      "children": [
+        "/_delivery/deliveries",
+        "/_delivery/deliveries-history",
+        "/_delivery/delivery"
+      ]
+    },
     "/_login": {
       "filePath": "_login.tsx",
       "children": [
         "/_login/login",
         "/_login/signup"
+      ]
+    },
+    "/_restaurant": {
+      "filePath": "_restaurant.tsx",
+      "children": [
+        "/_restaurant/create-edit-product",
+        "/_restaurant/restaurant"
       ]
     },
     "/_user": {
@@ -165,6 +273,18 @@ export const routeTree = rootRoute.addChildren({
         "/_user/user"
       ]
     },
+    "/_delivery/deliveries": {
+      "filePath": "_delivery/deliveries.tsx",
+      "parent": "/_delivery"
+    },
+    "/_delivery/deliveries-history": {
+      "filePath": "_delivery/deliveries-history.tsx",
+      "parent": "/_delivery"
+    },
+    "/_delivery/delivery": {
+      "filePath": "_delivery/delivery.tsx",
+      "parent": "/_delivery"
+    },
     "/_login/login": {
       "filePath": "_login/login.tsx",
       "parent": "/_login"
@@ -173,9 +293,14 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_login/signup.tsx",
       "parent": "/_login"
     },
-    "/_user/restaurant": {
-      "filePath": "_user/restaurant.tsx",
-      "parent": "/_user"
+
+    "/_restaurant/create-edit-product": {
+      "filePath": "_restaurant/create-edit-product.tsx",
+      "parent": "/_restaurant"
+    },
+    "/_restaurant/restaurant": {
+      "filePath": "_restaurant/restaurant.tsx",
+      "parent": "/_restaurant"
     },
     "/_user/user": {
       "filePath": "_user/user.tsx",

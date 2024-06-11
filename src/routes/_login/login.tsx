@@ -1,15 +1,4 @@
 import { H1 } from "@/components/typography";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
@@ -62,9 +51,9 @@ function Login() {
     },
   });
 
-  const onSubmit = form.handleSubmit((values: z.infer<typeof signinSchema>) => {
+  const onSubmit = async (values: z.infer<typeof signinSchema>) => {
     console.log(values);
-  });
+  };
 
   const resetPasswordHandler = (email: string) => {
     console.log(email);
@@ -182,8 +171,10 @@ function Login() {
                           <FormControl>
                             <Input
                               value={resetPasswordEmail}
-                              onInput={(e) =>
-                                setResetPasswordEmail(e.target.value)
+                              onInput={(e: React.FormEvent<HTMLInputElement>) =>
+                                setResetPasswordEmail(
+                                  (e.target as HTMLInputElement).value
+                                )
                               }
                               placeholder="email"
                             />

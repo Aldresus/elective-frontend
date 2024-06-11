@@ -1,8 +1,4 @@
-import { CircleUser } from "lucide-react";
-import Logo from "./logo";
-import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import { Link } from "@tanstack/react-router";
 
 interface FooterProps extends React.HTMLAttributes<HTMLDivElement> {}
 

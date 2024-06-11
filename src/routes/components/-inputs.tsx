@@ -1,5 +1,3 @@
-import { Checkbox } from "@/components/ui/checkbox";
-import { CheckboxWithText } from "@/components/ui/checkboxWithText";
 import { Input } from "@/components/ui/input";
 import { InputWithText } from "@/components/ui/inputWithText";
 import { Label } from "@/components/ui/label";
@@ -41,11 +39,11 @@ export default function InputsExample() {
             <Input id="file" type="file" placeholder="File input" />
           </div>
 
-          <CheckboxWithText label="Checkbox sans description" />
+          {/* <CheckboxWithText description="" label="Checkbox sans description" />
           <CheckboxWithText
             label="Checkbox avec description"
             description="Description"
-          />
+          /> */}
 
           <div>
             <Label htmlFor="switch">Switch</Label>
