@@ -18,9 +18,9 @@ import { Route as DeliveryImport } from './routes/_delivery'
 import { Route as IndexImport } from './routes/index'
 import { Route as ComponentsIndexImport } from './routes/components/index'
 import { Route as UserUserImport } from './routes/_user/user'
-import { Route as RestaurantRestaurantImport } from './routes/_restaurant/restaurant'
-import { Route as RestaurantCreateEditProductImport } from './routes/_restaurant/create-edit-product'
-
+import { Route as UserRestaurantImport } from './routes/_user/restaurant'
+import { Route as RestaurateurRestaurateurImport } from './routes/_restaurateur/restaurateur'
+import { Route as RestaurateurCreateEditProductImport } from './routes/_restaurateur/create-edit-product'
 import { Route as LoginSignupImport } from './routes/_login/signup'
 import { Route as LoginLoginImport } from './routes/_login/login'
 import { Route as DeliveryDeliveryImport } from './routes/_delivery/delivery'
@@ -64,15 +64,20 @@ const UserUserRoute = UserUserImport.update({
   getParentRoute: () => UserRoute,
 } as any)
 
-const RestaurantRestaurantRoute = RestaurantRestaurantImport.update({
+const UserRestaurantRoute = UserRestaurantImport.update({
   path: '/restaurant',
-  getParentRoute: () => RestaurantRoute,
+  getParentRoute: () => UserRoute,
 } as any)
 
-const RestaurantCreateEditProductRoute =
-  RestaurantCreateEditProductImport.update({
+const RestaurateurRestaurateurRoute = RestaurateurRestaurateurImport.update({
+  path: '/restaurateur',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RestaurateurCreateEditProductRoute =
+  RestaurateurCreateEditProductImport.update({
     path: '/create-edit-product',
-    getParentRoute: () => RestaurantRoute,
+    getParentRoute: () => rootRoute,
   } as any)
 
 const LoginSignupRoute = LoginSignupImport.update({
@@ -174,20 +179,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginSignupImport
       parentRoute: typeof LoginImport
     }
-    '/_restaurant/create-edit-product': {
-      id: '/_restaurant/create-edit-product'
+    '/_restaurateur/create-edit-product': {
+      id: '/_restaurateur/create-edit-product'
       path: '/create-edit-product'
       fullPath: '/create-edit-product'
-      preLoaderRoute: typeof RestaurantCreateEditProductImport
-      parentRoute: typeof RestaurantImport
+      preLoaderRoute: typeof RestaurateurCreateEditProductImport
+      parentRoute: typeof rootRoute
     }
-    '/_restaurant/restaurant': {
-      id: '/_restaurant/restaurant'
+    '/_restaurateur/restaurateur': {
+      id: '/_restaurateur/restaurateur'
+      path: '/restaurateur'
+      fullPath: '/restaurateur'
+      preLoaderRoute: typeof RestaurateurRestaurateurImport
+      parentRoute: typeof rootRoute
+    }
+    '/_user/restaurant': {
+      id: '/_user/restaurant'
       path: '/restaurant'
       fullPath: '/restaurant'
-      preLoaderRoute: typeof RestaurantRestaurantImport
-      parentRoute: typeof RestaurantImport
-
+      preLoaderRoute: typeof UserRestaurantImport
+      parentRoute: typeof UserImport
     }
     '/_user/user': {
       id: '/_user/user'
@@ -216,12 +227,9 @@ export const routeTree = rootRoute.addChildren({
     DeliveryDeliveryRoute,
   }),
   LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
-
-  RestaurantRoute: RestaurantRoute.addChildren({
-    RestaurantCreateEditProductRoute,
-    RestaurantRestaurantRoute,
-  }),
-  UserRoute: UserRoute.addChildren({ UserUserRoute }),
+  UserRoute: UserRoute.addChildren({ UserRestaurantRoute, UserUserRoute }),
+  RestaurateurCreateEditProductRoute,
+  RestaurateurRestaurateurRoute,
   ComponentsIndexRoute,
 })
 
@@ -238,6 +246,8 @@ export const routeTree = rootRoute.addChildren({
         "/_login",
         "/_restaurant",
         "/_user",
+        "/_restaurateur/create-edit-product",
+        "/_restaurateur/restaurateur",
         "/components/"
       ]
     },
@@ -260,11 +270,7 @@ export const routeTree = rootRoute.addChildren({
       ]
     },
     "/_restaurant": {
-      "filePath": "_restaurant.tsx",
-      "children": [
-        "/_restaurant/create-edit-product",
-        "/_restaurant/restaurant"
-      ]
+      "filePath": "_restaurant.tsx"
     },
     "/_user": {
       "filePath": "_user.tsx",
@@ -293,14 +299,15 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_login/signup.tsx",
       "parent": "/_login"
     },
-
-    "/_restaurant/create-edit-product": {
-      "filePath": "_restaurant/create-edit-product.tsx",
-      "parent": "/_restaurant"
+    "/_restaurateur/create-edit-product": {
+      "filePath": "_restaurateur/create-edit-product.tsx"
     },
-    "/_restaurant/restaurant": {
-      "filePath": "_restaurant/restaurant.tsx",
-      "parent": "/_restaurant"
+    "/_restaurateur/restaurateur": {
+      "filePath": "_restaurateur/restaurateur.tsx"
+    },
+    "/_user/restaurant": {
+      "filePath": "_user/restaurant.tsx",
+      "parent": "/_user"
     },
     "/_user/user": {
       "filePath": "_user/user.tsx",
