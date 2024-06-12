@@ -2,11 +2,11 @@ import Footer from "@/components/common/footer";
 import Navbar from "@/components/common/navbar";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_restaurant")({
-  component: RestaurantLayout,
+export const Route = createFileRoute("/_restaurateur")({
+  component: RestaurateurLayout,
 });
 
-function RestaurantLayout() {
+function RestaurateurLayout() {
   return (
     <div className=" h-screen overflow-hidden mx-auto">
       <Navbar />

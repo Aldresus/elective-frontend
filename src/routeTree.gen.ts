@@ -12,16 +12,16 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as UserImport } from './routes/_user'
-import { Route as RestaurantImport } from './routes/_restaurant'
+import { Route as RestaurateurImport } from './routes/_restaurateur'
 import { Route as LoginImport } from './routes/_login'
 import { Route as DeliveryImport } from './routes/_delivery'
 import { Route as IndexImport } from './routes/index'
 import { Route as ComponentsIndexImport } from './routes/components/index'
 import { Route as UserUserImport } from './routes/_user/user'
-import { Route as RestaurantRestaurantManagerImport } from './routes/_restaurant/restaurant-manager'
-import { Route as RestaurantRestaurantImport } from './routes/_restaurant/restaurant'
-import { Route as RestaurantProductManagerImport } from './routes/_restaurant/product-manager'
-import { Route as RestaurantMenuManagerImport } from './routes/_restaurant/menu-manager'
+import { Route as RestaurateurRestaurateurImport } from './routes/_restaurateur/restaurateur'
+import { Route as RestaurateurRestaurantManagerImport } from './routes/_restaurateur/restaurant-manager'
+import { Route as RestaurateurProductManagerImport } from './routes/_restaurateur/product-manager'
+import { Route as RestaurateurMenuManagerImport } from './routes/_restaurateur/menu-manager'
 import { Route as LoginSignupImport } from './routes/_login/signup'
 import { Route as LoginLoginImport } from './routes/_login/login'
 import { Route as DeliveryDeliveryImport } from './routes/_delivery/delivery'
@@ -35,8 +35,8 @@ const UserRoute = UserImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const RestaurantRoute = RestaurantImport.update({
-  id: '/_restaurant',
+const RestaurateurRoute = RestaurateurImport.update({
+  id: '/_restaurateur',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -65,25 +65,27 @@ const UserUserRoute = UserUserImport.update({
   getParentRoute: () => UserRoute,
 } as any)
 
-const RestaurantRestaurantManagerRoute =
-  RestaurantRestaurantManagerImport.update({
+const RestaurateurRestaurateurRoute = RestaurateurRestaurateurImport.update({
+  path: '/restaurateur',
+  getParentRoute: () => RestaurateurRoute,
+} as any)
+
+const RestaurateurRestaurantManagerRoute =
+  RestaurateurRestaurantManagerImport.update({
     path: '/restaurant-manager',
-    getParentRoute: () => RestaurantRoute,
+    getParentRoute: () => RestaurateurRoute,
   } as any)
 
-const RestaurantRestaurantRoute = RestaurantRestaurantImport.update({
-  path: '/restaurant',
-  getParentRoute: () => RestaurantRoute,
-} as any)
+const RestaurateurProductManagerRoute = RestaurateurProductManagerImport.update(
+  {
+    path: '/product-manager',
+    getParentRoute: () => RestaurateurRoute,
+  } as any,
+)
 
-const RestaurantProductManagerRoute = RestaurantProductManagerImport.update({
-  path: '/product-manager',
-  getParentRoute: () => RestaurantRoute,
-} as any)
-
-const RestaurantMenuManagerRoute = RestaurantMenuManagerImport.update({
+const RestaurateurMenuManagerRoute = RestaurateurMenuManagerImport.update({
   path: '/menu-manager',
-  getParentRoute: () => RestaurantRoute,
+  getParentRoute: () => RestaurateurRoute,
 } as any)
 
 const LoginSignupRoute = LoginSignupImport.update({
@@ -136,11 +138,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/_restaurant': {
-      id: '/_restaurant'
+    '/_restaurateur': {
+      id: '/_restaurateur'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof RestaurantImport
+      preLoaderRoute: typeof RestaurateurImport
       parentRoute: typeof rootRoute
     }
     '/_user': {
@@ -185,33 +187,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginSignupImport
       parentRoute: typeof LoginImport
     }
-    '/_restaurant/menu-manager': {
-      id: '/_restaurant/menu-manager'
+    '/_restaurateur/menu-manager': {
+      id: '/_restaurateur/menu-manager'
       path: '/menu-manager'
       fullPath: '/menu-manager'
-      preLoaderRoute: typeof RestaurantMenuManagerImport
-      parentRoute: typeof RestaurantImport
+      preLoaderRoute: typeof RestaurateurMenuManagerImport
+      parentRoute: typeof RestaurateurImport
     }
-    '/_restaurant/product-manager': {
-      id: '/_restaurant/product-manager'
+    '/_restaurateur/product-manager': {
+      id: '/_restaurateur/product-manager'
       path: '/product-manager'
       fullPath: '/product-manager'
-      preLoaderRoute: typeof RestaurantProductManagerImport
-      parentRoute: typeof RestaurantImport
+      preLoaderRoute: typeof RestaurateurProductManagerImport
+      parentRoute: typeof RestaurateurImport
     }
-    '/_restaurant/restaurant': {
-      id: '/_restaurant/restaurant'
-      path: '/restaurant'
-      fullPath: '/restaurant'
-      preLoaderRoute: typeof RestaurantRestaurantImport
-      parentRoute: typeof RestaurantImport
-    }
-    '/_restaurant/restaurant-manager': {
-      id: '/_restaurant/restaurant-manager'
+    '/_restaurateur/restaurant-manager': {
+      id: '/_restaurateur/restaurant-manager'
       path: '/restaurant-manager'
       fullPath: '/restaurant-manager'
-      preLoaderRoute: typeof RestaurantRestaurantManagerImport
-      parentRoute: typeof RestaurantImport
+      preLoaderRoute: typeof RestaurateurRestaurantManagerImport
+      parentRoute: typeof RestaurateurImport
+    }
+    '/_restaurateur/restaurateur': {
+      id: '/_restaurateur/restaurateur'
+      path: '/restaurateur'
+      fullPath: '/restaurateur'
+      preLoaderRoute: typeof RestaurateurRestaurateurImport
+      parentRoute: typeof RestaurateurImport
     }
     '/_user/user': {
       id: '/_user/user'
@@ -240,11 +242,11 @@ export const routeTree = rootRoute.addChildren({
     DeliveryDeliveryRoute,
   }),
   LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
-  RestaurantRoute: RestaurantRoute.addChildren({
-    RestaurantMenuManagerRoute,
-    RestaurantProductManagerRoute,
-    RestaurantRestaurantRoute,
-    RestaurantRestaurantManagerRoute,
+  RestaurateurRoute: RestaurateurRoute.addChildren({
+    RestaurateurMenuManagerRoute,
+    RestaurateurProductManagerRoute,
+    RestaurateurRestaurantManagerRoute,
+    RestaurateurRestaurateurRoute,
   }),
   UserRoute: UserRoute.addChildren({ UserUserRoute }),
   ComponentsIndexRoute,
@@ -261,7 +263,7 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/_delivery",
         "/_login",
-        "/_restaurant",
+        "/_restaurateur",
         "/_user",
         "/components/"
       ]
@@ -284,13 +286,13 @@ export const routeTree = rootRoute.addChildren({
         "/_login/signup"
       ]
     },
-    "/_restaurant": {
-      "filePath": "_restaurant.tsx",
+    "/_restaurateur": {
+      "filePath": "_restaurateur.tsx",
       "children": [
-        "/_restaurant/menu-manager",
-        "/_restaurant/product-manager",
-        "/_restaurant/restaurant",
-        "/_restaurant/restaurant-manager"
+        "/_restaurateur/menu-manager",
+        "/_restaurateur/product-manager",
+        "/_restaurateur/restaurant-manager",
+        "/_restaurateur/restaurateur"
       ]
     },
     "/_user": {
@@ -319,21 +321,21 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_login/signup.tsx",
       "parent": "/_login"
     },
-    "/_restaurant/menu-manager": {
-      "filePath": "_restaurant/menu-manager.tsx",
-      "parent": "/_restaurant"
+    "/_restaurateur/menu-manager": {
+      "filePath": "_restaurateur/menu-manager.tsx",
+      "parent": "/_restaurateur"
     },
-    "/_restaurant/product-manager": {
-      "filePath": "_restaurant/product-manager.tsx",
-      "parent": "/_restaurant"
+    "/_restaurateur/product-manager": {
+      "filePath": "_restaurateur/product-manager.tsx",
+      "parent": "/_restaurateur"
     },
-    "/_restaurant/restaurant": {
-      "filePath": "_restaurant/restaurant.tsx",
-      "parent": "/_restaurant"
+    "/_restaurateur/restaurant-manager": {
+      "filePath": "_restaurateur/restaurant-manager.tsx",
+      "parent": "/_restaurateur"
     },
-    "/_restaurant/restaurant-manager": {
-      "filePath": "_restaurant/restaurant-manager.tsx",
-      "parent": "/_restaurant"
+    "/_restaurateur/restaurateur": {
+      "filePath": "_restaurateur/restaurateur.tsx",
+      "parent": "/_restaurateur"
     },
     "/_user/user": {
       "filePath": "_user/user.tsx",

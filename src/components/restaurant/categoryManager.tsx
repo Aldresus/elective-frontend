@@ -1,4 +1,4 @@
-import { GripVertical, Plus } from "lucide-react";
+import { GripVertical, Plus, Trash2 } from "lucide-react";
 import { H3 } from "../typography";
 import {
   Active,
@@ -41,22 +41,30 @@ interface ICategoryManager {
   items: Items[];
 }
 
-const SortableItem = ({ id, name }: Items) => {
+interface SortableItemProps extends Items {
+  deleteItem: (id: string) => void;
+}
+
+const SortableItem = ({ id, name, deleteItem }: SortableItemProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
   const style = {
     transform: CSS.Transform.toString(transform),
   };
+
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className="w-2/3 flex justify-start items-center gap-2 p-2 border border-gray-300 rounded-md bg-white"
-    >
-      <GripVertical />
-      <p>{name}</p>
+    <div className="w-full flex items-center gap-2">
+      <div
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+        className="w-3/4 flex items-center gap-2 p-2 border border-gray-300 rounded-md bg-white"
+      >
+        <GripVertical />
+        <p>{name}</p>
+      </div>
+      <Trash2 onClick={() => deleteItem(id)} className="text-destructive" />
     </div>
   );
 };
@@ -94,6 +102,11 @@ export default function CategoryManager(category: ICategoryManager) {
     }
   }
 
+  function deleteItem(id: string) {
+    console.log("test");
+    setItems(items.filter((item) => item.id !== id));
+  }
+
   return (
     <div className="w-full flex flex-col gap-5">
       <div className="flex justify-between items-center pt-2">
@@ -122,15 +135,15 @@ export default function CategoryManager(category: ICategoryManager) {
           {items.map((product) => (
             <div key={product.id} className="w-full flex justify-start">
               <SortableItem
-                key={product.id}
                 id={product.id}
                 name={product.name}
+                deleteItem={deleteItem}
               />
             </div>
           ))}
         </SortableContext>
       </DndContext>
-      <div className="w-2/3">
+      <div className="w-3/4">
         <Select value="" onValueChange={addItem}>
           <SelectTrigger>
             <Plus className="text-accent" />

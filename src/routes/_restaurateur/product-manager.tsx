@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { createFileRoute } from "@tanstack/react-router";
 import { Save } from "lucide-react";
 
-export const Route = createFileRoute("/_restaurant/product-manager")({
+export const Route = createFileRoute("/_restaurateur/product-manager")({
   component: ProductManager,
 });
 
