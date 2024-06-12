@@ -10,6 +10,9 @@ COPY package*.json ./
 # Installez les dépendances
 RUN npm install
 
+#creer les routes 
+RUN npm run routes
+
 # Copiez le reste des fichiers de l'application dans le conteneur
 COPY . .
 
