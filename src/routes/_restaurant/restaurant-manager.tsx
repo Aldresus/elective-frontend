@@ -5,10 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { createFileRoute } from "@tanstack/react-router";
-import { Save } from "lucide-react";
+import { Plus, Save } from "lucide-react";
 
-export const Route = createFileRoute("/_restaurant/menu-manager")({
-  component: MenuManager,
+export const Route = createFileRoute("/_restaurant/restaurant-manager")({
+  component: RestaurantManager,
 });
 
 interface Items {
@@ -28,7 +28,7 @@ const testData: Array<ICategoryManager> = [
     category_id: "1",
     items: [
       { name: "Produit 1", id: "1" },
-      { name: "Produit 2", id: "2" },
+      { name: "Menu 1", id: "5" },
       { name: "Produit 3", id: "3" },
     ],
   },
@@ -36,8 +36,8 @@ const testData: Array<ICategoryManager> = [
     category_name: "Category 2",
     category_id: "2",
     items: [
-      { name: "Produit 2", id: "1" },
-      { name: "Produit 3", id: "2" },
+      { name: "Produit 2", id: "2" },
+      { name: "Menu 2", id: "6" },
     ],
   },
   {
@@ -45,19 +45,19 @@ const testData: Array<ICategoryManager> = [
     category_id: "3",
     items: [
       { name: "Produit 1", id: "1" },
-      { name: "Produit 3", id: "2" },
+      { name: "Menu 4", id: "8" },
     ],
   },
 ];
 
-function MenuManager() {
+function RestaurantManager() {
   return (
     <div className="h-full w-full">
-      <H1>Menu Manager</H1>
-      <div className="h-full w-full flex flex-col gap-4 pb-28 overflow-auto">
+      <H1 className="pb-2">Restaurant Manager</H1>
+      <div className="h-full w-full flex flex-col gap-4 pb-40 overflow-auto">
         <div className="flex flex-col gap-4 mt-2">
           <div>
-            <Large>Menu Name</Large>
+            <Large>Restaurant Name</Large>
             <Input
               id="name"
               type="text"
@@ -66,7 +66,16 @@ function MenuManager() {
             />
           </div>
           <div>
-            <Large>Menu Description</Large>
+            <Large>SIRET</Large>
+            <Input
+              id="siret"
+              type="text"
+              placeholder="SIRET"
+              className="w-full"
+            />
+          </div>
+          <div>
+            <Large>Restaurant Description</Large>
             <Textarea id="textarea" placeholder="Description" />
           </div>
           <div>
@@ -89,7 +98,12 @@ function MenuManager() {
             <CategoryManager {...testDataItem} />
           </div>
         ))}
-        <Button className="w-full flex gap-1">
+        <Button className="w-full flex gap-1" variant="outline">
+          <Plus />
+          Add Category
+        </Button>
+
+        <Button className="w-full flex gap-1 h-64">
           <Save />
           Enregistrer
         </Button>
