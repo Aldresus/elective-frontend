@@ -1,34 +1,35 @@
 import { CircleDashed, CircleDot } from "lucide-react";
 import { Large } from "../typography";
+import DeliveriesEntity from "@/entities/deliveries";
 
-interface DeliveryHistoryCardProps {
-  stateDelivery: string;
-}
-
-export default function DeliveryHistoryCard({
-  stateDelivery,
-}: DeliveryHistoryCardProps) {
+export default function DeliveryHistoryCard(props: DeliveriesEntity) {
   return (
     <div className="flex items-center justify-around w-full h-1/8 bg-gray-200 rounded-lg py-2">
       <div>
-        <Large>Restaurant 1</Large>
-        <Large>Nom du client</Large>
-        <p>Date de la livraison</p>
+        <Large>{props.order_name}</Large>
+        <Large>
+          {props.user_first_name} {props.user_last_name}
+        </Large>
+        <p>
+          {props.status === "Terminée"
+            ? props.received_datetime?.toLocaleDateString()
+            : props.restaurant_to_delivery_datetime?.toLocaleDateString()}
+        </p>
       </div>
       <div className="flex flex-col justify-around items-center gap-2">
-        <Large>30.52€</Large>
+        <Large>{props.price} €</Large>
         <div className="flex">
-          {stateDelivery === "Terminée" ? (
+          {props.status === "Terminée" ? (
             <CircleDot className="text-red-500 mr-1" />
           ) : (
             <CircleDashed className="text-green-500 mr-1" />
           )}
           <p
             className={
-              stateDelivery === "Terminée" ? "text-red-500" : "text-green-500"
+              props.status === "Terminée" ? "text-red-500" : "text-green-500"
             }
           >
-            {stateDelivery}
+            {props.status}
           </p>
         </div>
       </div>
