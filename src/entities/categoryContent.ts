@@ -15,6 +15,7 @@ export function isMenu(item: Product | Menu): item is Menu {
   return (item as Menu).id_menu !== undefined;
 }
 
+// Get id of the item   Warning : do not use when you need another type specific attribute
 export function getItemId(item: Product | Menu): string {
   if (isProduct(item)) {
     return item.id_product
