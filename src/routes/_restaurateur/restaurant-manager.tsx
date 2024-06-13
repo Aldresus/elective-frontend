@@ -1,5 +1,6 @@
+import { categoryData, itemsData } from "@/assets/testData";
 import CategoryManager from "@/components/restaurant/categoryManager";
-import { H1, Large } from "@/components/typography";
+import { H1 } from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -12,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { CategoryContent } from "@/entities/categoryContent";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute } from "@tanstack/react-router";
 import { Minus, Plus, Save } from "lucide-react";
@@ -22,45 +24,6 @@ import { z } from "zod";
 export const Route = createFileRoute("/_restaurateur/restaurant-manager")({
   component: RestaurantManager,
 });
-
-interface Items {
-  name: string;
-  id: string;
-}
-
-interface ICategoryManager {
-  category_name: string;
-  category_id: string;
-  items: Items[];
-}
-
-const testData: Array<ICategoryManager> = [
-  {
-    category_name: "Category 1",
-    category_id: "1",
-    items: [
-      { name: "Produit 1", id: "1" },
-      { name: "Menu 1", id: "5" },
-      { name: "Produit 3", id: "3" },
-    ],
-  },
-  {
-    category_name: "Category 2",
-    category_id: "2",
-    items: [
-      { name: "Produit 2", id: "2" },
-      { name: "Menu 2", id: "6" },
-    ],
-  },
-  {
-    category_name: "Category 3",
-    category_id: "3",
-    items: [
-      { name: "Produit 1", id: "1" },
-      { name: "Menu 4", id: "8" },
-    ],
-  },
-];
 
 const restaurantSchema = z.object({
   name: z.string().min(3, { message: "Nom trop court (Minimum 3)." }),
@@ -75,7 +38,7 @@ const restaurantSchema = z.object({
 });
 
 function RestaurantManager() {
-  const [data, setData] = useState<ICategoryManager[]>(testData);
+  const [data, setData] = useState<CategoryContent[]>(categoryData);
   const [displayCategory, setdisplayCategory] = useState<Boolean>(false);
   const [categoryName, setCategoryName] = useState("");
 
@@ -219,7 +182,7 @@ function RestaurantManager() {
         {data.map((dataItem) => (
           <div key={dataItem.category_id}>
             <Separator />
-            <CategoryManager {...dataItem} />
+            <CategoryManager category={dataItem} allItemsList={itemsData} />
           </div>
         ))}
         {displayCategory && (

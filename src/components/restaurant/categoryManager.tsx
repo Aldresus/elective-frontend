@@ -18,30 +18,21 @@ import {
   SelectValue,
   SelectItem,
 } from "../ui/select";
+import {
+  CategoryContent,
+  getItemId,
+  isMenu,
+  isProduct,
+} from "@/entities/categoryContent";
+import { Menu } from "@/entities/menu";
+import { Product } from "@/entities/product";
 
-interface Items {
-  name: string;
+interface ItemRequiredValues {
   id: string;
+  name: string;
 }
 
-const itemsData: Array<Items> = [
-  { name: "Produit 1", id: "1" },
-  { name: "Produit 2", id: "2" },
-  { name: "Produit 3", id: "3" },
-  { name: "Produit 4", id: "4" },
-  { name: "Menu 1", id: "5" },
-  { name: "Menu 2", id: "6" },
-  { name: "Menu 3", id: "7" },
-  { name: "Menu 4", id: "8" },
-];
-
-interface ICategoryManager {
-  category_name: string;
-  category_id: string;
-  items: Items[];
-}
-
-interface SortableItemProps extends Items {
+interface SortableItemProps extends ItemRequiredValues {
   deleteItem: (id: string) => void;
 }
 
@@ -69,10 +60,17 @@ const SortableItem = ({ id, name, deleteItem }: SortableItemProps) => {
   );
 };
 
-export default function CategoryManager(category: ICategoryManager) {
-  const [items, setItems] = useState<{ name: string; id: string }[]>(
-    category.items
-  );
+interface CategoryManagerProps extends React.HTMLAttributes<HTMLDivElement> {
+  category: CategoryContent;
+  allItemsList: (Menu | Product)[];
+}
+
+export default function CategoryManager({
+  category,
+  allItemsList,
+}: CategoryManagerProps) {
+  const [itemsList, setitemsList] = useState<(Menu | Product)[]>(allItemsList);
+  const [items, setItems] = useState<(Menu | Product)[]>(category.items);
   const [active, setActive] = useState<Active | null>(null);
   const [feedbackSelect, setfeedbackSelect] = useState<string | null>(null);
 
@@ -82,20 +80,54 @@ export default function CategoryManager(category: ICategoryManager) {
   const sensors = useSensors(mouseSensor, touchSensor);
 
   function addItem(newId: string) {
+    // Check if item is already in the category
     const checkValue = items.find((item) => {
-      return item.id === newId ? true : false;
+      if (isProduct(item)) {
+        return item.id_product === newId ? true : false;
+      } else {
+        return item.id_menu === newId ? true : false;
+      }
     });
+
+    // if item is not in the category, we add it, else do nothing
     if (!checkValue) {
-      const newItem = itemsData.find((item) => {
-        return item.id === newId;
+      //get the item from the list with all items
+      const newItem = itemsList.find((item) => {
+        if (isProduct(item)) {
+          return item.id_product === newId;
+        } else {
+          return item.id_menu === newId;
+        }
       });
-      setItems([
-        ...items,
-        {
-          name: newItem.name,
-          id: newId,
-        },
-      ]);
+      // add it to the category list
+      if (newItem !== undefined && isProduct(newItem)) {
+        setItems([
+          ...items,
+          {
+            id_product: newItem.id_product,
+            name: newItem.name,
+            price: newItem.price,
+            description: newItem.description,
+            product_image_url: newItem.product_image_url,
+            category: newItem.category,
+            id_restaurant: newItem.id_restaurant,
+          },
+        ]);
+      } else if (newItem !== undefined && isMenu(newItem)) {
+        setItems([
+          ...items,
+          {
+            id_menu: newItem.id_menu,
+            name: newItem.name,
+            description: newItem.description,
+            menu_image_url: newItem.menu_image_url,
+            price: newItem.price,
+            category: newItem.category,
+            menu_ordered_categories: newItem.menu_ordered_categories,
+            products: newItem.products,
+          },
+        ]);
+      }
       setfeedbackSelect("Item ajouté");
     } else {
       setfeedbackSelect("Item déjà dans la catégorie");
@@ -103,8 +135,15 @@ export default function CategoryManager(category: ICategoryManager) {
   }
 
   function deleteItem(id: string) {
-    console.log("test");
-    setItems(items.filter((item) => item.id !== id));
+    setItems(
+      items.filter((item) => {
+        if (isProduct(item)) {
+          item.id_product !== id;
+        } else {
+          item.id_menu !== id;
+        }
+      })
+    );
   }
 
   return (
@@ -120,9 +159,20 @@ export default function CategoryManager(category: ICategoryManager) {
         }}
         onDragEnd={({ active, over }) => {
           if (over && active.id !== over?.id) {
-            const activeIndex = items.findIndex(({ id }) => id === active.id);
-            const overIndex = items.findIndex(({ id }) => id === over.id);
-
+            const activeIndex = items.findIndex((item) => {
+              if (isProduct(item)) {
+                return item.id_product === active.id;
+              } else {
+                return item.id_menu === active.id;
+              }
+            });
+            const overIndex = items.findIndex((item) => {
+              if (isProduct(item)) {
+                return item.id_product === over.id;
+              } else {
+                return item.id_menu === over.id;
+              }
+            });
             setItems(arrayMove(items, activeIndex, overIndex));
           }
           setActive(null);
@@ -131,12 +181,16 @@ export default function CategoryManager(category: ICategoryManager) {
           setActive(null);
         }}
       >
-        <SortableContext items={items.map((product) => product.id)}>
-          {items.map((product) => (
-            <div key={product.id} className="w-full flex justify-start">
+        <SortableContext
+          items={items.map((item) => {
+            return getItemId(item);
+          })}
+        >
+          {items.map((item) => (
+            <div key={getItemId(item)} className="w-full flex justify-start">
               <SortableItem
-                id={product.id}
-                name={product.name}
+                id={getItemId(item)}
+                name={item.name}
                 deleteItem={deleteItem}
               />
             </div>
@@ -150,8 +204,8 @@ export default function CategoryManager(category: ICategoryManager) {
             <SelectValue placeholder="Ajouter Item" />
           </SelectTrigger>
           <SelectContent>
-            {itemsData.map((item) => (
-              <SelectItem key={item.id} value={item.id}>
+            {itemsList.map((item) => (
+              <SelectItem key={getItemId(item)} value={getItemId(item)}>
                 {item.name}
               </SelectItem>
             ))}
