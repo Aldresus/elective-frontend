@@ -22,6 +22,7 @@ import { Route as RestaurateurRestaurateurImport } from './routes/_restaurateur/
 import { Route as RestaurateurRestaurantManagerImport } from './routes/_restaurateur/restaurant-manager'
 import { Route as RestaurateurProductManagerImport } from './routes/_restaurateur/product-manager'
 import { Route as RestaurateurMenuManagerImport } from './routes/_restaurateur/menu-manager'
+import { Route as RestaurateurCommandMonitoringImport } from './routes/_restaurateur/commandMonitoring'
 import { Route as LoginSignupImport } from './routes/_login/signup'
 import { Route as LoginLoginImport } from './routes/_login/login'
 import { Route as DeliveryDeliveryImport } from './routes/_delivery/delivery'
@@ -87,6 +88,12 @@ const RestaurateurMenuManagerRoute = RestaurateurMenuManagerImport.update({
   path: '/menu-manager',
   getParentRoute: () => RestaurateurRoute,
 } as any)
+
+const RestaurateurCommandMonitoringRoute =
+  RestaurateurCommandMonitoringImport.update({
+    path: '/commandMonitoring',
+    getParentRoute: () => RestaurateurRoute,
+  } as any)
 
 const LoginSignupRoute = LoginSignupImport.update({
   path: '/signup',
@@ -187,6 +194,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginSignupImport
       parentRoute: typeof LoginImport
     }
+    '/_restaurateur/commandMonitoring': {
+      id: '/_restaurateur/commandMonitoring'
+      path: '/commandMonitoring'
+      fullPath: '/commandMonitoring'
+      preLoaderRoute: typeof RestaurateurCommandMonitoringImport
+      parentRoute: typeof RestaurateurImport
+    }
     '/_restaurateur/menu-manager': {
       id: '/_restaurateur/menu-manager'
       path: '/menu-manager'
@@ -243,6 +257,7 @@ export const routeTree = rootRoute.addChildren({
   }),
   LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
   RestaurateurRoute: RestaurateurRoute.addChildren({
+    RestaurateurCommandMonitoringRoute,
     RestaurateurMenuManagerRoute,
     RestaurateurProductManagerRoute,
     RestaurateurRestaurantManagerRoute,
@@ -289,6 +304,7 @@ export const routeTree = rootRoute.addChildren({
     "/_restaurateur": {
       "filePath": "_restaurateur.tsx",
       "children": [
+        "/_restaurateur/commandMonitoring",
         "/_restaurateur/menu-manager",
         "/_restaurateur/product-manager",
         "/_restaurateur/restaurant-manager",
@@ -320,6 +336,10 @@ export const routeTree = rootRoute.addChildren({
     "/_login/signup": {
       "filePath": "_login/signup.tsx",
       "parent": "/_login"
+    },
+    "/_restaurateur/commandMonitoring": {
+      "filePath": "_restaurateur/commandMonitoring.tsx",
+      "parent": "/_restaurateur"
     },
     "/_restaurateur/menu-manager": {
       "filePath": "_restaurateur/menu-manager.tsx",
