@@ -1,8 +1,19 @@
 import { CircleDashed, CircleDot } from "lucide-react";
 import { Large } from "../typography";
-import DeliveriesEntity from "@/entities/deliveries";
+import OrderEntity from "@/entities/order";
+import UserEntity from "@/entities/user";
 
-export default function DeliveryHistoryCard(props: DeliveriesEntity) {
+interface IDeliveries extends OrderEntity, UserEntity {
+  price?: string;
+  order_name?: string;
+  status?: string;
+  user_first_name?: string;
+  user_last_name?: string;
+  received_datetime?: Date;
+  restaurant_to_delivery_datetime?: Date;
+}
+
+export default function DeliveryHistoryCard(props: IDeliveries) {
   return (
     <div className="flex items-center justify-around w-full h-1/8 bg-gray-200 rounded-lg py-2">
       <div>

@@ -15,7 +15,10 @@ import {
 } from "react";
 import ReactModal from "react-modal";
 import QrScanner from "qr-scanner";
-import DeliveriesEntity from "@/entities/deliveries";
+import DeliveryEntity from "@/entities/delivery";
+import OrderEntity from "@/entities/order";
+import UserEntity from "@/entities/user";
+import RestaurantEntity from "@/entities/restaurant";
 
 export const Route = createFileRoute("/_delivery/delivery")({
   component: Delivery,
@@ -31,8 +34,23 @@ const DeliveriesContext = createContext<IDeliveriesContext>({
   setIsOpen: () => {},
 });
 
+interface IDelivery extends DeliveryEntity, OrderEntity, UserEntity {
+  order_id: string;
+  status?: string;
+  price?: string;
+  restaurant_name?: string;
+  restaurant_address?: string;
+  restaurant_city?: string;
+  restaurant_postal_code?: string;
+  user_last_name?: string;
+  user_first_name?: string;
+  user_address?: string;
+  user_city?: string;
+  user_postal_code?: string;
+}
+
 function Delivery() {
-  const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [qrCodeData, setQrCodeData] = useState<string | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -41,14 +59,12 @@ function Delivery() {
   ) as MutableRefObject<MediaStream | null>;
   const qrScannerRef = useRef<QrScanner | null>(null);
 
-  //const [data, setData] = useState("No Result");
-
   function openModal() {
-    setIsOpen(true);
+    setModalIsOpen(true);
   }
 
   function closeModal() {
-    setIsOpen(false);
+    setModalIsOpen(false);
   }
 
   useEffect(() => {
@@ -108,30 +124,43 @@ function Delivery() {
     };
   }, [modalIsOpen]);
 
-  const [delivery, setDelivery] = useState<DeliveriesEntity | null>(null);
+  const userData: UserEntity = {
+    first_name: "Jean",
+    last_name: "Dupont",
+    address: "Rue de la Guerre",
+    city: "Lingolsheim",
+    postal_code: "67000",
+  };
 
-  useEffect(() => {
-    setDelivery(
-      //   null
-      {
-        id_order: Math.random().toString(36).substring(2),
-        status: "En cours",
-        price: "10",
-        restaurant_name: "Le Pain Quotidien",
-        restaurant_address: "Rue de la République",
-        restaurant_city: "Srasbourg",
-        restaurant_postal_code: "67000",
-        user_last_name: "Dupont",
-        user_first_name: "Jean",
-        user_address: "Rue de la Paix",
-        user_city: "Lingolsheim",
-        user_postal_code: "67000",
-      }
-    );
-  }, []);
+  const restaurantData: RestaurantEntity = {
+    name: "KFC",
+    address: "Rue de la Paix",
+    city: "Strasbourg",
+    postal_code: "67000",
+  };
+
+  const orderData: OrderEntity = {
+    status: "Terminée",
+    price: "100",
+  };
+
+  const delivery: IDelivery | null = {
+    order_id: Math.random().toString(36).substring(2),
+    status: orderData?.status,
+    price: orderData?.price,
+    restaurant_name: restaurantData?.name,
+    restaurant_address: restaurantData?.address,
+    restaurant_city: restaurantData?.city,
+    restaurant_postal_code: restaurantData?.postal_code,
+    user_last_name: userData?.last_name,
+    user_first_name: userData?.first_name,
+    user_address: userData?.address,
+    user_city: userData?.city,
+    user_postal_code: userData?.postal_code,
+  };
 
   return (
-    <DeliveriesContext.Provider value={{ modalIsOpen, setIsOpen }}>
+    <DeliveriesContext.Provider value={{ modalIsOpen, setModalIsOpen }}>
       <div className="flex flex-col mx-auto h-full pb-0 gap-2">
         {delivery ? (
           <>
@@ -148,7 +177,7 @@ function Delivery() {
             </div>
             <div className="flex flex-col items-stretch h-full pb-32">
               <div className="flex-1">
-                <Large>{delivery?.order_name}</Large>
+                <Large>{delivery?.restaurant_name}</Large>
                 <p>{delivery?.restaurant_address}</p>
                 <p>
                   {delivery?.restaurant_city} {delivery?.restaurant_postal_code}

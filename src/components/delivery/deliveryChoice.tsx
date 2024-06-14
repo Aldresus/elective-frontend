@@ -1,10 +1,21 @@
 import { Check, X } from "lucide-react";
 import { H3, Large } from "../typography";
-import DeliveriesEntity from "@/entities/deliveries";
+import UserEntity from "@/entities/user";
+import OrderEntity from "@/entities/order";
+import { Card } from "../ui/card";
 
-export default function DeliveryChoice(props: DeliveriesEntity) {
+export interface IDelivery extends OrderEntity, UserEntity {
+  user_address?: string;
+  user_city?: string;
+  user_postal_code?: string;
+  order_name?: string;
+  price?: string;
+  status?: string;
+}
+
+export default function DeliveryChoice({ ...props }: IDelivery) {
   return (
-    <div className="py-3 px-6 rounded-xl bg-slate-100">
+    <Card className="py-3 px-6 rounded-xl bg-slate-100">
       <div className="flex justify-between items-center mb-2">
         <H3>{props.order_name}</H3>
         <Large>{props.price} €</Large>
@@ -23,6 +34,6 @@ export default function DeliveryChoice(props: DeliveriesEntity) {
           <X />
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
