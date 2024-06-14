@@ -19,6 +19,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as ComponentsIndexImport } from './routes/components/index'
 import { Route as UserUserImport } from './routes/_user/user'
 import { Route as RestaurateurRestaurateurImport } from './routes/_restaurateur/restaurateur'
+import { Route as RestaurateurRestaurantOfferingsImport } from './routes/_restaurateur/restaurantOfferings'
 import { Route as RestaurateurRestaurantManagerImport } from './routes/_restaurateur/restaurant-manager'
 import { Route as RestaurateurProductManagerImport } from './routes/_restaurateur/product-manager'
 import { Route as RestaurateurMenuManagerImport } from './routes/_restaurateur/menu-manager'
@@ -70,6 +71,12 @@ const RestaurateurRestaurateurRoute = RestaurateurRestaurateurImport.update({
   path: '/restaurateur',
   getParentRoute: () => RestaurateurRoute,
 } as any)
+
+const RestaurateurRestaurantOfferingsRoute =
+  RestaurateurRestaurantOfferingsImport.update({
+    path: '/restaurantOfferings',
+    getParentRoute: () => RestaurateurRoute,
+  } as any)
 
 const RestaurateurRestaurantManagerRoute =
   RestaurateurRestaurantManagerImport.update({
@@ -222,6 +229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RestaurateurRestaurantManagerImport
       parentRoute: typeof RestaurateurImport
     }
+    '/_restaurateur/restaurantOfferings': {
+      id: '/_restaurateur/restaurantOfferings'
+      path: '/restaurantOfferings'
+      fullPath: '/restaurantOfferings'
+      preLoaderRoute: typeof RestaurateurRestaurantOfferingsImport
+      parentRoute: typeof RestaurateurImport
+    }
     '/_restaurateur/restaurateur': {
       id: '/_restaurateur/restaurateur'
       path: '/restaurateur'
@@ -261,6 +275,7 @@ export const routeTree = rootRoute.addChildren({
     RestaurateurMenuManagerRoute,
     RestaurateurProductManagerRoute,
     RestaurateurRestaurantManagerRoute,
+    RestaurateurRestaurantOfferingsRoute,
     RestaurateurRestaurateurRoute,
   }),
   UserRoute: UserRoute.addChildren({ UserUserRoute }),
@@ -308,6 +323,7 @@ export const routeTree = rootRoute.addChildren({
         "/_restaurateur/menu-manager",
         "/_restaurateur/product-manager",
         "/_restaurateur/restaurant-manager",
+        "/_restaurateur/restaurantOfferings",
         "/_restaurateur/restaurateur"
       ]
     },
@@ -351,6 +367,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_restaurateur/restaurant-manager": {
       "filePath": "_restaurateur/restaurant-manager.tsx",
+      "parent": "/_restaurateur"
+    },
+    "/_restaurateur/restaurantOfferings": {
+      "filePath": "_restaurateur/restaurantOfferings.tsx",
       "parent": "/_restaurateur"
     },
     "/_restaurateur/restaurateur": {
