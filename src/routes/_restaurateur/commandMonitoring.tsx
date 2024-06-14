@@ -1,6 +1,6 @@
 import SearchBar from "@/components/common/searchBar";
 import Command from "@/components/restaurant/command";
-import { H1, H2, Large } from "@/components/typography";
+import { H1, H2 } from "@/components/typography";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_restaurateur/commandMonitoring")({

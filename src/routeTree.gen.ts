@@ -12,12 +12,14 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as UserImport } from './routes/_user'
+import { Route as SalesImport } from './routes/_sales'
 import { Route as RestaurateurImport } from './routes/_restaurateur'
 import { Route as LoginImport } from './routes/_login'
 import { Route as DeliveryImport } from './routes/_delivery'
 import { Route as IndexImport } from './routes/index'
 import { Route as ComponentsIndexImport } from './routes/components/index'
 import { Route as UserUserImport } from './routes/_user/user'
+import { Route as SalesSalesImport } from './routes/_sales/sales'
 import { Route as RestaurateurRestaurateurImport } from './routes/_restaurateur/restaurateur'
 import { Route as RestaurateurRestaurantOfferingsImport } from './routes/_restaurateur/restaurantOfferings'
 import { Route as RestaurateurRestaurantManagerImport } from './routes/_restaurateur/restaurant-manager'
@@ -34,6 +36,11 @@ import { Route as DeliveryDeliveriesImport } from './routes/_delivery/deliveries
 
 const UserRoute = UserImport.update({
   id: '/_user',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SalesRoute = SalesImport.update({
+  id: '/_sales',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -65,6 +72,11 @@ const ComponentsIndexRoute = ComponentsIndexImport.update({
 const UserUserRoute = UserUserImport.update({
   path: '/user',
   getParentRoute: () => UserRoute,
+} as any)
+
+const SalesSalesRoute = SalesSalesImport.update({
+  path: '/sales',
+  getParentRoute: () => SalesRoute,
 } as any)
 
 const RestaurateurRestaurateurRoute = RestaurateurRestaurateurImport.update({
@@ -159,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RestaurateurImport
       parentRoute: typeof rootRoute
     }
+    '/_sales': {
+      id: '/_sales'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof SalesImport
+      parentRoute: typeof rootRoute
+    }
     '/_user': {
       id: '/_user'
       path: ''
@@ -243,6 +262,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RestaurateurRestaurateurImport
       parentRoute: typeof RestaurateurImport
     }
+    '/_sales/sales': {
+      id: '/_sales/sales'
+      path: '/sales'
+      fullPath: '/sales'
+      preLoaderRoute: typeof SalesSalesImport
+      parentRoute: typeof SalesImport
+    }
     '/_user/user': {
       id: '/_user/user'
       path: '/user'
@@ -278,6 +304,7 @@ export const routeTree = rootRoute.addChildren({
     RestaurateurRestaurantOfferingsRoute,
     RestaurateurRestaurateurRoute,
   }),
+  SalesRoute: SalesRoute.addChildren({ SalesSalesRoute }),
   UserRoute: UserRoute.addChildren({ UserUserRoute }),
   ComponentsIndexRoute,
 })
@@ -294,6 +321,7 @@ export const routeTree = rootRoute.addChildren({
         "/_delivery",
         "/_login",
         "/_restaurateur",
+        "/_sales",
         "/_user",
         "/components/"
       ]
@@ -325,6 +353,12 @@ export const routeTree = rootRoute.addChildren({
         "/_restaurateur/restaurant-manager",
         "/_restaurateur/restaurantOfferings",
         "/_restaurateur/restaurateur"
+      ]
+    },
+    "/_sales": {
+      "filePath": "_sales.tsx",
+      "children": [
+        "/_sales/sales"
       ]
     },
     "/_user": {
@@ -376,6 +410,10 @@ export const routeTree = rootRoute.addChildren({
     "/_restaurateur/restaurateur": {
       "filePath": "_restaurateur/restaurateur.tsx",
       "parent": "/_restaurateur"
+    },
+    "/_sales/sales": {
+      "filePath": "_sales/sales.tsx",
+      "parent": "/_sales"
     },
     "/_user/user": {
       "filePath": "_user/user.tsx",

@@ -2,9 +2,9 @@ import ReactModal from "react-modal";
 import { H1 } from "../typography";
 import { useContext } from "react";
 import { Button } from "../ui/button";
-import { X } from "lucide-react";
-import { ProfilePageSelector } from "./profilePageSelector";
+import { ChevronRight, X } from "lucide-react";
 import { ModalContext } from "./modalContext";
+import { Link } from "@tanstack/react-router";
 
 export function EditProfileModal() {
   const { modalIsOpen, setmodalIsOpen } = useContext(ModalContext);
@@ -28,19 +28,46 @@ export function EditProfileModal() {
           </Button>
         </div>
         <div className="w-full flex flex-col gap-2 pt-4">
-          <ProfilePageSelector
-            text={"Commandes"}
-            pageLink={"path/to/orderpage"}
-          />
-          <ProfilePageSelector
-            text={"Parrainage"}
-            pageLink={"path/to/orderpage"}
-          />
-          <ProfilePageSelector
-            text={"Réglage Restaurant"}
-            pageLink={"path/to/orderpage"}
-          />
-          <ProfilePageSelector text={"Autre"} pageLink={"path/to/orderpage"} />
+          <Link to="/commandMonitoring">
+            <Button
+              className="w-full flex gap-1 justify-between"
+              variant="outline"
+              onClick={closeModal}
+            >
+              Commandes
+              <ChevronRight />
+            </Button>
+          </Link>
+          <Link to="/">
+            <Button
+              className="w-full flex gap-1 justify-between"
+              variant="outline"
+              onClick={closeModal}
+            >
+              Parrainage
+              <ChevronRight />
+            </Button>
+          </Link>
+          <Link to="/restaurant-manager">
+            <Button
+              className="w-full flex gap-1 justify-between"
+              variant="outline"
+              onClick={closeModal}
+            >
+              Réglage Restaurant
+              <ChevronRight />
+            </Button>
+          </Link>
+          <Link to="/">
+            <Button
+              className="w-full flex gap-1 justify-between"
+              variant="outline"
+              onClick={closeModal}
+            >
+              Autre
+              <ChevronRight />
+            </Button>
+          </Link>
         </div>
       </div>
     </ReactModal>
