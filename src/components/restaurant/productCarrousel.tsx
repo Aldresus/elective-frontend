@@ -1,33 +1,28 @@
+import { Menu } from "@/entities/menu";
 import { Product } from "@/entities/product";
 import { H2 } from "../typography";
+import { isProduct } from "@/entities/categoryContent";
 import { VerticalProductCard } from "./verticalProductCard";
-import { isProduct, type CategoryContent } from "@/entities/categoryContent";
-import { Menu } from "@/entities/menu";
-import { HorizontalProductCard } from "./horizontalProductCard";
 
-interface RestaurantCategoryProps extends React.HTMLProps<HTMLDivElement> {
+interface ProductCarrouselProps extends React.HTMLProps<HTMLDivElement> {
   title: string;
   content: Array<Product | Menu>;
-  orientation?: "horizontal" | "vertical";
 }
 
-export function RestaurantCategory({
+export function ProductCarrousel({
   title,
-  orientation = "horizontal",
   content,
-  className,
-}: RestaurantCategoryProps) {
-  const ProductCard =
-    orientation === "horizontal" ? HorizontalProductCard : VerticalProductCard;
-
+  ...props
+}: ProductCarrouselProps) {
   return (
-    <div>
+    <div className="overflow-hidden h-full w-full">
       <H2>{title}</H2>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="flex gap-3 overflow-x-scroll w-full whitespace-nowrap">
         {content.map((item) => {
           if (isProduct(item)) {
             return (
-              <ProductCard
+              <VerticalProductCard
+                className="shrink-0"
                 key={item.id_product}
                 title={item.name}
                 imageUrl={item.product_image_url}
@@ -37,7 +32,8 @@ export function RestaurantCategory({
             );
           }
           return (
-            <ProductCard
+            <VerticalProductCard
+              className="shrink-0"
               key={item.id_menu}
               title={item.name}
               imageUrl={item.menu_image_url}
