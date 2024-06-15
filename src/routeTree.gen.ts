@@ -29,8 +29,9 @@ import { Route as SalesAcceptationsCommandesImport } from './routes/_sales/accep
 import { Route as RestaurateurRestaurateurImport } from './routes/_restaurateur/restaurateur'
 import { Route as RestaurateurRestaurantOfferingsImport } from './routes/_restaurateur/restaurantOfferings'
 import { Route as RestaurateurRestaurantManagerImport } from './routes/_restaurateur/restaurant-manager'
-import { Route as RestaurateurProductManagerImport } from './routes/_restaurateur/product-manager'
+import { Route as RestaurateurProductManagerImport } from './routes/_restaurateur/productManager'
 import { Route as RestaurateurMenuManagerImport } from './routes/_restaurateur/menu-manager'
+import { Route as RestaurateurCreateEditProductImport } from './routes/_restaurateur/create-edit-product'
 import { Route as RestaurateurCommandMonitoringImport } from './routes/_restaurateur/commandMonitoring'
 import { Route as LoginSignupImport } from './routes/_login/signup'
 import { Route as LoginLoginImport } from './routes/_login/login'
@@ -139,7 +140,7 @@ const RestaurateurRestaurantManagerRoute =
 
 const RestaurateurProductManagerRoute = RestaurateurProductManagerImport.update(
   {
-    path: '/product-manager',
+    path: '/productManager',
     getParentRoute: () => RestaurateurRoute,
   } as any,
 )
@@ -148,6 +149,12 @@ const RestaurateurMenuManagerRoute = RestaurateurMenuManagerImport.update({
   path: '/menu-manager',
   getParentRoute: () => RestaurateurRoute,
 } as any)
+
+const RestaurateurCreateEditProductRoute =
+  RestaurateurCreateEditProductImport.update({
+    path: '/create-edit-product',
+    getParentRoute: () => RestaurateurRoute,
+  } as any)
 
 const RestaurateurCommandMonitoringRoute =
   RestaurateurCommandMonitoringImport.update({
@@ -266,12 +273,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginSignupImport
       parentRoute: typeof LoginImport
     }
-
     '/_restaurateur/commandMonitoring': {
       id: '/_restaurateur/commandMonitoring'
       path: '/commandMonitoring'
       fullPath: '/commandMonitoring'
       preLoaderRoute: typeof RestaurateurCommandMonitoringImport
+      parentRoute: typeof RestaurateurImport
+    }
+    '/_restaurateur/create-edit-product': {
+      id: '/_restaurateur/create-edit-product'
+      path: '/create-edit-product'
+      fullPath: '/create-edit-product'
+      preLoaderRoute: typeof RestaurateurCreateEditProductImport
       parentRoute: typeof RestaurateurImport
     }
     '/_restaurateur/menu-manager': {
@@ -281,10 +294,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RestaurateurMenuManagerImport
       parentRoute: typeof RestaurateurImport
     }
-    '/_restaurateur/product-manager': {
-      id: '/_restaurateur/product-manager'
-      path: '/product-manager'
-      fullPath: '/product-manager'
+    '/_restaurateur/productManager': {
+      id: '/_restaurateur/productManager'
+      path: '/productManager'
+      fullPath: '/productManager'
       preLoaderRoute: typeof RestaurateurProductManagerImport
       parentRoute: typeof RestaurateurImport
     }
@@ -394,6 +407,7 @@ export const routeTree = rootRoute.addChildren({
   LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
   RestaurateurRoute: RestaurateurRoute.addChildren({
     RestaurateurCommandMonitoringRoute,
+    RestaurateurCreateEditProductRoute,
     RestaurateurMenuManagerRoute,
     RestaurateurProductManagerRoute,
     RestaurateurRestaurantManagerRoute,
@@ -409,6 +423,163 @@ export const routeTree = rootRoute.addChildren({
     SalesPassationsCommandesRoute,
     SalesSalesRoute,
   }),
-  UserRoute: UserRoute.addChildren({ UserUserRoute }),
+  UserRoute: UserRoute.addChildren({ UserUserRoute, UserRestaurantIdRoute }),
   ComponentsIndexRoute,
 })
+
+/* prettier-ignore-end */
+
+/* ROUTE_MANIFEST_START
+{
+  "routes": {
+    "__root__": {
+      "filePath": "__root.tsx",
+      "children": [
+        "/",
+        "/_delivery",
+        "/_login",
+        "/_restaurateur",
+        "/_sales",
+        "/_user",
+        "/components/"
+      ]
+    },
+    "/": {
+      "filePath": "index.tsx"
+    },
+    "/_delivery": {
+      "filePath": "_delivery.tsx",
+      "children": [
+        "/_delivery/deliveries",
+        "/_delivery/deliveries-history",
+        "/_delivery/delivery"
+      ]
+    },
+    "/_login": {
+      "filePath": "_login.tsx",
+      "children": [
+        "/_login/login",
+        "/_login/signup"
+      ]
+    },
+    "/_restaurateur": {
+      "filePath": "_restaurateur.tsx",
+      "children": [
+        "/_restaurateur/commandMonitoring",
+        "/_restaurateur/create-edit-product",
+        "/_restaurateur/menu-manager",
+        "/_restaurateur/productManager",
+        "/_restaurateur/restaurant-manager",
+        "/_restaurateur/restaurantOfferings",
+        "/_restaurateur/restaurateur"
+      ]
+    },
+    "/_sales": {
+      "filePath": "_sales.tsx",
+      "children": [
+        "/_sales/acceptationsCommandes",
+        "/_sales/acceptationsLivraisons",
+        "/_sales/acquittementsLivraisons",
+        "/_sales/allClients",
+        "/_sales/clientDetails",
+        "/_sales/passationsCommandes",
+        "/_sales/sales"
+      ]
+    },
+    "/_user": {
+      "filePath": "_user.tsx",
+      "children": [
+        "/_user/user",
+        "/_user/restaurant/$id"
+      ]
+    },
+    "/_delivery/deliveries": {
+      "filePath": "_delivery/deliveries.tsx",
+      "parent": "/_delivery"
+    },
+    "/_delivery/deliveries-history": {
+      "filePath": "_delivery/deliveries-history.tsx",
+      "parent": "/_delivery"
+    },
+    "/_delivery/delivery": {
+      "filePath": "_delivery/delivery.tsx",
+      "parent": "/_delivery"
+    },
+    "/_login/login": {
+      "filePath": "_login/login.tsx",
+      "parent": "/_login"
+    },
+    "/_login/signup": {
+      "filePath": "_login/signup.tsx",
+      "parent": "/_login"
+    },
+    "/_restaurateur/commandMonitoring": {
+      "filePath": "_restaurateur/commandMonitoring.tsx",
+      "parent": "/_restaurateur"
+    },
+    "/_restaurateur/create-edit-product": {
+      "filePath": "_restaurateur/create-edit-product.tsx",
+      "parent": "/_restaurateur"
+    },
+    "/_restaurateur/menu-manager": {
+      "filePath": "_restaurateur/menu-manager.tsx",
+      "parent": "/_restaurateur"
+    },
+    "/_restaurateur/productManager": {
+      "filePath": "_restaurateur/productManager.tsx",
+      "parent": "/_restaurateur"
+    },
+    "/_restaurateur/restaurant-manager": {
+      "filePath": "_restaurateur/restaurant-manager.tsx",
+      "parent": "/_restaurateur"
+    },
+    "/_restaurateur/restaurantOfferings": {
+      "filePath": "_restaurateur/restaurantOfferings.tsx",
+      "parent": "/_restaurateur"
+    },
+    "/_restaurateur/restaurateur": {
+      "filePath": "_restaurateur/restaurateur.tsx",
+      "parent": "/_restaurateur"
+    },
+    "/_sales/acceptationsCommandes": {
+      "filePath": "_sales/acceptationsCommandes.tsx",
+      "parent": "/_sales"
+    },
+    "/_sales/acceptationsLivraisons": {
+      "filePath": "_sales/acceptationsLivraisons.tsx",
+      "parent": "/_sales"
+    },
+    "/_sales/acquittementsLivraisons": {
+      "filePath": "_sales/acquittementsLivraisons.tsx",
+      "parent": "/_sales"
+    },
+    "/_sales/allClients": {
+      "filePath": "_sales/allClients.tsx",
+      "parent": "/_sales"
+    },
+    "/_sales/clientDetails": {
+      "filePath": "_sales/clientDetails.tsx",
+      "parent": "/_sales"
+    },
+    "/_sales/passationsCommandes": {
+      "filePath": "_sales/passationsCommandes.tsx",
+      "parent": "/_sales"
+    },
+    "/_sales/sales": {
+      "filePath": "_sales/sales.tsx",
+      "parent": "/_sales"
+    },
+    "/_user/user": {
+      "filePath": "_user/user.tsx",
+      "parent": "/_user"
+    },
+    "/components/": {
+      "filePath": "components/index.tsx"
+    },
+    "/_user/restaurant/$id": {
+      "filePath": "_user/restaurant.$id.tsx",
+      "parent": "/_user"
+    }
+  }
+}
+ROUTE_MANIFEST_END */
