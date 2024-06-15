@@ -22,6 +22,7 @@ import { Route as UserUserImport } from './routes/_user/user'
 import { Route as SalesSalesImport } from './routes/_sales/sales'
 import { Route as SalesPassationsCommandesImport } from './routes/_sales/passationsCommandes'
 import { Route as SalesAllClientsImport } from './routes/_sales/allClients'
+import { Route as SalesAcquittementsLivraisonsImport } from './routes/_sales/acquittementsLivraisons'
 import { Route as SalesAcceptationsCommandesImport } from './routes/_sales/acceptationsCommandes'
 import { Route as RestaurateurRestaurateurImport } from './routes/_restaurateur/restaurateur'
 import { Route as RestaurateurRestaurantOfferingsImport } from './routes/_restaurateur/restaurantOfferings'
@@ -91,6 +92,12 @@ const SalesAllClientsRoute = SalesAllClientsImport.update({
   path: '/allClients',
   getParentRoute: () => SalesRoute,
 } as any)
+
+const SalesAcquittementsLivraisonsRoute =
+  SalesAcquittementsLivraisonsImport.update({
+    path: '/acquittementsLivraisons',
+    getParentRoute: () => SalesRoute,
+  } as any)
 
 const SalesAcceptationsCommandesRoute = SalesAcceptationsCommandesImport.update(
   {
@@ -289,6 +296,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SalesAcceptationsCommandesImport
       parentRoute: typeof SalesImport
     }
+    '/_sales/acquittementsLivraisons': {
+      id: '/_sales/acquittementsLivraisons'
+      path: '/acquittementsLivraisons'
+      fullPath: '/acquittementsLivraisons'
+      preLoaderRoute: typeof SalesAcquittementsLivraisonsImport
+      parentRoute: typeof SalesImport
+    }
     '/_sales/allClients': {
       id: '/_sales/allClients'
       path: '/allClients'
@@ -347,6 +361,7 @@ export const routeTree = rootRoute.addChildren({
   }),
   SalesRoute: SalesRoute.addChildren({
     SalesAcceptationsCommandesRoute,
+    SalesAcquittementsLivraisonsRoute,
     SalesAllClientsRoute,
     SalesPassationsCommandesRoute,
     SalesSalesRoute,
@@ -405,6 +420,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_sales.tsx",
       "children": [
         "/_sales/acceptationsCommandes",
+        "/_sales/acquittementsLivraisons",
         "/_sales/allClients",
         "/_sales/passationsCommandes",
         "/_sales/sales"
@@ -462,6 +478,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_sales/acceptationsCommandes": {
       "filePath": "_sales/acceptationsCommandes.tsx",
+      "parent": "/_sales"
+    },
+    "/_sales/acquittementsLivraisons": {
+      "filePath": "_sales/acquittementsLivraisons.tsx",
       "parent": "/_sales"
     },
     "/_sales/allClients": {

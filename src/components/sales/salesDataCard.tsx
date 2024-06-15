@@ -31,7 +31,7 @@ export default function SalesDataCard({
         <p>{orderId}</p>
       </div>
       <div>
-        {type === "passation" || "acceptCom" ? (
+        {type === "passation" || type === "acceptCom" ? (
           <Large>Nom du restaurant :</Large>
         ) : (
           <Large>Nom du livreur :</Large>
