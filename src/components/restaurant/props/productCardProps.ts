@@ -1,6 +1,6 @@
+import type { Menu } from "@/entities/menu";
+import type { Product } from "@/entities/product";
+
 export interface ProductCardProps extends React.HTMLProps<HTMLDivElement> {
-  title: string;
-  imageUrl: string;
-  description?: string;
-  price: number;
+  content: Menu | Product;
 }

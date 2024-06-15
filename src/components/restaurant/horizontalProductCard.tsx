@@ -1,28 +1,32 @@
 import { Plus } from "lucide-react";
 import { Large, Small } from "../typography";
-import { AspectRatio } from "../ui/aspect-ratio";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
-import { ProductCardProps } from "./props/productCardProps";
+import type { ProductCardProps } from "./props/productCardProps";
+import { isProduct } from "@/entities/categoryContent";
+import { cn } from "@/lib/utils";
 
 export function HorizontalProductCard({
   className,
-  title,
-  imageUrl,
-  children,
-  price,
-  description,
+  content,
   ...props
 }: ProductCardProps) {
   return (
     <Card
-      className="flex bg-card shadow-none border-none h-[200px] w-full gap-4"
+      className={cn(
+        "flex bg-card shadow-none border-none h-[200px] w-full gap-4",
+        className
+      )}
       {...props}
     >
       <div className="h-full aspect-square">
         <div className="object-fill h-full">
           <img
-            src="/src/assets/test/test.webp"
+            src={
+              isProduct(content)
+                ? content.product_image_url
+                : content.menu_image_url
+            }
             alt="restaurant"
             className="relative h-full w-full object-cover rounded-l-md aspect-square"
           />
@@ -31,9 +35,11 @@ export function HorizontalProductCard({
 
       <div className="w-full flex justify-between items-end gap-2 p-2">
         <div className="h-full flex flex-col justify-start gap-1">
-          <Large>{title}</Large>
-          <Small className="text-ellipsis line-clamp-3">{description}</Small>
-          <p>{price} €</p>
+          <Large>{content.name}</Large>
+          <Small className="text-ellipsis line-clamp-3">
+            {content.description}
+          </Small>
+          <p>{content.price} €</p>
         </div>
 
         <Button size="icon" className="shrink-0">
