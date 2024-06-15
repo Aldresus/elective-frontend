@@ -18,7 +18,6 @@ import { Route as DeliveryImport } from './routes/_delivery'
 import { Route as IndexImport } from './routes/index'
 import { Route as ComponentsIndexImport } from './routes/components/index'
 import { Route as UserUserImport } from './routes/_user/user'
-import { Route as UserRestaurantImport } from './routes/_user/restaurant'
 import { Route as RestaurateurRestaurateurImport } from './routes/_restaurateur/restaurateur'
 import { Route as RestaurateurCreateEditProductImport } from './routes/_restaurateur/create-edit-product'
 import { Route as LoginSignupImport } from './routes/_login/signup'
@@ -26,6 +25,7 @@ import { Route as LoginLoginImport } from './routes/_login/login'
 import { Route as DeliveryDeliveryImport } from './routes/_delivery/delivery'
 import { Route as DeliveryDeliveriesHistoryImport } from './routes/_delivery/deliveries-history'
 import { Route as DeliveryDeliveriesImport } from './routes/_delivery/deliveries'
+import { Route as UserRestaurantIdImport } from './routes/_user/restaurant.$id'
 
 // Create/Update Routes
 
@@ -64,11 +64,6 @@ const UserUserRoute = UserUserImport.update({
   getParentRoute: () => UserRoute,
 } as any)
 
-const UserRestaurantRoute = UserRestaurantImport.update({
-  path: '/restaurant',
-  getParentRoute: () => UserRoute,
-} as any)
-
 const RestaurateurRestaurateurRoute = RestaurateurRestaurateurImport.update({
   path: '/restaurateur',
   getParentRoute: () => rootRoute,
@@ -103,6 +98,11 @@ const DeliveryDeliveriesHistoryRoute = DeliveryDeliveriesHistoryImport.update({
 const DeliveryDeliveriesRoute = DeliveryDeliveriesImport.update({
   path: '/deliveries',
   getParentRoute: () => DeliveryRoute,
+} as any)
+
+const UserRestaurantIdRoute = UserRestaurantIdImport.update({
+  path: '/restaurant/$id',
+  getParentRoute: () => UserRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -193,13 +193,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RestaurateurRestaurateurImport
       parentRoute: typeof rootRoute
     }
-    '/_user/restaurant': {
-      id: '/_user/restaurant'
-      path: '/restaurant'
-      fullPath: '/restaurant'
-      preLoaderRoute: typeof UserRestaurantImport
-      parentRoute: typeof UserImport
-    }
     '/_user/user': {
       id: '/_user/user'
       path: '/user'
@@ -214,6 +207,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/_user/restaurant/$id': {
+      id: '/_user/restaurant/$id'
+      path: '/restaurant/$id'
+      fullPath: '/restaurant/$id'
+      preLoaderRoute: typeof UserRestaurantIdImport
+      parentRoute: typeof UserImport
+    }
   }
 }
 
@@ -227,7 +227,7 @@ export const routeTree = rootRoute.addChildren({
     DeliveryDeliveryRoute,
   }),
   LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
-  UserRoute: UserRoute.addChildren({ UserRestaurantRoute, UserUserRoute }),
+  UserRoute: UserRoute.addChildren({ UserUserRoute, UserRestaurantIdRoute }),
   RestaurateurCreateEditProductRoute,
   RestaurateurRestaurateurRoute,
   ComponentsIndexRoute,
@@ -275,8 +275,8 @@ export const routeTree = rootRoute.addChildren({
     "/_user": {
       "filePath": "_user.tsx",
       "children": [
-        "/_user/restaurant",
-        "/_user/user"
+        "/_user/user",
+        "/_user/restaurant/$id"
       ]
     },
     "/_delivery/deliveries": {
@@ -305,16 +305,16 @@ export const routeTree = rootRoute.addChildren({
     "/_restaurateur/restaurateur": {
       "filePath": "_restaurateur/restaurateur.tsx"
     },
-    "/_user/restaurant": {
-      "filePath": "_user/restaurant.tsx",
-      "parent": "/_user"
-    },
     "/_user/user": {
       "filePath": "_user/user.tsx",
       "parent": "/_user"
     },
     "/components/": {
       "filePath": "components/index.tsx"
+    },
+    "/_user/restaurant/$id": {
+      "filePath": "_user/restaurant.$id.tsx",
+      "parent": "/_user"
     }
   }
 }
