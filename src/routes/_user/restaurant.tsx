@@ -2,8 +2,8 @@ import { ProductCarrousel } from "@/components/restaurant/productCarrousel";
 import { RestaurantCategory } from "@/components/restaurant/restaurantCategory";
 import { H1 } from "@/components/typography";
 import type { CategoryContent } from "@/entities/categoryContent";
-import { Menu } from "@/entities/menu";
-import { Product } from "@/entities/product";
+import type { Menu } from "@/entities/menu";
+import type { Product } from "@/entities/product";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_user/restaurant")({
@@ -13,118 +13,102 @@ export const Route = createFileRoute("/_user/restaurant")({
 const contentPlaceholder: CategoryContent[] = [
   {
     category_id: "1",
-    category_name: "Super ça",
+    category_name: "Main Course",
     items: [
       {
         id_menu: "1",
-        name: "PAIN",
-        price: 100,
-        menu_image_url: "",
-        description: "fort bien gouteux",
-      } as Menu,
-      {
-        id_menu: "2",
-        name: "PAIN",
-        price: 100,
-        menu_image_url: "",
-        description: "fort bien gouteux",
+        name: "Menu Steak",
+        price: 25.99,
+        menu_image_url: "https://picsum.photos/200",
+        products: [
+          {
+            id_product: "1",
+            name: "Burger",
+            price: 12.99,
+            product_image_url: "https://picsum.photos/200",
+            category: "Burger",
+            description:
+              "Classic cheeseburger with lettuce, tomato, and special sauce.",
+          } as Product,
+          {
+            id_product: "2",
+            name: "Mozzarella Burger",
+            price: 9.99,
+            product_image_url: "https://picsum.photos/200",
+            category: "Burger",
+            description:
+              "Modern mozzarella burger with tomato, lettuce, and tomato sauce.",
+          },
+          {
+            id_product: "3",
+            name: "Calamari Burger",
+            price: 11.99,
+            product_image_url: "https://picsum.photos/200",
+            category: "Burger",
+            description:
+              "Calamari burger with tomato, lettuce, and tomato sauce.",
+          },
+          {
+            id_product: "4",
+            name: "Cheeseburger",
+            price: 10.99,
+            product_image_url: "https://picsum.photos/200",
+            category: "Burger",
+            description:
+              "Classic cheeseburger with lettuce, tomato, and special sauce.",
+          },
+          {
+            id_product: "5",
+            name: "French Fries",
+            price: 2.99,
+            product_image_url: "https://picsum.photos/200",
+            category: "Sides",
+            description: "French fries",
+          },
+          {
+            id_product: "6",
+            name: "Onion Rings",
+            price: 2.99,
+            product_image_url: "https://picsum.photos/200",
+            category: "Sides",
+            description: "Onion rings",
+          },
+          {
+            id_product: "7",
+            name: "Fruit Salad",
+            price: 2.99,
+            product_image_url: "https://picsum.photos/200",
+            category: "Dessert",
+            description: "Fruit salad",
+          },
+          {
+            id_product: "8",
+            name: "Ice Cream",
+            price: 5.99,
+            product_image_url: "https://picsum.photos/200",
+            category: "Dessert",
+            description: "Assorted flavors of premium ice cream.",
+          },
+          {
+            id_product: "9",
+            name: "Chocolate Cake",
+            price: 8.99,
+            product_image_url: "https://picsum.photos/200",
+            category: "Dessert",
+            description:
+              "Rich chocolate cake with layers of chocolate ganache.",
+          },
+        ],
+        description: "Burger with his fries and dessert.",
       } as Menu,
       {
         id_product: "1",
-        name: "PAIN",
-        price: 100,
-        product_image_url: "",
-        description: "fort bien gouteux",
+        name: "Burger",
+        price: 12.99,
+        product_image_url: "https://picsum.photos/200",
+        description:
+          "Classic cheeseburger with lettuce, tomato, and special sauce.",
       } as Product,
-      {
-        id_menu: "1",
-        name: "PAIN",
-        price: 100,
-        menu_image_url: "",
-        description: "fort bien gouteux",
-      } as Menu,
-      {
-        id_menu: "2",
-        name: "PAIN",
-        price: 100,
-        menu_image_url: "",
-        description: "fort bien gouteux",
-      } as Menu,
-      {
-        id_product: "1",
-        name: "PAIN",
-        price: 100,
-        product_image_url: "",
-        description: "fort bien gouteux",
-      } as Product,
-      {
-        id_menu: "1",
-        name: "PAIN",
-        price: 100,
-        menu_image_url: "",
-        description: "fort bien gouteux",
-      } as Menu,
-      {
-        id_menu: "2",
-        name: "PAIN",
-        price: 100,
-        menu_image_url: "",
-        description: "fort bien gouteux",
-      } as Menu,
-      {
-        id_product: "1",
-        name: "PAIN",
-        price: 100,
-        product_image_url: "",
-        description: "fort bien gouteux",
-      } as Product,
-    ],
-  },
-  {
-    category_id: "2",
-    category_name: "Dessert",
-    items: [
-      {
-        id_menu: "1",
-        name: "PAIN",
-        price: 100,
-        menu_image_url: "",
-        description: "fort bien gouteux",
-      } as Menu,
-      {
-        id_menu: "2",
-        name: "PAIN",
-        price: 100,
-        menu_image_url: "",
-        description: "fort bien gouteux",
-      } as Menu,
-      {
-        id_product: "1",
-        name: "PAIN",
-        price: 100,
-        product_image_url: "",
-        description: "fort bien gouteux",
-      } as Product,
-    ],
-  },
-  {
-    category_id: "3",
-    category_name: "Dessert",
-    items: [
-      {
-        id_menu: "1",
-        name: "PAIN",
-        price: 100,
-        menu_image_url: "",
-        description: "fort bien gouteux",
-      } as Menu,
-      {
-        id_menu: "2",
-        name: "PAIN",
-        price: 100,
-        menu_image_url: "",
-        description: "fort bien gouteux",
-      } as Menu,
     ],
   },
 ];
@@ -132,6 +116,16 @@ const contentPlaceholder: CategoryContent[] = [
 function Restaurant() {
   return (
     <div className="space-y-6 w-full">
+      {/* {selectedItem && isMenu(selectedItem) && (
+        <MenuConfigModal
+          content={selectedItem}
+          open={selectedItem !== undefined}
+          close={() => {
+            console.log("close");
+            setSelectedItem(undefined);
+          }}
+        />
+      )} */}
       <img
         className="w-full h-[200px] object-cover rounded-[20px]"
         src="/src/assets/test/test.webp"

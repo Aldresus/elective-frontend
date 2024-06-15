@@ -8,5 +8,6 @@ export interface Menu {
   price: number;
   category: string;
   menu_ordered_categories: string;
+  ids_products: string[];
   products: Product[];
 }

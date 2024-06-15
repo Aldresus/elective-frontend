@@ -3,6 +3,7 @@ import { Product } from "@/entities/product";
 import { H2 } from "../typography";
 import { isProduct } from "@/entities/categoryContent";
 import { VerticalProductCard } from "./verticalProductCard";
+import { cn } from "@/lib/utils";
 
 interface ProductCarrouselProps extends React.HTMLProps<HTMLDivElement> {
   title: string;
@@ -12,10 +13,11 @@ interface ProductCarrouselProps extends React.HTMLProps<HTMLDivElement> {
 export function ProductCarrousel({
   title,
   content,
+  className,
   ...props
 }: ProductCarrouselProps) {
   return (
-    <div className="overflow-hidden h-full w-full">
+    <div className={cn("overflow-hidden h-full w-full", className)} {...props}>
       <H2>{title}</H2>
       <div className="flex gap-3 overflow-x-scroll w-full whitespace-nowrap">
         {content.map((item) => {
@@ -23,22 +25,16 @@ export function ProductCarrousel({
             return (
               <VerticalProductCard
                 className="shrink-0"
-                key={item.id_product}
-                title={item.name}
-                imageUrl={item.product_image_url}
-                description={item.description}
-                price={item.price}
+                key={`product_${item.id_product}`}
+                content={item}
               />
             );
           }
           return (
             <VerticalProductCard
               className="shrink-0"
-              key={item.id_menu}
-              title={item.name}
-              imageUrl={item.menu_image_url}
-              description={item.description}
-              price={item.price}
+              key={`menu_${item.id_menu}`}
+              content={item}
             />
           );
         })}

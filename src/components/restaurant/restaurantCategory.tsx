@@ -1,4 +1,4 @@
-import { Product } from "@/entities/product";
+import type { Product } from "@/entities/product";
 import { H2 } from "../typography";
 import { VerticalProductCard } from "./verticalProductCard";
 import { isProduct, type CategoryContent } from "@/entities/categoryContent";
@@ -26,25 +26,9 @@ export function RestaurantCategory({
       <div className="grid grid-cols-2 gap-3">
         {content.map((item) => {
           if (isProduct(item)) {
-            return (
-              <ProductCard
-                key={item.id_product}
-                title={item.name}
-                imageUrl={item.product_image_url}
-                description={item.description}
-                price={item.price}
-              />
-            );
+            return <ProductCard key={item.id_product} content={item} />;
           }
-          return (
-            <ProductCard
-              key={item.id_menu}
-              title={item.name}
-              imageUrl={item.menu_image_url}
-              description={item.description}
-              price={item.price}
-            />
-          );
+          return <ProductCard key={item.id_menu} content={item} />;
         })}
       </div>
     </div>
