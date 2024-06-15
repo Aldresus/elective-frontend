@@ -28,6 +28,7 @@ function UserComponent() {
 
       return response.data as Array<Restaurant>;
     },
+    refetchInterval: 1000 * 60, // refresh every minute
   });
 
   return (

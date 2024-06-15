@@ -1,11 +1,11 @@
 import type { Menu } from "./menu";
 import type { Product } from "./product";
 
-export interface CategoryContent {
-  category_name: string;
-  category_id: string;
-  items: Array<Menu | Product>;
-}
+// export interface CategoryContent {
+//   category_name: string;
+//   category_id: string;
+//   items: Array<Menu | Product>;
+// }
 
 export function isProduct(item: Product | Menu): item is Product {
   return (item as Product).id_product !== undefined;

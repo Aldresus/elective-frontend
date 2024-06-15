@@ -36,6 +36,7 @@ function RestaurantPage() {
 
       return finalData;
     },
+    refetchInterval: 1000 * 60, // refresh every minute
   });
 
   return (

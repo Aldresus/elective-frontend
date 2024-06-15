@@ -20,7 +20,7 @@ export function ItemCarrousel({
   return (
     <div className={cn("overflow-hidden h-full w-full", className)} {...props}>
       <H2>{categoryName}</H2>
-      <div className="flex gap-3 overflow-x-scroll w-full whitespace-nowrap">
+      <div className="flex gap-3 overflow-x-auto w-full whitespace-nowrap">
         {items.map((item) => {
           if (isProduct(item)) {
             return (
