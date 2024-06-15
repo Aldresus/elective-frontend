@@ -1,34 +1,33 @@
 import type { Product } from "@/entities/product";
 import { H2 } from "../typography";
-import { VerticalProductCard } from "./verticalProductCard";
+import { VerticalProductCard } from "./product/verticalProductCard";
 import { isProduct, type CategoryContent } from "@/entities/categoryContent";
 import { Menu } from "@/entities/menu";
-import { HorizontalProductCard } from "./horizontalProductCard";
+import { HorizontalProductCard } from "./product/horizontalProductCard";
+import { HorizontalMenuCard } from "./menu/horizontalMenuCard";
 
 interface RestaurantCategoryProps extends React.HTMLProps<HTMLDivElement> {
   categoryName: string;
-  content: Array<Product | Menu>;
-  orientation?: "horizontal" | "vertical";
+  items: Array<Product | Menu>;
 }
 
 export function RestaurantCategory({
   categoryName: title,
-  orientation = "horizontal",
-  content,
+  items,
   className,
+  ...props
 }: RestaurantCategoryProps) {
-  const ProductCard =
-    orientation === "horizontal" ? HorizontalProductCard : VerticalProductCard;
-
   return (
-    <div>
+    <div className={className} {...props}>
       <H2>{title}</H2>
       <div className="grid grid-cols-2 gap-3">
-        {content.map((item) => {
+        {items.map((item) => {
           if (isProduct(item)) {
-            return <ProductCard key={item.id_product} content={item} />;
+            return (
+              <HorizontalProductCard key={item.id_product} product={item} />
+            );
           }
-          return <ProductCard key={item.id_menu} content={item} />;
+          return <HorizontalMenuCard key={item.id_menu} menuContent={item} />;
         })}
       </div>
     </div>
