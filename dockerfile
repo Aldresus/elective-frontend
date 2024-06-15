@@ -1,32 +1,29 @@
-# Étape 1: Build de l'application
-FROM node:22.2.0-alpine AS builder
+# Utilisez une image Node pour construire l'application
+FROM node:22 as builder
 
-# Définir le répertoire de travail dans le conteneur
+# Définissez le répertoire de travail dans le conteneur
 WORKDIR /app
 
-# Copier les fichiers package.json et package-lock.json
-COPY package.json package-lock.json ./
+# Copiez le package.json et le package-lock.json dans le conteneur
+COPY package*.json ./
 
-# Installer les dépendances
+# Installez les dépendances
 RUN npm install
 
-# Copier le reste de l'application
+# Copiez le reste des fichiers de l'application dans le conteneur
 COPY . .
 
-# Construire l'application
+# Construisez l'application pour la production
 RUN npm run build
 
-# Étape 2: Créer une image légère pour servir le contenu statique
-FROM nginx:stable-alpine
+# Utilisez une image Apache pour servir l'application
+FROM httpd:2.4
 
-# Copier les fichiers de build de l'étape précédente
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Copiez les fichiers de build de l'application dans le répertoire de distribution d'Apache
+COPY --from=builder /app/dist /usr/local/apache2/htdocs/
 
-# Copier la configuration Nginx personnalisée, si nécessaire
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Exposer le port 80
+# Exposez le port 80 pour accéder à l'application
 EXPOSE 80
 
-# Démarrer Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Lancez Apache en mode premier plan
+CMD ["httpd-foreground"]

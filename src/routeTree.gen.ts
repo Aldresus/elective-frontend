@@ -37,6 +37,7 @@ import { Route as LoginLoginImport } from './routes/_login/login'
 import { Route as DeliveryDeliveryImport } from './routes/_delivery/delivery'
 import { Route as DeliveryDeliveriesHistoryImport } from './routes/_delivery/deliveries-history'
 import { Route as DeliveryDeliveriesImport } from './routes/_delivery/deliveries'
+import { Route as UserRestaurantIdImport } from './routes/_user/restaurant.$id'
 
 // Create/Update Routes
 
@@ -179,6 +180,11 @@ const DeliveryDeliveriesRoute = DeliveryDeliveriesImport.update({
   getParentRoute: () => DeliveryRoute,
 } as any)
 
+const UserRestaurantIdRoute = UserRestaurantIdImport.update({
+  path: '/restaurant/$id',
+  getParentRoute: () => UserRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -260,6 +266,7 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginSignupImport
       parentRoute: typeof LoginImport
     }
+
     '/_restaurateur/commandMonitoring': {
       id: '/_restaurateur/commandMonitoring'
       path: '/commandMonitoring'
@@ -365,6 +372,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/_user/restaurant/$id': {
+      id: '/_user/restaurant/$id'
+      path: '/restaurant/$id'
+      fullPath: '/restaurant/$id'
+      preLoaderRoute: typeof UserRestaurantIdImport
+      parentRoute: typeof UserImport
+    }
   }
 }
 
@@ -398,150 +412,3 @@ export const routeTree = rootRoute.addChildren({
   UserRoute: UserRoute.addChildren({ UserUserRoute }),
   ComponentsIndexRoute,
 })
-
-/* prettier-ignore-end */
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/_delivery",
-        "/_login",
-        "/_restaurateur",
-        "/_sales",
-        "/_user",
-        "/components/"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_delivery": {
-      "filePath": "_delivery.tsx",
-      "children": [
-        "/_delivery/deliveries",
-        "/_delivery/deliveries-history",
-        "/_delivery/delivery"
-      ]
-    },
-    "/_login": {
-      "filePath": "_login.tsx",
-      "children": [
-        "/_login/login",
-        "/_login/signup"
-      ]
-    },
-    "/_restaurateur": {
-      "filePath": "_restaurateur.tsx",
-      "children": [
-        "/_restaurateur/commandMonitoring",
-        "/_restaurateur/menu-manager",
-        "/_restaurateur/product-manager",
-        "/_restaurateur/restaurant-manager",
-        "/_restaurateur/restaurantOfferings",
-        "/_restaurateur/restaurateur"
-      ]
-    },
-    "/_sales": {
-      "filePath": "_sales.tsx",
-      "children": [
-        "/_sales/acceptationsCommandes",
-        "/_sales/acceptationsLivraisons",
-        "/_sales/acquittementsLivraisons",
-        "/_sales/allClients",
-        "/_sales/clientDetails",
-        "/_sales/passationsCommandes",
-        "/_sales/sales"
-      ]
-    },
-    "/_user": {
-      "filePath": "_user.tsx",
-      "children": [
-        "/_user/user"
-      ]
-    },
-    "/_delivery/deliveries": {
-      "filePath": "_delivery/deliveries.tsx",
-      "parent": "/_delivery"
-    },
-    "/_delivery/deliveries-history": {
-      "filePath": "_delivery/deliveries-history.tsx",
-      "parent": "/_delivery"
-    },
-    "/_delivery/delivery": {
-      "filePath": "_delivery/delivery.tsx",
-      "parent": "/_delivery"
-    },
-    "/_login/login": {
-      "filePath": "_login/login.tsx",
-      "parent": "/_login"
-    },
-    "/_login/signup": {
-      "filePath": "_login/signup.tsx",
-      "parent": "/_login"
-    },
-    "/_restaurateur/commandMonitoring": {
-      "filePath": "_restaurateur/commandMonitoring.tsx",
-      "parent": "/_restaurateur"
-    },
-    "/_restaurateur/menu-manager": {
-      "filePath": "_restaurateur/menu-manager.tsx",
-      "parent": "/_restaurateur"
-    },
-    "/_restaurateur/product-manager": {
-      "filePath": "_restaurateur/product-manager.tsx",
-      "parent": "/_restaurateur"
-    },
-    "/_restaurateur/restaurant-manager": {
-      "filePath": "_restaurateur/restaurant-manager.tsx",
-      "parent": "/_restaurateur"
-    },
-    "/_restaurateur/restaurantOfferings": {
-      "filePath": "_restaurateur/restaurantOfferings.tsx",
-      "parent": "/_restaurateur"
-    },
-    "/_restaurateur/restaurateur": {
-      "filePath": "_restaurateur/restaurateur.tsx",
-      "parent": "/_restaurateur"
-    },
-    "/_sales/acceptationsCommandes": {
-      "filePath": "_sales/acceptationsCommandes.tsx",
-      "parent": "/_sales"
-    },
-    "/_sales/acceptationsLivraisons": {
-      "filePath": "_sales/acceptationsLivraisons.tsx",
-      "parent": "/_sales"
-    },
-    "/_sales/acquittementsLivraisons": {
-      "filePath": "_sales/acquittementsLivraisons.tsx",
-      "parent": "/_sales"
-    },
-    "/_sales/allClients": {
-      "filePath": "_sales/allClients.tsx",
-      "parent": "/_sales"
-    },
-    "/_sales/clientDetails": {
-      "filePath": "_sales/clientDetails.tsx",
-      "parent": "/_sales"
-    },
-    "/_sales/passationsCommandes": {
-      "filePath": "_sales/passationsCommandes.tsx",
-      "parent": "/_sales"
-    },
-    "/_sales/sales": {
-      "filePath": "_sales/sales.tsx",
-      "parent": "/_sales"
-    },
-    "/_user/user": {
-      "filePath": "_user/user.tsx",
-      "parent": "/_user"
-    },
-    "/components/": {
-      "filePath": "components/index.tsx"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
