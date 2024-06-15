@@ -15,7 +15,7 @@ export interface Restaurant {
   rating: number;
 }
 
-interface RestaurantCategory {
+export interface RestaurantCategory {
   id_restaurant_category: string;
   name: string;
   id_restaurant: string;
@@ -23,7 +23,7 @@ interface RestaurantCategory {
   Menus: Menu[];
 }
 
-interface MergedRestaurantCategory {
+export interface MergedRestaurantCategory {
   id_restaurant_category: string;
   name: string;
   id_restaurant: string;

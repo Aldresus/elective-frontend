@@ -76,7 +76,10 @@ function UserComponent() {
           <RestaurantCard className="flex-1">La mie tah caline</RestaurantCard>
           <RestaurantCard className="flex-1">La mie tah caline</RestaurantCard> */}
           {query.data?.slice(0, 3).map((restaurant) => (
-            <Link to={`/restaurant/${restaurant.id_restaurant}`}>
+            <Link
+              to={`/restaurant/${restaurant.id_restaurant}`}
+              key={restaurant.id_restaurant}
+            >
               <RestaurantCard
                 onClick={() => console.log(restaurant)}
                 className="flex-1"
@@ -92,7 +95,10 @@ function UserComponent() {
         <H2>Restaurants italiens</H2>
         <div className="flex w-full gap-6 overflow-x-scroll">
           {query.data?.slice(3, 9).map((restaurant) => (
-            <Link to={`/restaurant/${restaurant.id_restaurant}`}>
+            <Link
+              to={`/restaurant/${restaurant.id_restaurant}`}
+              key={restaurant.id_restaurant}
+            >
               <RestaurantCard
                 onClick={() => console.log(restaurant)}
                 className="w-[300px]"
@@ -108,7 +114,10 @@ function UserComponent() {
         <H2>Bon grec sa mère</H2>
         <div className="flex w-full gap-6 overflow-x-scroll">
           {query.data?.slice(9, 15).map((restaurant) => (
-            <Link to={`/restaurant/${restaurant.id_restaurant}`}>
+            <Link
+              to={`/restaurant/${restaurant.id_restaurant}`}
+              key={restaurant.id_restaurant}
+            >
               <RestaurantCard
                 onClick={() => console.log(restaurant)}
                 className="w-[300px]"
