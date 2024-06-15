@@ -6,13 +6,13 @@ import { Menu } from "@/entities/menu";
 import { HorizontalProductCard } from "./horizontalProductCard";
 
 interface RestaurantCategoryProps extends React.HTMLProps<HTMLDivElement> {
-  title: string;
+  categoryName: string;
   content: Array<Product | Menu>;
   orientation?: "horizontal" | "vertical";
 }
 
 export function RestaurantCategory({
-  title,
+  categoryName: title,
   orientation = "horizontal",
   content,
   className,

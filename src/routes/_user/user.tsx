@@ -75,7 +75,7 @@ function UserComponent() {
           {/* <RestaurantCard className="flex-1">La mie tah caline</RestaurantCard>
           <RestaurantCard className="flex-1">La mie tah caline</RestaurantCard>
           <RestaurantCard className="flex-1">La mie tah caline</RestaurantCard> */}
-          {query.data?.map((restaurant) => (
+          {query.data?.slice(0, 3).map((restaurant) => (
             <Link to={`/restaurant/${restaurant.id_restaurant}`}>
               <RestaurantCard
                 onClick={() => console.log(restaurant)}
@@ -88,6 +88,39 @@ function UserComponent() {
         </div>
         <Separator />
       </div>
+      <div>
+        <H2>Restaurants italiens</H2>
+        <div className="flex w-full gap-6 overflow-x-scroll">
+          {query.data?.slice(3, 9).map((restaurant) => (
+            <Link to={`/restaurant/${restaurant.id_restaurant}`}>
+              <RestaurantCard
+                onClick={() => console.log(restaurant)}
+                className="w-[300px]"
+              >
+                {restaurant.name}
+              </RestaurantCard>
+            </Link>
+          ))}
+        </div>
+        <Separator />
+      </div>
+      <div>
+        <H2>Bon grec sa mère</H2>
+        <div className="flex w-full gap-6 overflow-x-scroll">
+          {query.data?.slice(9, 15).map((restaurant) => (
+            <Link to={`/restaurant/${restaurant.id_restaurant}`}>
+              <RestaurantCard
+                onClick={() => console.log(restaurant)}
+                className="w-[300px]"
+              >
+                {restaurant.name}
+              </RestaurantCard>
+            </Link>
+          ))}
+        </div>
+        <Separator />
+      </div>
+
       {/* <div>
         <H2>Restaurants italiens</H2>
         <div className="flex w-full gap-6 overflow-x-scroll">

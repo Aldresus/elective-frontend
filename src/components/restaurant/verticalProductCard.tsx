@@ -10,7 +10,7 @@ import { useState } from "react";
 
 export function VerticalProductCard({
   className,
-  title,
+  categoryName: title,
   content,
   ...props
 }: ProductCardProps) {

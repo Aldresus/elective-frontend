@@ -15,26 +15,12 @@ interface MenuConfigModalProps extends React.HTMLAttributes<HTMLDivElement> {
   content: Menu;
 }
 
-const productCategoryAggreation = (products: Menu["products"]) => {
-  //create a new list of categories given the products list
-  const categories = [];
-  products.forEach((product) => {
-    categories.push({
-        name:product.category,
-    });
-  });
-  return Array.from(categories);
-};
-
 export function MenuConfigModal({
   open,
   close,
   content,
   ...props
 }: MenuConfigModalProps) {
-  const categories = productCategoryAggreation(content.products);
-  console.log(categories);
-
   return (
     <Dialog
       open={open}
@@ -54,13 +40,13 @@ export function MenuConfigModal({
           </div>
           <Separator />
           <div>
-            {content.products.map((product) => (
+            {/* {content.products.map((product) => (
               <div key={product.id_product}>
                 <H1>{product.name}</H1>
                 <div>{product.description}</div>
                 <div>{product.price}</div>
               </div>
-            ))}
+            ))} */}
           </div>
           <DialogFooter>{content.price}</DialogFooter>
         </DialogHeader>

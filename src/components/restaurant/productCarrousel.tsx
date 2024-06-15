@@ -6,19 +6,19 @@ import { VerticalProductCard } from "./verticalProductCard";
 import { cn } from "@/lib/utils";
 
 interface ProductCarrouselProps extends React.HTMLProps<HTMLDivElement> {
-  title: string;
+  categoryName: string;
   content: Array<Product | Menu>;
 }
 
 export function ProductCarrousel({
-  title,
+  categoryName,
   content,
   className,
   ...props
 }: ProductCarrouselProps) {
   return (
     <div className={cn("overflow-hidden h-full w-full", className)} {...props}>
-      <H2>{title}</H2>
+      <H2>{categoryName}</H2>
       <div className="flex gap-3 overflow-x-scroll w-full whitespace-nowrap">
         {content.map((item) => {
           if (isProduct(item)) {

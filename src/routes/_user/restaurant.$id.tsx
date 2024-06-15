@@ -164,23 +164,23 @@ function RestaurantPage() {
     <div className="space-y-6 w-full">
       <img
         className="w-full h-[200px] object-cover rounded-[20px]"
-        src="/src/assets/test/test.webp"
+        src={query.data?.banner_url}
         alt="restaurant"
       />
-      <H1 className="text-center">La mie tah caline</H1>
+      <H1 className="text-center">{query.data?.name}</H1>
       {query.data?.Restaurant_Categories.map((category, i) => {
         if (i === 0)
           return (
             <ProductCarrousel
               content={category.items}
-              title={category.category_name}
+              categoryName={category.name}
             />
           );
 
         return (
           <RestaurantCategory
-            key={category.category_name}
-            title={category.category_name}
+            key={category.name}
+            categoryName={category.name}
             content={category.items}
           />
         );
