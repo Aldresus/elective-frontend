@@ -12,14 +12,26 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as UserImport } from './routes/_user'
-import { Route as RestaurantImport } from './routes/_restaurant'
+import { Route as SalesImport } from './routes/_sales'
+import { Route as RestaurateurImport } from './routes/_restaurateur'
 import { Route as LoginImport } from './routes/_login'
 import { Route as DeliveryImport } from './routes/_delivery'
 import { Route as IndexImport } from './routes/index'
 import { Route as ComponentsIndexImport } from './routes/components/index'
 import { Route as UserUserImport } from './routes/_user/user'
+import { Route as SalesSalesImport } from './routes/_sales/sales'
+import { Route as SalesPassationsCommandesImport } from './routes/_sales/passationsCommandes'
+import { Route as SalesClientDetailsImport } from './routes/_sales/clientDetails'
+import { Route as SalesAllClientsImport } from './routes/_sales/allClients'
+import { Route as SalesAcquittementsLivraisonsImport } from './routes/_sales/acquittementsLivraisons'
+import { Route as SalesAcceptationsLivraisonsImport } from './routes/_sales/acceptationsLivraisons'
+import { Route as SalesAcceptationsCommandesImport } from './routes/_sales/acceptationsCommandes'
 import { Route as RestaurateurRestaurateurImport } from './routes/_restaurateur/restaurateur'
-import { Route as RestaurateurCreateEditProductImport } from './routes/_restaurateur/create-edit-product'
+import { Route as RestaurateurRestaurantOfferingsImport } from './routes/_restaurateur/restaurantOfferings'
+import { Route as RestaurateurRestaurantManagerImport } from './routes/_restaurateur/restaurant-manager'
+import { Route as RestaurateurProductManagerImport } from './routes/_restaurateur/product-manager'
+import { Route as RestaurateurMenuManagerImport } from './routes/_restaurateur/menu-manager'
+import { Route as RestaurateurCommandMonitoringImport } from './routes/_restaurateur/commandMonitoring'
 import { Route as LoginSignupImport } from './routes/_login/signup'
 import { Route as LoginLoginImport } from './routes/_login/login'
 import { Route as DeliveryDeliveryImport } from './routes/_delivery/delivery'
@@ -34,8 +46,13 @@ const UserRoute = UserImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const RestaurantRoute = RestaurantImport.update({
-  id: '/_restaurant',
+const SalesRoute = SalesImport.update({
+  id: '/_sales',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RestaurateurRoute = RestaurateurImport.update({
+  id: '/_restaurateur',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -64,15 +81,78 @@ const UserUserRoute = UserUserImport.update({
   getParentRoute: () => UserRoute,
 } as any)
 
-const RestaurateurRestaurateurRoute = RestaurateurRestaurateurImport.update({
-  path: '/restaurateur',
-  getParentRoute: () => rootRoute,
+const SalesSalesRoute = SalesSalesImport.update({
+  path: '/sales',
+  getParentRoute: () => SalesRoute,
 } as any)
 
-const RestaurateurCreateEditProductRoute =
-  RestaurateurCreateEditProductImport.update({
-    path: '/create-edit-product',
-    getParentRoute: () => rootRoute,
+const SalesPassationsCommandesRoute = SalesPassationsCommandesImport.update({
+  path: '/passationsCommandes',
+  getParentRoute: () => SalesRoute,
+} as any)
+
+const SalesClientDetailsRoute = SalesClientDetailsImport.update({
+  path: '/clientDetails',
+  getParentRoute: () => SalesRoute,
+} as any)
+
+const SalesAllClientsRoute = SalesAllClientsImport.update({
+  path: '/allClients',
+  getParentRoute: () => SalesRoute,
+} as any)
+
+const SalesAcquittementsLivraisonsRoute =
+  SalesAcquittementsLivraisonsImport.update({
+    path: '/acquittementsLivraisons',
+    getParentRoute: () => SalesRoute,
+  } as any)
+
+const SalesAcceptationsLivraisonsRoute =
+  SalesAcceptationsLivraisonsImport.update({
+    path: '/acceptationsLivraisons',
+    getParentRoute: () => SalesRoute,
+  } as any)
+
+const SalesAcceptationsCommandesRoute = SalesAcceptationsCommandesImport.update(
+  {
+    path: '/acceptationsCommandes',
+    getParentRoute: () => SalesRoute,
+  } as any,
+)
+
+const RestaurateurRestaurateurRoute = RestaurateurRestaurateurImport.update({
+  path: '/restaurateur',
+  getParentRoute: () => RestaurateurRoute,
+} as any)
+
+const RestaurateurRestaurantOfferingsRoute =
+  RestaurateurRestaurantOfferingsImport.update({
+    path: '/restaurantOfferings',
+    getParentRoute: () => RestaurateurRoute,
+  } as any)
+
+const RestaurateurRestaurantManagerRoute =
+  RestaurateurRestaurantManagerImport.update({
+    path: '/restaurant-manager',
+    getParentRoute: () => RestaurateurRoute,
+  } as any)
+
+const RestaurateurProductManagerRoute = RestaurateurProductManagerImport.update(
+  {
+    path: '/product-manager',
+    getParentRoute: () => RestaurateurRoute,
+  } as any,
+)
+
+const RestaurateurMenuManagerRoute = RestaurateurMenuManagerImport.update({
+  path: '/menu-manager',
+  getParentRoute: () => RestaurateurRoute,
+} as any)
+
+const RestaurateurCommandMonitoringRoute =
+  RestaurateurCommandMonitoringImport.update({
+    path: '/commandMonitoring',
+    getParentRoute: () => RestaurateurRoute,
   } as any)
 
 const LoginSignupRoute = LoginSignupImport.update({
@@ -130,11 +210,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/_restaurant': {
-      id: '/_restaurant'
+    '/_restaurateur': {
+      id: '/_restaurateur'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof RestaurantImport
+      preLoaderRoute: typeof RestaurateurImport
+      parentRoute: typeof rootRoute
+    }
+    '/_sales': {
+      id: '/_sales'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof SalesImport
       parentRoute: typeof rootRoute
     }
     '/_user': {
@@ -179,19 +266,97 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginSignupImport
       parentRoute: typeof LoginImport
     }
-    '/_restaurateur/create-edit-product': {
-      id: '/_restaurateur/create-edit-product'
-      path: '/create-edit-product'
-      fullPath: '/create-edit-product'
-      preLoaderRoute: typeof RestaurateurCreateEditProductImport
-      parentRoute: typeof rootRoute
+
+    '/_restaurateur/commandMonitoring': {
+      id: '/_restaurateur/commandMonitoring'
+      path: '/commandMonitoring'
+      fullPath: '/commandMonitoring'
+      preLoaderRoute: typeof RestaurateurCommandMonitoringImport
+      parentRoute: typeof RestaurateurImport
+    }
+    '/_restaurateur/menu-manager': {
+      id: '/_restaurateur/menu-manager'
+      path: '/menu-manager'
+      fullPath: '/menu-manager'
+      preLoaderRoute: typeof RestaurateurMenuManagerImport
+      parentRoute: typeof RestaurateurImport
+    }
+    '/_restaurateur/product-manager': {
+      id: '/_restaurateur/product-manager'
+      path: '/product-manager'
+      fullPath: '/product-manager'
+      preLoaderRoute: typeof RestaurateurProductManagerImport
+      parentRoute: typeof RestaurateurImport
+    }
+    '/_restaurateur/restaurant-manager': {
+      id: '/_restaurateur/restaurant-manager'
+      path: '/restaurant-manager'
+      fullPath: '/restaurant-manager'
+      preLoaderRoute: typeof RestaurateurRestaurantManagerImport
+      parentRoute: typeof RestaurateurImport
+    }
+    '/_restaurateur/restaurantOfferings': {
+      id: '/_restaurateur/restaurantOfferings'
+      path: '/restaurantOfferings'
+      fullPath: '/restaurantOfferings'
+      preLoaderRoute: typeof RestaurateurRestaurantOfferingsImport
+      parentRoute: typeof RestaurateurImport
     }
     '/_restaurateur/restaurateur': {
       id: '/_restaurateur/restaurateur'
       path: '/restaurateur'
       fullPath: '/restaurateur'
       preLoaderRoute: typeof RestaurateurRestaurateurImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof RestaurateurImport
+    }
+    '/_sales/acceptationsCommandes': {
+      id: '/_sales/acceptationsCommandes'
+      path: '/acceptationsCommandes'
+      fullPath: '/acceptationsCommandes'
+      preLoaderRoute: typeof SalesAcceptationsCommandesImport
+      parentRoute: typeof SalesImport
+    }
+    '/_sales/acceptationsLivraisons': {
+      id: '/_sales/acceptationsLivraisons'
+      path: '/acceptationsLivraisons'
+      fullPath: '/acceptationsLivraisons'
+      preLoaderRoute: typeof SalesAcceptationsLivraisonsImport
+      parentRoute: typeof SalesImport
+    }
+    '/_sales/acquittementsLivraisons': {
+      id: '/_sales/acquittementsLivraisons'
+      path: '/acquittementsLivraisons'
+      fullPath: '/acquittementsLivraisons'
+      preLoaderRoute: typeof SalesAcquittementsLivraisonsImport
+      parentRoute: typeof SalesImport
+    }
+    '/_sales/allClients': {
+      id: '/_sales/allClients'
+      path: '/allClients'
+      fullPath: '/allClients'
+      preLoaderRoute: typeof SalesAllClientsImport
+      parentRoute: typeof SalesImport
+    }
+    '/_sales/clientDetails': {
+      id: '/_sales/clientDetails'
+      path: '/clientDetails'
+      fullPath: '/clientDetails'
+      preLoaderRoute: typeof SalesClientDetailsImport
+      parentRoute: typeof SalesImport
+    }
+    '/_sales/passationsCommandes': {
+      id: '/_sales/passationsCommandes'
+      path: '/passationsCommandes'
+      fullPath: '/passationsCommandes'
+      preLoaderRoute: typeof SalesPassationsCommandesImport
+      parentRoute: typeof SalesImport
+    }
+    '/_sales/sales': {
+      id: '/_sales/sales'
+      path: '/sales'
+      fullPath: '/sales'
+      preLoaderRoute: typeof SalesSalesImport
+      parentRoute: typeof SalesImport
     }
     '/_user/user': {
       id: '/_user/user'
@@ -227,95 +392,23 @@ export const routeTree = rootRoute.addChildren({
     DeliveryDeliveryRoute,
   }),
   LoginRoute: LoginRoute.addChildren({ LoginLoginRoute, LoginSignupRoute }),
-  UserRoute: UserRoute.addChildren({ UserUserRoute, UserRestaurantIdRoute }),
-  RestaurateurCreateEditProductRoute,
-  RestaurateurRestaurateurRoute,
+  RestaurateurRoute: RestaurateurRoute.addChildren({
+    RestaurateurCommandMonitoringRoute,
+    RestaurateurMenuManagerRoute,
+    RestaurateurProductManagerRoute,
+    RestaurateurRestaurantManagerRoute,
+    RestaurateurRestaurantOfferingsRoute,
+    RestaurateurRestaurateurRoute,
+  }),
+  SalesRoute: SalesRoute.addChildren({
+    SalesAcceptationsCommandesRoute,
+    SalesAcceptationsLivraisonsRoute,
+    SalesAcquittementsLivraisonsRoute,
+    SalesAllClientsRoute,
+    SalesClientDetailsRoute,
+    SalesPassationsCommandesRoute,
+    SalesSalesRoute,
+  }),
+  UserRoute: UserRoute.addChildren({ UserUserRoute }),
   ComponentsIndexRoute,
 })
-
-/* prettier-ignore-end */
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/_delivery",
-        "/_login",
-        "/_restaurant",
-        "/_user",
-        "/_restaurateur/create-edit-product",
-        "/_restaurateur/restaurateur",
-        "/components/"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_delivery": {
-      "filePath": "_delivery.tsx",
-      "children": [
-        "/_delivery/deliveries",
-        "/_delivery/deliveries-history",
-        "/_delivery/delivery"
-      ]
-    },
-    "/_login": {
-      "filePath": "_login.tsx",
-      "children": [
-        "/_login/login",
-        "/_login/signup"
-      ]
-    },
-    "/_restaurant": {
-      "filePath": "_restaurant.tsx"
-    },
-    "/_user": {
-      "filePath": "_user.tsx",
-      "children": [
-        "/_user/user",
-        "/_user/restaurant/$id"
-      ]
-    },
-    "/_delivery/deliveries": {
-      "filePath": "_delivery/deliveries.tsx",
-      "parent": "/_delivery"
-    },
-    "/_delivery/deliveries-history": {
-      "filePath": "_delivery/deliveries-history.tsx",
-      "parent": "/_delivery"
-    },
-    "/_delivery/delivery": {
-      "filePath": "_delivery/delivery.tsx",
-      "parent": "/_delivery"
-    },
-    "/_login/login": {
-      "filePath": "_login/login.tsx",
-      "parent": "/_login"
-    },
-    "/_login/signup": {
-      "filePath": "_login/signup.tsx",
-      "parent": "/_login"
-    },
-    "/_restaurateur/create-edit-product": {
-      "filePath": "_restaurateur/create-edit-product.tsx"
-    },
-    "/_restaurateur/restaurateur": {
-      "filePath": "_restaurateur/restaurateur.tsx"
-    },
-    "/_user/user": {
-      "filePath": "_user/user.tsx",
-      "parent": "/_user"
-    },
-    "/components/": {
-      "filePath": "components/index.tsx"
-    },
-    "/_user/restaurant/$id": {
-      "filePath": "_user/restaurant.$id.tsx",
-      "parent": "/_user"
-    }
-  }
-}
-ROUTE_MANIFEST_END */

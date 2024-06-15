@@ -1,5 +1,6 @@
 import { Product } from "./product";
 
+
 export interface Menu {
   id_menu: string;
   name: string;

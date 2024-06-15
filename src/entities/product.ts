@@ -6,3 +6,4 @@ export interface Product {
   product_image_url: string;
   id_restaurant: string;
 }
+
