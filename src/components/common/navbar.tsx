@@ -3,8 +3,9 @@ import Logo from "./logo";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ModalContext } from "../restaurant/modalContext";
+import { AddressChoiceModal } from "../user/addressChoiceModal";
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
   isAdress?: boolean;
@@ -18,6 +19,7 @@ export default function Navbar({
   ...props
 }: NavbarProps) {
   const { modalIsOpen, setmodalIsOpen } = useContext(ModalContext);
+  const [addressModalIsOpen, setAddressModalIsOpen] = useState(false);
   return (
     <div
       className={cn(
@@ -29,7 +31,14 @@ export default function Navbar({
       <Link to="/" className="h-full">
         <Logo />
       </Link>
-      {isAdress && <div>l'adresse tmtc V</div>}
+      {isAdress && (
+        <AddressChoiceModal
+          opened={() => setAddressModalIsOpen(true)}
+          open={addressModalIsOpen}
+          closed={() => setAddressModalIsOpen(false)}
+          currentAddress="adresse test" //needs to come from the context
+        />
+      )}
       <Input className="w-full max-w-xs" placeholder="Rechercher" />
       <div className="flex items-center gap-2">
         jsp qui est ce texte
