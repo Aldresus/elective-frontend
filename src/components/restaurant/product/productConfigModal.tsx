@@ -5,9 +5,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../ui/dialog";
-import { H2, Large, Small } from "../../typography";
+import { H1, H2, Large, Small } from "../../typography";
 import { Product } from "@/entities/product";
-import { Select } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
@@ -47,9 +46,7 @@ export function ProductConfigModal({
         </div>
         <div className="p-6">
           <DialogHeader className="space-y-4">
-            <DialogTitle>
-              <H2>{product.name}</H2>
-            </DialogTitle>
+            <H1>{product.name}</H1>
 
             <div className="flex justify-between">
               <p>{product.description}</p>
