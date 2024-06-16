@@ -5,8 +5,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../ui/dialog";
-import { H2 } from "../../typography";
+import { H2, Large, Small } from "../../typography";
 import { Product } from "@/entities/product";
+import { Select } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 interface ProductConfigModalProps extends React.HTMLAttributes<HTMLDivElement> {
   open: boolean;
@@ -21,6 +26,8 @@ export function ProductConfigModal({
   ...props
 }: ProductConfigModalProps) {
   console.log(product);
+
+  const [selectedQuantity, setSelectedQuantity] = useState(1); //temp solution
 
   return (
     <Dialog
@@ -39,17 +46,49 @@ export function ProductConfigModal({
           />
         </div>
         <div className="p-6">
-          <DialogHeader>
+          <DialogHeader className="space-y-4">
             <DialogTitle>
               <H2>{product.name}</H2>
             </DialogTitle>
-            <div className="flex justify-between gap-2">
-              <div>{product.description}</div>
-              <div>{product.price} €</div>
+
+            <div className="flex justify-between">
+              <p>{product.description}</p>
+              <Large>{product.price} €</Large>
             </div>
-            <DialogFooter>{product.price}</DialogFooter>
           </DialogHeader>
         </div>
+        {/* <DialogFooter>
+          <Button variant="link" onClick={close}>
+            Annuler
+          </Button>
+          <Button onClick={close}>
+            Ajouter au panier <Small>+{product.price}€</Small>
+          </Button>
+        </DialogFooter> */}
+
+        <DialogFooter className="sm:justify-center p-6">
+          <div className="space-y-4">
+            <div className="flex justify-center items-center gap-4">
+              <Label>Quantité</Label>
+              <Input
+                value={selectedQuantity}
+                onChange={(e) => setSelectedQuantity(Number(e.target.value))}
+                type="number"
+                min={1}
+                max={50}
+                className="w-16"
+              />
+            </div>
+            <Button variant="link" onClick={close}>
+              Annuler
+            </Button>
+            <Button onClick={close}>
+              <p>
+                Ajouter pour <Small>{product.price * selectedQuantity}€</Small>
+              </p>
+            </Button>
+          </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

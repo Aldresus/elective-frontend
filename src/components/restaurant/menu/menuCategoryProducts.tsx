@@ -7,11 +7,13 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface MenuCategoryProps extends React.HTMLProps<HTMLDivElement> {
   category: MenuCategory;
+  bottomDivider?: boolean;
 }
 
 export function MenuCategoryProducts({
   category,
   className,
+  bottomDivider = true,
   ...props
 }: MenuCategoryProps) {
   return (
@@ -39,8 +41,7 @@ export function MenuCategoryProducts({
           </div>
         ))}
       </RadioGroup>
-
-      <Separator />
+      {bottomDivider && <Separator />}
     </div>
   );
 }

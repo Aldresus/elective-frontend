@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "../../ui/dialog";
 import type { FullMenu, Menu } from "@/entities/menu";
-import { H1, H2, Large } from "../../typography";
+import { H1, H2, Large, Small } from "../../typography";
 import { Separator } from "../../ui/separator";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axiosConfig";
@@ -58,7 +58,7 @@ export function MenuConfigModal({
             alt={menuContent.name}
           />
         </div>
-        <div className="p-6 pb-2 overflow-y-scroll max-h-[500px]">
+        <div className="p-6 pb-2 overflow-y-scroll max-h-[500px] ">
           <DialogHeader>
             <H1>{menuContent.name}</H1>
             <div className="flex justify-between gap-2">
@@ -67,21 +67,28 @@ export function MenuConfigModal({
             </div>
             <Separator />
             <div className="space-y-4">
-              {query.data?.Menu_Categories.map((category) => (
+              {query.data?.Menu_Categories.map((category, i) => (
                 <MenuCategoryProducts
                   category={category}
                   key={category.id_category}
+                  bottomDivider={
+                    !(i === query.data?.Menu_Categories.length - 1)
+                  }
                 />
               ))}
             </div>
-            <DialogFooter className="relative">
-              <Button variant="link" onClick={close}>
-                Annuler
-              </Button>
-              <Button onClick={close}>Ajouter au panier</Button>
-            </DialogFooter>
           </DialogHeader>
         </div>
+        <DialogFooter className="flex flex-row justify-center sm:justify-center p-6">
+          <Button variant="link" onClick={close}>
+            Annuler
+          </Button>
+          <Button onClick={close}>
+            <p>
+              Ajouter pour <Small>{menuContent.price}€</Small>
+            </p>
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
