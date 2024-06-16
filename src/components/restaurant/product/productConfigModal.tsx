@@ -9,8 +9,9 @@ import { H1, H2, Large, Small } from "../../typography";
 import { Product } from "@/entities/product";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { basketContext } from "@/contexts/basketContext";
 
 interface ProductConfigModalProps extends React.HTMLAttributes<HTMLDivElement> {
   open: boolean;
@@ -27,6 +28,8 @@ export function ProductConfigModal({
   console.log(product);
 
   const [selectedQuantity, setSelectedQuantity] = useState(1); //temp solution
+
+  const basket = useContext(basketContext);
 
   return (
     <Dialog

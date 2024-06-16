@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Large, Small } from "@/components/typography";
 import { Button } from "@/components/ui/button";
+import { MouseEvent } from "react";
 
 export interface HorizontalItemCardProps
   extends React.HTMLProps<HTMLDivElement> {
@@ -11,6 +12,7 @@ export interface HorizontalItemCardProps
   cardTitle: string;
   cardDescription: string;
   cardPrice: number;
+  onAddClick?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
 export function HorizontalItemCard({
@@ -19,6 +21,7 @@ export function HorizontalItemCard({
   cardPrice,
   cardTitle,
   imgUrl,
+  onAddClick = () => {},
   ...props
 }: HorizontalItemCardProps) {
   return (
@@ -48,7 +51,13 @@ export function HorizontalItemCard({
           <p>{cardPrice} €</p>
         </div>
 
-        <Button size="icon" className="shrink-0">
+        <Button
+          size="icon"
+          className="shrink-0"
+          onClick={(e: MouseEvent<HTMLButtonElement>) => {
+            onAddClick(e);
+          }}
+        >
           <Plus />
         </Button>
       </div>

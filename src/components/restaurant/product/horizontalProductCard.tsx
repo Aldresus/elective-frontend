@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { HorizontalItemCard } from "../primitives/horizontalItemCard";
 import { Product } from "@/entities/product";
 import { ProductConfigModal } from "./productConfigModal";
 import { cn } from "@/lib/utils";
+import { basketContext } from "@/contexts/basketContext";
 
 interface HorizontalProductCardProps extends React.HTMLProps<HTMLDivElement> {
   product: Product;
@@ -14,6 +15,8 @@ export function HorizontalProductCard({
   ...props
 }: HorizontalProductCardProps) {
   const [open, setOpen] = useState(false);
+  const basket = useContext(basketContext);
+
   return (
     <>
       <ProductConfigModal
@@ -25,6 +28,11 @@ export function HorizontalProductCard({
       />
       <HorizontalItemCard
         onClick={() => setOpen(true)}
+        onAddClick={(e) => {
+          e.stopPropagation();
+          console.log("add product", product);
+          basket.addProduct(product, 1);
+        }}
         cardDescription={product.description}
         cardPrice={product.price}
         cardTitle={product.name}

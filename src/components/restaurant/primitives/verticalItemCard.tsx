@@ -3,12 +3,14 @@ import { Large, Small } from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MouseEvent } from "react";
 
 export interface VerticalItemCardProps extends React.HTMLProps<HTMLDivElement> {
   imgUrl: string;
   cardTitle: string;
   cardDescription: string;
   cardPrice: number;
+  onAddClick?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
 export function VerticalItemCard({
@@ -17,6 +19,7 @@ export function VerticalItemCard({
   cardTitle,
   cardDescription,
   cardPrice,
+  onAddClick = () => {},
   ...props
 }: VerticalItemCardProps) {
   return (
@@ -46,7 +49,13 @@ export function VerticalItemCard({
           <p>{cardPrice} €</p>
         </div>
 
-        <Button size="icon" className="shrink-0">
+        <Button
+          size="icon"
+          className="shrink-0"
+          onClick={(e: MouseEvent<HTMLButtonElement>) => {
+            onAddClick(e);
+          }}
+        >
           <Plus />
         </Button>
       </div>

@@ -2,6 +2,7 @@ import { ItemCarrousel } from "@/components/restaurant/itemCarrousel";
 import { RestaurantCategory } from "@/components/restaurant/restaurantCategory";
 import { H1 } from "@/components/typography";
 import { Button } from "@/components/ui/button";
+import { basketContext } from "@/contexts/basketContext";
 
 import {
   FullRestaurant,
@@ -12,6 +13,7 @@ import { axiosInstance } from "@/lib/axiosConfig";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { ShoppingBasket } from "lucide-react";
+import { useContext, useEffect } from "react";
 
 export const Route = createFileRoute("/_user/restaurant/$id")({
   component: RestaurantPage,
@@ -41,6 +43,16 @@ function RestaurantPage() {
     refetchInterval: 1000 * 60, // refresh every minute
   });
 
+  const basket = useContext(basketContext);
+
+  useEffect(() => {
+    console.log("useEffect", basket);
+
+    if (!basket.id_restaurant) {
+      basket.setRestaurantId(id);
+    }
+  }, [basket, id]);
+
   return (
     <div className="space-y-6 w-full">
       <img
@@ -69,12 +81,21 @@ function RestaurantPage() {
           />
         );
       })}
-      <div className="sticky mx-auto bottom-10 w-1/2 z-50 shadow">
-        <Button size="lg" className="w-full gap-2">
-          Voir le panier
-          <ShoppingBasket />
-        </Button>
-      </div>
+      {basket.id_restaurant &&
+        (basket.products.length > 0 || basket.menus.length > 0) && (
+          <div className="sticky mx-auto bottom-10 w-1/2 z-50 shadow">
+            <Button
+              size="lg"
+              className="w-full gap-2"
+              onClick={() => {
+                console.log("basket", basket);
+              }}
+            >
+              Voir le panier ({basket.products.length + basket.menus.length})
+              <ShoppingBasket />
+            </Button>
+          </div>
+        )}
     </div>
   );
 }

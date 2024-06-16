@@ -3,12 +3,13 @@ import { RestaurantCard } from "@/components/common/restaurantCard";
 import { H2 } from "@/components/typography";
 import { Separator } from "@/components/ui/separator";
 import { LoginBanner } from "@/components/user/loginBanner";
+import { basketContext } from "@/contexts/basketContext";
 import { Restaurant } from "@/entities/restaurant";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Beer, IceCreamBowl, Pizza, Sandwich, Vegan } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 export const Route = createFileRoute("/_user/user")({
   component: UserComponent,
@@ -30,6 +31,8 @@ function UserComponent() {
     },
     refetchInterval: 1000 * 60, // refresh every minute
   });
+
+  const basket = useContext(basketContext);
 
   return (
     <div className="flex flex-col gap-6 w-full">
@@ -78,6 +81,7 @@ function UserComponent() {
           <RestaurantCard className="flex-1">La mie tah caline</RestaurantCard> */}
           {query.data?.slice(0, 3).map((restaurant) => (
             <Link
+              onClick={() => basket.setRestaurantId(restaurant.id_restaurant)}
               to={`/restaurant/${restaurant.id_restaurant}`}
               key={restaurant.id_restaurant}
             >

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +19,7 @@ import { EyeOff, Search } from "lucide-react";
 import clsx from "clsx";
 import { Button } from "../ui/button";
 import { H1 } from "../typography";
+import { basketContext } from "@/contexts/basketContext";
 
 interface AddressChoiceModalProps extends React.HTMLAttributes<HTMLDivElement> {
   currentAddress: string;
@@ -56,6 +57,8 @@ export function AddressChoiceModal({
     enabled: false,
   });
 
+  const basket = useContext(basketContext);
+
   const addressChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddress(e.target.value);
 
@@ -83,6 +86,7 @@ export function AddressChoiceModal({
         closed();
       }}
     >
+      {basket.restaurantId}
       <DialogTrigger
         onClick={() => {
           opened();
