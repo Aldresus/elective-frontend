@@ -1,6 +1,7 @@
 import { ItemCarrousel } from "@/components/restaurant/itemCarrousel";
 import { RestaurantCategory } from "@/components/restaurant/restaurantCategory";
 import { H1 } from "@/components/typography";
+import { Button } from "@/components/ui/button";
 
 import {
   FullRestaurant,
@@ -10,6 +11,7 @@ import {
 import { axiosInstance } from "@/lib/axiosConfig";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { ShoppingBasket } from "lucide-react";
 
 export const Route = createFileRoute("/_user/restaurant/$id")({
   component: RestaurantPage,
@@ -46,6 +48,7 @@ function RestaurantPage() {
         src={query.data?.banner_url}
         alt="restaurant"
       />
+
       <H1 className="text-center">{query.data?.name}</H1>
       {query.data?.Restaurant_Categories.map((category, i) => {
         category = category as MergedRestaurantCategory;
@@ -66,6 +69,12 @@ function RestaurantPage() {
           />
         );
       })}
+      <div className="sticky mx-auto bottom-10 w-1/2 z-50 shadow">
+        <Button size="lg" className="w-full gap-2">
+          Voir le panier
+          <ShoppingBasket />
+        </Button>
+      </div>
     </div>
   );
 }
