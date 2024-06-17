@@ -1,10 +1,5 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext } from "react";
+import { useLocalStorage } from "@uidotdev/usehooks";
 
 export interface AuthContext {
   isAuthenticated: boolean;
@@ -17,35 +12,22 @@ const AuthContext = createContext<AuthContext | null>(null);
 
 const key = "tanstack.auth.token";
 
-function getStoredToken() {
-  return localStorage.getItem(key);
-}
-
-function setStoredToken(token: string | null) {
-  if (token) {
-    localStorage.setItem(key, token);
-  } else {
-    localStorage.removeItem(key);
-  }
-}
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [token, setToken] = useState<string | null>(getStoredToken());
+  const [token, setToken]: [string | null, (token: string | null) => void] =
+    useLocalStorage(key);
+
   const isAuthenticated = !!token;
 
   const logout = useCallback(async () => {
-    setStoredToken(null);
     setToken(null);
-  }, []);
+  }, [setToken]);
 
-  const login = useCallback(async (username: string) => {
-    setStoredToken(username);
-    setToken(username);
-  }, []);
-
-  useEffect(() => {
-    setToken(getStoredToken());
-  }, []);
+  const login = useCallback(
+    async (token: string | null) => {
+      token ? setToken(token) : localStorage.removeItem(key);
+    },
+    [setToken]
+  );
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>

@@ -86,7 +86,7 @@ function Login() {
       .post("login", { email: values.email, password: hash })
       .then(async (res) => {
         console.log("Insertion réussie");
-        await auth.login(res.data.access_token);
+        await auth.login(sha256(res.data.access_token));
         await router.invalidate();
         await navigate({ to: search.redirect ?? fallback });
       })
