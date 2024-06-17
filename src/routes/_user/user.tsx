@@ -81,9 +81,6 @@ function UserComponent() {
           <RestaurantCard className="flex-1">La mie tah caline</RestaurantCard> */}
           {query.data?.slice(0, 3).map((restaurant) => (
             <Link
-              onClick={() =>
-                currentOrder.setRestaurantId(restaurant.id_restaurant)
-              }
               to={`/restaurant/${restaurant.id_restaurant}`}
               key={restaurant.id_restaurant}
             >

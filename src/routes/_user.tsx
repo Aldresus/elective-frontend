@@ -139,20 +139,41 @@ function UserLayout() {
   };
 
   const clearOrder = () => {
-    setCurrentOrder((prev) => {
-      return {
-        ...prev,
-        products: [],
-        menus: [],
-      };
-    });
-    setLocalStorageCurrentOrder((prev) => {
-      return {
-        ...prev,
-        products: [],
-        menus: [],
-      };
-    });
+    const emptyOrder: CurrentOrderContext = {
+      address: "",
+      city: "",
+      id_restaurant: "",
+      id_user: "",
+      notes: "",
+      postal_code: "",
+      price: 0,
+      status: "",
+      order_date: new Date(),
+      restaurant_accepted_datetime: undefined,
+      restaurant_to_delivery_datetime: undefined,
+      received_datetime: undefined,
+      delivery_accepted_datetime: undefined,
+      id_order: undefined,
+
+      menus: [],
+      products: [],
+
+      setRestaurantId: () => {},
+
+      addProduct: () => {},
+      addMenu: () => {},
+
+      removeProduct: () => {},
+      removeMenu: () => {},
+
+      clearOrder: () => {},
+
+      setAddress: () => {},
+    };
+
+    setCurrentOrder(emptyOrder);
+
+    setLocalStorageCurrentOrder(emptyOrder);
   };
 
   const setAddress = (address: {

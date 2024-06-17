@@ -48,7 +48,8 @@ function RestaurantPage() {
   useEffect(() => {
     console.log("useEffect", currentOrder);
 
-    if (!currentOrder.id_restaurant) {
+    if (!currentOrder.id_restaurant || id !== currentOrder.id_restaurant) {
+      currentOrder.clearOrder();
       currentOrder.setRestaurantId(id);
     }
   }, [currentOrder, id]);
