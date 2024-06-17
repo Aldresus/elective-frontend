@@ -25,6 +25,7 @@ export function VerticalMenuCard({
       />
       <VerticalItemCard
         onClick={() => setOpen(true)}
+        addButton={false}
         cardDescription={menuContent.description}
         cardPrice={menuContent.price}
         cardTitle={menuContent.name}

@@ -1,9 +1,7 @@
 import Footer from "@/components/common/footer";
 import Navbar from "@/components/common/navbar";
-import { basketContext } from "@/contexts/basketContext";
-import { BasketContext } from "@/entities/basketContext";
-import { FullMenu } from "@/entities/menu";
-import { Product } from "@/entities/product";
+import { currentOrderContext } from "@/contexts/currentOrderContext";
+import { CurrentOrderContext } from "@/entities/currentOrderContext";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useLocalStorage } from "@uidotdev/usehooks";
@@ -14,44 +12,45 @@ export const Route = createFileRoute("/_user")({
 });
 
 function UserLayout() {
-  const [localStorageBasket, setLocalStorageBasket] =
-    useLocalStorage<BasketContext>("basket");
+  const [localStorageCurrentOrder, setLocalStorageCurrentOrder] =
+    useLocalStorage<CurrentOrderContext>("currentOrder");
 
-  const [basket, setBasket] = useState<BasketContext>({
-    address: localStorageBasket?.address || "",
-    city: localStorageBasket?.city || "",
-    id_restaurant: localStorageBasket?.id_restaurant || "",
-    id_user: localStorageBasket?.id_user || "",
-    notes: localStorageBasket?.notes || "",
-    menus: localStorageBasket?.menus || [],
-    products: localStorageBasket?.products || [],
-    postal_code: localStorageBasket?.postal_code || "",
-    price: localStorageBasket?.price || 0,
-    status: localStorageBasket?.status || "",
-    order_date: localStorageBasket?.order_date || new Date(),
+  const [currentOrder, setCurrentOrder] = useState<CurrentOrderContext>({
+    address: localStorageCurrentOrder?.address || "",
+    city: localStorageCurrentOrder?.city || "",
+    id_restaurant: localStorageCurrentOrder?.id_restaurant || "",
+    id_user: localStorageCurrentOrder?.id_user || "",
+    notes: localStorageCurrentOrder?.notes || "",
+    menus: localStorageCurrentOrder?.menus || [],
+    products: localStorageCurrentOrder?.products || [],
+    postal_code: localStorageCurrentOrder?.postal_code || "",
+    price: localStorageCurrentOrder?.price || 0,
+    status: localStorageCurrentOrder?.status || "",
+    order_date: localStorageCurrentOrder?.order_date || new Date(),
     restaurant_accepted_datetime:
-      localStorageBasket?.restaurant_accepted_datetime,
+      localStorageCurrentOrder?.restaurant_accepted_datetime,
     restaurant_to_delivery_datetime:
-      localStorageBasket?.restaurant_to_delivery_datetime,
-    received_datetime: localStorageBasket?.received_datetime,
-    delivery_accepted_datetime: localStorageBasket?.delivery_accepted_datetime,
-    id_order: localStorageBasket?.id_order,
+      localStorageCurrentOrder?.restaurant_to_delivery_datetime,
+    received_datetime: localStorageCurrentOrder?.received_datetime,
+    delivery_accepted_datetime:
+      localStorageCurrentOrder?.delivery_accepted_datetime,
+    id_order: localStorageCurrentOrder?.id_order,
     addProduct: () => {},
     addMenu: () => {},
     removeProduct: () => {},
     removeMenu: () => {},
-    clearBasket: () => {},
+    clearOrder: () => {},
     setRestaurantId: () => {},
   });
 
   const setRestaurantId = (restaurantId: string) => {
-    setBasket((prev) => {
+    setCurrentOrder((prev) => {
       return {
         ...prev,
         id_restaurant: restaurantId,
       };
     });
-    setLocalStorageBasket((prev) => {
+    setLocalStorageCurrentOrder((prev) => {
       return {
         ...prev,
         id_restaurant: restaurantId,
@@ -61,21 +60,21 @@ function UserLayout() {
 
   const addProduct = (product: OrderProduct, quantity: number) => {
     console.log("context add product", product);
-    console.log("context items", basket);
+    console.log("context items", currentOrder);
 
-    const newItems = [...basket.products];
+    const newItems = [...currentOrder.products];
 
     for (let i = 0; i < quantity; i++) {
       newItems.push(product);
     }
 
-    setBasket((prev) => {
+    setCurrentOrder((prev) => {
       return {
         ...prev,
         products: newItems,
       };
     });
-    setLocalStorageBasket((prev) => {
+    setLocalStorageCurrentOrder((prev) => {
       return {
         ...prev,
         products: newItems,
@@ -84,34 +83,38 @@ function UserLayout() {
   };
 
   const addMenu = (menu: OrderMenu) => {
-    setBasket((prev) => {
+    const newItems = [...currentOrder.menus];
+
+    newItems.push(menu);
+
+    setCurrentOrder((prev) => {
       return {
         ...prev,
-        menus: [...prev.menus, menu],
+        menus: newItems,
       };
     });
-    setLocalStorageBasket((prev) => {
+    setLocalStorageCurrentOrder((prev) => {
       return {
         ...prev,
-        menus: [...prev.menus, menu],
+        menus: newItems,
       };
     });
   };
 
   const removeProduct = (product: OrderProduct, quantity: number) => {
-    const newItems = [...basket.products];
+    const newItems = [...currentOrder.products];
 
     for (let i = 0; i < quantity; i++) {
       newItems.splice(newItems.indexOf(product), 1);
     }
 
-    setBasket((prev) => {
+    setCurrentOrder((prev) => {
       return {
         ...prev,
         products: newItems,
       };
     });
-    setLocalStorageBasket((prev) => {
+    setLocalStorageCurrentOrder((prev) => {
       return {
         ...prev,
         products: newItems,
@@ -120,13 +123,13 @@ function UserLayout() {
   };
 
   const removeMenu = (menu: OrderMenu) => {
-    setBasket((prev) => {
+    setCurrentOrder((prev) => {
       return {
         ...prev,
         menus: prev.menus.filter((item) => item.id_menu !== menu.id_menu),
       };
     });
-    setLocalStorageBasket((prev) => {
+    setLocalStorageCurrentOrder((prev) => {
       return {
         ...prev,
         menus: prev.menus.filter((item) => item.id_menu !== menu.id_menu),
@@ -134,15 +137,15 @@ function UserLayout() {
     });
   };
 
-  const clearBasket = () => {
-    setBasket((prev) => {
+  const clearOrder = () => {
+    setCurrentOrder((prev) => {
       return {
         ...prev,
         products: [],
         menus: [],
       };
     });
-    setLocalStorageBasket((prev) => {
+    setLocalStorageCurrentOrder((prev) => {
       return {
         ...prev,
         products: [],
@@ -155,19 +158,19 @@ function UserLayout() {
     <div className="bg-yellow-500 min-h-screen">
       <Navbar className="fixed top-0 left-0 w-full" />
       <div className="bg-red-50 mt-[50px] p-9 w-[1280px] mx-auto">
-        <basketContext.Provider
+        <currentOrderContext.Provider
           value={{
-            ...basket,
+            ...currentOrder,
             addProduct,
             addMenu,
             removeProduct,
             removeMenu,
-            clearBasket,
+            clearOrder: clearOrder,
             setRestaurantId,
           }}
         >
           <Outlet />
-        </basketContext.Provider>
+        </currentOrderContext.Provider>
       </div>
       <Footer />
     </div>

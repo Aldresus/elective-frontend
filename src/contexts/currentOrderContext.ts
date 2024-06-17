@@ -1,7 +1,7 @@
-import { BasketContext } from "@/entities/basketContext";
+import { CurrentOrderContext } from "@/entities/currentOrderContext";
 import { createContext } from "react";
 
-export const basketContext = createContext<BasketContext>({
+export const currentOrderContext = createContext<CurrentOrderContext>({
   address: "",
   city: "",
   id_restaurant: "",
@@ -28,5 +28,5 @@ export const basketContext = createContext<BasketContext>({
   removeProduct: () => {},
   removeMenu: () => {},
 
-  clearBasket: () => {},
+  clearOrder: () => {},
 });

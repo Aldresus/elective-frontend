@@ -3,7 +3,7 @@ import { Menu } from "@/entities/menu";
 import { MenuConfigModal } from "./menuConfigModal";
 import { HorizontalItemCard } from "../primitives/horizontalItemCard";
 import { cn } from "@/lib/utils";
-import { basketContext } from "@/contexts/basketContext";
+import { currentOrderContext } from "@/contexts/currentOrderContext";
 
 interface HorizontalMenuCardProps extends React.HTMLProps<HTMLDivElement> {
   menuContent: Menu;
@@ -16,7 +16,7 @@ export function HorizontalMenuCard({
 }: HorizontalMenuCardProps) {
   const [open, setOpen] = useState(false);
 
-  const basket = useContext(basketContext);
+  const currentOrder = useContext(currentOrderContext);
 
   return (
     <>
@@ -29,6 +29,7 @@ export function HorizontalMenuCard({
       />
       <HorizontalItemCard
         onClick={() => setOpen(true)}
+        addButton={false}
         cardDescription={menuContent.description}
         cardPrice={menuContent.price}
         cardTitle={menuContent.name}

@@ -4,7 +4,8 @@ import { ProductConfigModal } from "./productConfigModal";
 import { VerticalItemCard } from "../primitives/verticalItemCard";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { basketContext } from "@/contexts/basketContext";
+import { currentOrderContext } from "@/contexts/currentOrderContext";
+import { productToOrderProduct } from "@/entities/order";
 
 interface VerticalProductCardProps extends React.HTMLProps<HTMLDivElement> {
   product: Product;
@@ -17,7 +18,7 @@ export function VerticalProductCard({
 }: VerticalProductCardProps) {
   const [open, setOpen] = useState(false);
 
-  const basket = useContext(basketContext);
+  const currentOrder = useContext(currentOrderContext);
 
   return (
     <>
@@ -34,7 +35,7 @@ export function VerticalProductCard({
         onAddClick={(e) => {
           e.stopPropagation();
           console.log("add product", product);
-          basket.addProduct(product, 1);
+          currentOrder.addProduct(productToOrderProduct(product), 1);
         }}
         cardDescription={product.description}
         cardPrice={product.price}

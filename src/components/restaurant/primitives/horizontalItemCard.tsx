@@ -13,6 +13,7 @@ export interface HorizontalItemCardProps
   cardDescription: string;
   cardPrice: number;
   onAddClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  addButton?: boolean;
 }
 
 export function HorizontalItemCard({
@@ -22,6 +23,7 @@ export function HorizontalItemCard({
   cardTitle,
   imgUrl,
   onAddClick = () => {},
+  addButton = true,
   ...props
 }: HorizontalItemCardProps) {
   return (
@@ -51,15 +53,17 @@ export function HorizontalItemCard({
           <p>{cardPrice} €</p>
         </div>
 
-        <Button
-          size="icon"
-          className="shrink-0"
-          onClick={(e: MouseEvent<HTMLButtonElement>) => {
-            onAddClick(e);
-          }}
-        >
-          <Plus />
-        </Button>
+        {addButton && (
+          <Button
+            size="icon"
+            className="shrink-0"
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
+              onAddClick(e);
+            }}
+          >
+            <Plus />
+          </Button>
+        )}
       </div>
     </Card>
   );

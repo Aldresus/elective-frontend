@@ -3,7 +3,8 @@ import { HorizontalItemCard } from "../primitives/horizontalItemCard";
 import { Product } from "@/entities/product";
 import { ProductConfigModal } from "./productConfigModal";
 import { cn } from "@/lib/utils";
-import { basketContext } from "@/contexts/basketContext";
+import { currentOrderContext } from "@/contexts/currentOrderContext";
+import { productToOrderProduct } from "@/entities/order";
 
 interface HorizontalProductCardProps extends React.HTMLProps<HTMLDivElement> {
   product: Product;
@@ -15,7 +16,7 @@ export function HorizontalProductCard({
   ...props
 }: HorizontalProductCardProps) {
   const [open, setOpen] = useState(false);
-  const basket = useContext(basketContext);
+  const currentOrder = useContext(currentOrderContext);
 
   return (
     <>
@@ -31,7 +32,7 @@ export function HorizontalProductCard({
         onAddClick={(e) => {
           e.stopPropagation();
           console.log("add product", product);
-          basket.addProduct(product, 1);
+          currentOrder.addProduct(productToOrderProduct(product), 1);
         }}
         cardDescription={product.description}
         cardPrice={product.price}

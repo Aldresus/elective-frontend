@@ -11,7 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { basketContext } from "@/contexts/basketContext";
+import { currentOrderContext } from "@/contexts/currentOrderContext";
+import { productToOrderProduct } from "@/entities/order";
 
 interface ProductConfigModalProps extends React.HTMLAttributes<HTMLDivElement> {
   open: boolean;
@@ -29,7 +30,7 @@ export function ProductConfigModal({
 
   const [selectedQuantity, setSelectedQuantity] = useState(1); //temp solution
 
-  const basket = useContext(basketContext);
+  const currentOrder = useContext(currentOrderContext);
 
   return (
     <Dialog
@@ -57,15 +58,6 @@ export function ProductConfigModal({
             </div>
           </DialogHeader>
         </div>
-        {/* <DialogFooter>
-          <Button variant="link" onClick={close}>
-            Annuler
-          </Button>
-          <Button onClick={close}>
-            Ajouter au panier <Small>+{product.price}€</Small>
-          </Button>
-        </DialogFooter> */}
-
         <DialogFooter className="sm:justify-center p-6">
           <div className="space-y-4">
             <div className="flex justify-center items-center gap-4">
@@ -82,7 +74,15 @@ export function ProductConfigModal({
             <Button variant="link" onClick={close}>
               Annuler
             </Button>
-            <Button onClick={close}>
+            <Button
+              onClick={() => {
+                currentOrder.addProduct(
+                  productToOrderProduct(product),
+                  selectedQuantity
+                );
+                close();
+              }}
+            >
               <p>
                 Ajouter pour <Small>{product.price * selectedQuantity}€</Small>
               </p>

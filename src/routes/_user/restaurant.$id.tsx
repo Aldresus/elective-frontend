@@ -2,7 +2,7 @@ import { ItemCarrousel } from "@/components/restaurant/itemCarrousel";
 import { RestaurantCategory } from "@/components/restaurant/restaurantCategory";
 import { H1 } from "@/components/typography";
 import { Button } from "@/components/ui/button";
-import { basketContext } from "@/contexts/basketContext";
+import { currentOrderContext } from "@/contexts/currentOrderContext";
 
 import {
   FullRestaurant,
@@ -43,15 +43,15 @@ function RestaurantPage() {
     refetchInterval: 1000 * 60, // refresh every minute
   });
 
-  const basket = useContext(basketContext);
+  const currentOrder = useContext(currentOrderContext);
 
   useEffect(() => {
-    console.log("useEffect", basket);
+    console.log("useEffect", currentOrder);
 
-    if (!basket.id_restaurant) {
-      basket.setRestaurantId(id);
+    if (!currentOrder.id_restaurant) {
+      currentOrder.setRestaurantId(id);
     }
-  }, [basket, id]);
+  }, [currentOrder, id]);
 
   return (
     <div className="space-y-6 w-full">
@@ -81,17 +81,18 @@ function RestaurantPage() {
           />
         );
       })}
-      {basket.id_restaurant &&
-        (basket.products.length > 0 || basket.menus.length > 0) && (
+      {currentOrder.id_restaurant &&
+        (currentOrder.products.length > 0 || currentOrder.menus.length > 0) && (
           <div className="sticky mx-auto bottom-10 w-1/2 z-50 shadow">
             <Button
               size="lg"
               className="w-full gap-2"
               onClick={() => {
-                console.log("basket", basket);
+                console.log("currentOrder", currentOrder);
               }}
             >
-              Voir le panier ({basket.products.length + basket.menus.length})
+              Voir le panier (
+              {currentOrder.products.length + currentOrder.menus.length})
               <ShoppingBasket />
             </Button>
           </div>

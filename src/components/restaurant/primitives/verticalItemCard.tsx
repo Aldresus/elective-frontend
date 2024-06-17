@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MouseEvent } from "react";
+import clsx from "clsx";
 
 export interface VerticalItemCardProps extends React.HTMLProps<HTMLDivElement> {
   imgUrl: string;
@@ -11,6 +12,7 @@ export interface VerticalItemCardProps extends React.HTMLProps<HTMLDivElement> {
   cardDescription: string;
   cardPrice: number;
   onAddClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  addButton?: boolean;
 }
 
 export function VerticalItemCard({
@@ -20,6 +22,7 @@ export function VerticalItemCard({
   cardDescription,
   cardPrice,
   onAddClick = () => {},
+  addButton = true,
   ...props
 }: VerticalItemCardProps) {
   return (
@@ -41,7 +44,11 @@ export function VerticalItemCard({
       </div>
 
       <div className="h-1/3 flex justify-between items-end gap-2 px-2 pt-1">
-        <div className="w-3/4 h-full flex flex-col justify-start gap-1">
+        <div
+          className={clsx(" h-full flex flex-col justify-start gap-1", {
+            "w-3/4": addButton,
+          })}
+        >
           <Large className="truncate">{cardTitle}</Large>
           <Small className="text-ellipsis line-clamp-3 text-wrap">
             {cardDescription}
@@ -49,15 +56,17 @@ export function VerticalItemCard({
           <p>{cardPrice} €</p>
         </div>
 
-        <Button
-          size="icon"
-          className="shrink-0"
-          onClick={(e: MouseEvent<HTMLButtonElement>) => {
-            onAddClick(e);
-          }}
-        >
-          <Plus />
-        </Button>
+        {addButton && (
+          <Button
+            size="icon"
+            className="shrink-0"
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
+              onAddClick(e);
+            }}
+          >
+            <Plus />
+          </Button>
+        )}
       </div>
     </Card>
   );

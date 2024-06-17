@@ -4,27 +4,41 @@ import { Separator } from "@/components/ui/separator";
 import { MenuCategory } from "@/entities/menu";
 import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { FormControl, FormItem, FormMessage } from "@/components/ui/form";
+import { ControllerRenderProps } from "react-hook-form";
 
 interface MenuCategoryProps extends React.HTMLProps<HTMLDivElement> {
   category: MenuCategory;
   bottomDivider?: boolean;
+  field?: ControllerRenderProps<
+    {
+      [x: string]: any;
+    },
+    string
+  >;
 }
 
 export function MenuCategoryProducts({
   category,
   className,
   bottomDivider = true,
+  field,
   ...props
 }: MenuCategoryProps) {
   return (
     <div className={cn("rounded-lg space-y-4", className)} {...props}>
-      <H2>{category.name}</H2>
+      <div className="-space-y-2">
+        <H2>{category.name}</H2>
+        <FormMessage />
+      </div>
       <RadioGroup
-        defaultValue={category.Product[0].id_product}
+        // defaultValue={category.Product[0].id_product}
+        onValueChange={(value) => field?.onChange(value)}
+        value={field?.value}
         className="space-y-2"
       >
         {category.Product.map((product) => (
-          <div
+          <FormItem
             key={product.id_product}
             className="flex items-center justify-between"
           >
@@ -34,11 +48,13 @@ export function MenuCategoryProducts({
                 <Small>{product.description}</Small>
               </div>
             </Label>
-            <RadioGroupItem
-              id={product.id_product}
-              value={product.id_product}
-            />
-          </div>
+            <FormControl>
+              <RadioGroupItem
+                id={product.id_product}
+                value={product.id_product}
+              />
+            </FormControl>
+          </FormItem>
         ))}
       </RadioGroup>
       {bottomDivider && <Separator />}

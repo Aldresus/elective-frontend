@@ -19,7 +19,8 @@ import { EyeOff, Search } from "lucide-react";
 import clsx from "clsx";
 import { Button } from "../ui/button";
 import { H1 } from "../typography";
-import { basketContext } from "@/contexts/basketContext";
+import { currentOrderContext } from "@/contexts/currentOrderContext";
+import { useLocalStorage } from "@uidotdev/usehooks";
 
 interface AddressChoiceModalProps extends React.HTMLAttributes<HTMLDivElement> {
   currentAddress: string;
@@ -37,6 +38,10 @@ export function AddressChoiceModal({
 }: AddressChoiceModalProps) {
   const [address, setAddress] = useState("");
   const [currentTimeout, setCurrentTimeout] = useState<NodeJS.Timeout>();
+  const [localStorageAddress, setLocalStorageAddress] = useLocalStorage(
+    "address",
+    ""
+  );
 
   const query = useQuery({
     queryKey: ["address", address],
@@ -46,7 +51,7 @@ export function AddressChoiceModal({
         {
           params: {
             q: address,
-            limit: "1",
+            limit: "5",
           },
         }
       );
@@ -57,7 +62,7 @@ export function AddressChoiceModal({
     enabled: false,
   });
 
-  const basket = useContext(basketContext);
+  const currentOrder = useContext(currentOrderContext);
 
   const addressChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddress(e.target.value);
@@ -86,7 +91,6 @@ export function AddressChoiceModal({
         closed();
       }}
     >
-      {basket.restaurantId}
       <DialogTrigger
         onClick={() => {
           opened();
@@ -116,7 +120,10 @@ export function AddressChoiceModal({
               <div className="absolute flex flex-col w-full px-3 rounded-b  bg-secondary gap-2">
                 {query.data?.features.map((feature) => (
                   <AddressSuggestion
-                    onClick={(e) => setAddress(e)}
+                    onClick={(e) => {
+                      setAddress(e);
+                      setLocalStorageAddress(e);
+                    }}
                     feature={feature}
                     key={feature.properties.id}
                   />
