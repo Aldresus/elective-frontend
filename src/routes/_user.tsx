@@ -41,6 +41,7 @@ function UserLayout() {
     removeMenu: () => {},
     clearOrder: () => {},
     setRestaurantId: () => {},
+    setAddress: () => {},
   });
 
   const setRestaurantId = (restaurantId: string) => {
@@ -154,25 +155,52 @@ function UserLayout() {
     });
   };
 
+  const setAddress = (address: {
+    address: string;
+    city: string;
+    postal_code: string;
+  }) => {
+    console.log("setAddress", address);
+
+    setCurrentOrder((prev) => {
+      return {
+        ...prev,
+        address: address.address,
+        city: address.city,
+        postal_code: address.postal_code,
+      };
+    });
+
+    setLocalStorageCurrentOrder((prev) => {
+      return {
+        ...prev,
+        address: address.address,
+        city: address.city,
+        postal_code: address.postal_code,
+      };
+    });
+  };
+
   return (
     <div className="bg-yellow-500 min-h-screen">
-      <Navbar className="fixed top-0 left-0 w-full" />
-      <div className="bg-red-50 mt-[50px] p-9 w-[1280px] mx-auto">
-        <currentOrderContext.Provider
-          value={{
-            ...currentOrder,
-            addProduct,
-            addMenu,
-            removeProduct,
-            removeMenu,
-            clearOrder: clearOrder,
-            setRestaurantId,
-          }}
-        >
+      <currentOrderContext.Provider
+        value={{
+          ...currentOrder,
+          addProduct,
+          addMenu,
+          removeProduct,
+          removeMenu,
+          clearOrder: clearOrder,
+          setRestaurantId,
+          setAddress,
+        }}
+      >
+        <Navbar className="fixed top-0 left-0 w-full" />
+        <div className="bg-red-50 mt-[50px] p-9 w-[1280px] mx-auto">
           <Outlet />
-        </currentOrderContext.Provider>
-      </div>
-      <Footer />
+        </div>
+        <Footer />
+      </currentOrderContext.Provider>
     </div>
   );
 }

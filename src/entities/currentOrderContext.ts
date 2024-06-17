@@ -10,4 +10,10 @@ export interface CurrentOrderContext extends CreateOrder {
   removeMenu: (menu: OrderMenu) => void;
 
   clearOrder: () => void;
+
+  setAddress: (address: {
+    address: string;
+    city: string;
+    postal_code: string;
+  }) => void;
 }

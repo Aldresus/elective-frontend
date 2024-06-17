@@ -1,11 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
 import { Input } from "../ui/input";
@@ -13,14 +12,13 @@ import { Label } from "../ui/label";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { FeatureCollection } from "@/entities/featureCollection";
-import { Timeout } from "node_modules/@tanstack/react-router/dist/esm/utils";
 import { AddressSuggestion } from "./addressSuggestion";
-import { EyeOff, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import clsx from "clsx";
 import { Button } from "../ui/button";
 import { H1 } from "../typography";
 import { currentOrderContext } from "@/contexts/currentOrderContext";
-import { useLocalStorage } from "@uidotdev/usehooks";
+import { set } from "react-hook-form";
 
 interface AddressChoiceModalProps extends React.HTMLAttributes<HTMLDivElement> {
   currentAddress: string;
@@ -30,18 +28,18 @@ interface AddressChoiceModalProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function AddressChoiceModal({
-  currentAddress,
   open,
   closed,
   opened,
   ...props
 }: AddressChoiceModalProps) {
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState({
+    address: "",
+    city: "",
+    postal_code: "",
+    label: "",
+  });
   const [currentTimeout, setCurrentTimeout] = useState<NodeJS.Timeout>();
-  const [localStorageAddress, setLocalStorageAddress] = useLocalStorage(
-    "address",
-    ""
-  );
 
   const query = useQuery({
     queryKey: ["address", address],
@@ -50,7 +48,7 @@ export function AddressChoiceModal({
         `https://api-adresse.data.gouv.fr/search/`,
         {
           params: {
-            q: address,
+            q: address.label,
             limit: "5",
           },
         }
@@ -64,8 +62,26 @@ export function AddressChoiceModal({
 
   const currentOrder = useContext(currentOrderContext);
 
+  useEffect(() => {
+    console.log("load address", currentOrder);
+
+    setAddress({
+      address: currentOrder.address,
+      city: currentOrder.city,
+      postal_code: currentOrder.postal_code,
+      label: `${currentOrder.address} ${currentOrder.city} ${currentOrder.postal_code}`,
+    });
+  }, [currentOrder]);
+
   const addressChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAddress(e.target.value);
+    console.log("addressChangeHandler", e.target.value);
+
+    setAddress((prev) => {
+      return {
+        ...prev,
+        label: e.target.value,
+      };
+    });
 
     if (currentTimeout) {
       clearTimeout(currentTimeout);
@@ -97,7 +113,9 @@ export function AddressChoiceModal({
           console.log("open");
         }}
       >
-        {currentAddress}
+        {currentOrder.address === ""
+          ? "Adresse de livraison"
+          : `${currentOrder.address} ${currentOrder.city} ${currentOrder.postal_code}`}
       </DialogTrigger>
       <DialogContent className="space-y-4">
         <DialogHeader>
@@ -107,7 +125,7 @@ export function AddressChoiceModal({
           <Label>Adresse</Label>
           <div className="relative">
             <Input
-              value={address}
+              value={address.label}
               onChange={(e) => addressChangeHandler(e)}
               id="address"
               autoComplete="address-line1"
@@ -120,9 +138,13 @@ export function AddressChoiceModal({
               <div className="absolute flex flex-col w-full px-3 rounded-b  bg-secondary gap-2">
                 {query.data?.features.map((feature) => (
                   <AddressSuggestion
-                    onClick={(e) => {
-                      setAddress(e);
-                      setLocalStorageAddress(e);
+                    onClick={(feature) => {
+                      setAddress({
+                        address: feature.properties.name,
+                        city: feature.properties.city,
+                        postal_code: feature.properties.postcode,
+                        label: feature.properties.label,
+                      });
                     }}
                     feature={feature}
                     key={feature.properties.id}
@@ -142,7 +164,19 @@ export function AddressChoiceModal({
           <Button variant="link" onClick={closed}>
             Annuler
           </Button>
-          <Button onClick={closed}>Modifier l'adresse</Button>
+          <Button
+            onClick={() => {
+              console.log("address", address);
+
+              if (address.address === "") return;
+
+              currentOrder.setAddress(address);
+
+              closed();
+            }}
+          >
+            Modifier l'adresse
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
