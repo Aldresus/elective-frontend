@@ -31,4 +31,6 @@ export const currentOrderContext = createContext<CurrentOrderContext>({
   clearOrder: () => {},
 
   setAddress: () => {},
+
+  calculateTotalPrice: () => 0,
 });

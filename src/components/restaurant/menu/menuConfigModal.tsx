@@ -114,6 +114,11 @@ export function MenuConfigModal({
       price: menuContent.price,
       products: orderProducts,
     });
+
+    //reset form
+    form.reset();
+
+    close();
   };
 
   return (
@@ -167,16 +172,7 @@ export function MenuConfigModal({
               <Button variant="link" onClick={close}>
                 Annuler
               </Button>
-              <Button
-                type="submit"
-                onClick={() => {
-                  if (!form.formState.isValid) {
-                    return;
-                  }
-                  close();
-                  //the submit logic is handled by the form
-                }}
-              >
+              <Button type="submit">
                 <p>
                   Ajouter pour <Small>{menuContent.price}€</Small>
                 </p>

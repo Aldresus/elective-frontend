@@ -5,7 +5,11 @@ import { CurrentOrderContext } from "@/entities/currentOrderContext";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useLocalStorage } from "@uidotdev/usehooks";
-import { OrderMenu, OrderProduct } from "@/entities/order";
+import {
+  OrderMenu,
+  OrderProduct,
+  productToOrderProduct,
+} from "@/entities/order";
 
 export const Route = createFileRoute("/_user")({
   component: UserLayout,
@@ -19,7 +23,7 @@ function UserLayout() {
     address: localStorageCurrentOrder?.address || "",
     city: localStorageCurrentOrder?.city || "",
     id_restaurant: localStorageCurrentOrder?.id_restaurant || "",
-    id_user: localStorageCurrentOrder?.id_user || "",
+    id_user: localStorageCurrentOrder?.id_user || "111111111111111111111111", //placeholder
     notes: localStorageCurrentOrder?.notes || "",
     menus: localStorageCurrentOrder?.menus || [],
     products: localStorageCurrentOrder?.products || [],
@@ -42,6 +46,7 @@ function UserLayout() {
     clearOrder: () => {},
     setRestaurantId: () => {},
     setAddress: () => {},
+    calculateTotalPrice: () => 0,
   });
 
   const setRestaurantId = (restaurantId: string) => {
@@ -60,13 +65,16 @@ function UserLayout() {
   };
 
   const addProduct = (product: OrderProduct, quantity: number) => {
-    console.log("context add product", product);
-    console.log("context items", currentOrder);
+    let newItems = [...currentOrder.products];
+    //check if product is already in the order
+    const productInOrder = currentOrder.products.findIndex(
+      (item) => item.id_product === product.id_product
+    );
 
-    const newItems = [...currentOrder.products];
-
-    for (let i = 0; i < quantity; i++) {
-      newItems.push(product);
+    if (productInOrder === -1) {
+      newItems = [...newItems, { ...product, quantity }];
+    } else {
+      newItems[productInOrder].quantity += quantity;
     }
 
     setCurrentOrder((prev) => {
@@ -143,7 +151,7 @@ function UserLayout() {
       address: "",
       city: "",
       id_restaurant: "",
-      id_user: "",
+      id_user: "111111111111111111111111",
       notes: "",
       postal_code: "",
       price: 0,
@@ -169,6 +177,8 @@ function UserLayout() {
       clearOrder: () => {},
 
       setAddress: () => {},
+
+      calculateTotalPrice: () => 0,
     };
 
     setCurrentOrder(emptyOrder);
@@ -202,6 +212,19 @@ function UserLayout() {
     });
   };
 
+  const calculateTotalPrice = () => {
+    let totalPrice = 0;
+
+    currentOrder.products.forEach((product) => {
+      totalPrice += product.price * product.quantity;
+    });
+    currentOrder.menus.forEach((menu) => {
+      totalPrice += menu.price;
+    });
+
+    return totalPrice;
+  };
+
   return (
     <div className="bg-yellow-500 min-h-screen">
       <currentOrderContext.Provider
@@ -214,6 +237,7 @@ function UserLayout() {
           clearOrder: clearOrder,
           setRestaurantId,
           setAddress,
+          calculateTotalPrice,
         }}
       >
         <Navbar className="fixed top-0 left-0 w-full" />

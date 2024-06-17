@@ -1,3 +1,4 @@
+import BasketModal from "@/components/restaurant/basketModal";
 import { ItemCarrousel } from "@/components/restaurant/itemCarrousel";
 import { RestaurantCategory } from "@/components/restaurant/restaurantCategory";
 import { H1 } from "@/components/typography";
@@ -47,6 +48,12 @@ function RestaurantPage() {
 
   useEffect(() => {
     console.log("useEffect", currentOrder);
+    console.log(
+      "useEffect",
+      id,
+      currentOrder.id_restaurant,
+      id !== currentOrder.id_restaurant
+    );
 
     if (!currentOrder.id_restaurant || id !== currentOrder.id_restaurant) {
       currentOrder.clearOrder();
@@ -84,19 +91,7 @@ function RestaurantPage() {
       })}
       {currentOrder.id_restaurant &&
         (currentOrder.products.length > 0 || currentOrder.menus.length > 0) && (
-          <div className="sticky mx-auto bottom-10 w-1/2 z-50 shadow">
-            <Button
-              size="lg"
-              className="w-full gap-2"
-              onClick={() => {
-                console.log("currentOrder", currentOrder);
-              }}
-            >
-              Voir le panier (
-              {currentOrder.products.length + currentOrder.menus.length})
-              <ShoppingBasket />
-            </Button>
-          </div>
+          <BasketModal />
         )}
     </div>
   );

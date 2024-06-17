@@ -113,9 +113,11 @@ export function AddressChoiceModal({
           console.log("open");
         }}
       >
-        {currentOrder.address === ""
-          ? "Adresse de livraison"
-          : `${currentOrder.address} ${currentOrder.city} ${currentOrder.postal_code}`}
+        <Button variant="link" className="underline">
+          {currentOrder.address === ""
+            ? "Entrez votre adresse de livraison"
+            : `${currentOrder.address} ${currentOrder.city} ${currentOrder.postal_code}`}
+        </Button>
       </DialogTrigger>
       <DialogContent className="space-y-4">
         <DialogHeader>

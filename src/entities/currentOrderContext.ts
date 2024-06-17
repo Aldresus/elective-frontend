@@ -16,4 +16,6 @@ export interface CurrentOrderContext extends CreateOrder {
     city: string;
     postal_code: string;
   }) => void;
+
+  calculateTotalPrice: () => number;
 }
