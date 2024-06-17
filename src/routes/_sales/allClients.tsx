@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Client } from "@/entities/client";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/_sales/allClients")({
@@ -45,15 +45,16 @@ function AllClient() {
               return el.last_name.startsWith(letter);
             })
             .map((client) => (
-              <Button
-                key={client.id}
-                className="w-full flex gap-1 justify-between"
-                variant="outline"
-                id={client.id}
-              >
-                {client.last_name} {client.first_name}
-                <ChevronRight />
-              </Button>
+              <Link to={`/clientDetails/${client.id}`} key={client.id}>
+                <Button
+                  className="w-full flex gap-1 justify-between"
+                  variant="outline"
+                  id={client.id}
+                >
+                  {client.last_name} {client.first_name}
+                  <ChevronRight />
+                </Button>
+              </Link>
             ))}
         </div>
       ))}
