@@ -1,9 +1,19 @@
-import { CircleUser } from "lucide-react";
+import { ChevronRight, CircleUser } from "lucide-react";
 import Logo from "./logo";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import { Link } from "@tanstack/react-router";
+import { Link, Navigate } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
+import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogPortal,
+  DialogClose,
+} from "../ui/dialog";
+import { Large } from "../typography";
+import { Route } from "@/routes/_user";
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
   isAdress?: boolean;
@@ -15,10 +25,12 @@ export default function Navbar({
   ...props
 }: NavbarProps) {
   const auth = useAuth();
+  const navigate = Route.useNavigate();
+
   return (
     <div
       className={cn(
-        "bg-slate-50 flex justify-between items-center h-[50px] py-2 px-6",
+        "bg-slate-50 flex justify-around items-center h-[50px] py-2 px-6",
         className
       )}
       {...props}
@@ -29,16 +41,75 @@ export default function Navbar({
       {isAdress && <div>l'adresse tmtc V</div>}
       <Input className="w-full max-w-xs" placeholder="Rechercher" />
       <div className="flex items-center gap-2">
-        {auth.isAuthenticated && (
-          <button
-            className="bg-slate-200 text-slate-500 hover:bg-slate-300 py-1 px-2 rounded-md"
-            onClick={() => auth.logout()}
-          >
-            Déconnexion
-          </button>
-        )}
-        <CircleUser size={30} />
+        <Large>user.name</Large>
+        <Dialog>
+          <DialogTrigger>
+            <Button type="button" variant="ghost">
+              <CircleUser size={30} />
+            </Button>
+          </DialogTrigger>
+          <DialogPortal>
+            <DialogContent className="flex flex-col items-center justify-center fixed overflow-y-auto">
+              <Large>Account information</Large>
+              <DialogClose>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-96 flex flex-row justify-between"
+                  onClick={() => navigate({ to: "/user" })}
+                >
+                  <p>Orders</p>
+                  <ChevronRight size={24} />
+                </Button>
+              </DialogClose>
+              <DialogClose>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-96 flex flex-row justify-between"
+                  onClick={() => navigate({ to: "/editProfile" })}
+                >
+                  <p>Refer</p>
+                  <ChevronRight size={24} />
+                </Button>
+              </DialogClose>
+              <DialogClose>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-96 flex flex-row justify-between"
+                  onClick={() => navigate({ to: "/editProfile" })}
+                >
+                  <p>Account settings</p>
+                  <ChevronRight size={24} />
+                </Button>
+              </DialogClose>
+              <DialogClose>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-96 flex flex-row justify-between"
+                  onClick={() => navigate({ to: "/editProfile" })}
+                >
+                  <p>Others</p>
+                  <ChevronRight size={24} />
+                </Button>
+              </DialogClose>
+              {auth.isAuthenticated && (
+                <Button
+                  type="button"
+                  className="mt-4 w-96"
+                  variant="link"
+                  onClick={() => auth.logout()}
+                >
+                  Déconnexion
+                </Button>
+              )}
+            </DialogContent>
+          </DialogPortal>
+        </Dialog>
       </div>
     </div>
+    // </div>
   );
 }
