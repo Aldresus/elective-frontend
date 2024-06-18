@@ -1,4 +1,3 @@
-import { CircleUser } from "lucide-react";
 import Logo from "./logo";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
@@ -6,6 +5,11 @@ import { Link } from "@tanstack/react-router";
 import { useContext, useState } from "react";
 import { ModalContext } from "../restaurant/modalContext";
 import { AddressChoiceModal } from "../address/addressChoiceModal";
+import { useAuth } from "@/hooks/useAuth";
+import { DecodedAccessToken } from "@/entities/login";
+import { useLocalStorage } from "@uidotdev/usehooks";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Button } from "../ui/button";
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
   isAdress?: boolean;
@@ -20,6 +24,10 @@ export default function Navbar({
 }: NavbarProps) {
   const { modalIsOpen, setmodalIsOpen } = useContext(ModalContext);
   const [addressModalIsOpen, setAddressModalIsOpen] = useState(false);
+  const [user] = useLocalStorage<DecodedAccessToken>("user");
+  const auth = useAuth();
+  console.log(auth);
+
   return (
     <div
       className={cn(
@@ -41,11 +49,25 @@ export default function Navbar({
       )}
       <Input className="w-full max-w-xs" placeholder="Rechercher" />
       <div className="flex items-center gap-2">
-        jsp qui est ce texte
-        {isRestaurateur && (
-          <CircleUser size={30} onClick={() => setmodalIsOpen(true)} />
+        {auth.isAuthenticated ? (
+          <>
+            <button
+              className="bg-slate-200 text-slate-500 hover:bg-slate-300 py-1 px-2 rounded-md"
+              onClick={() => auth.logout()}
+            >
+              Déconnexion
+            </button>
+            <Avatar>
+              <AvatarFallback>{`${user?.first_name.charAt(0)}${user?.last_name.charAt(
+                0
+              )}`}</AvatarFallback>
+            </Avatar>
+          </>
+        ) : (
+          <Link to="/login">
+            <Button variant="link">Se connecter</Button>
+          </Link>
         )}
-        {!isRestaurateur && <CircleUser size={30} />}
       </div>
     </div>
   );

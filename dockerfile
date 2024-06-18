@@ -13,6 +13,9 @@ RUN npm install
 # Copiez le reste des fichiers de l'application dans le conteneur
 COPY . .
 
+#creer les routes 
+RUN npm run routes
+
 # Construisez l'application pour la production
 RUN npm run build
 

@@ -10,12 +10,13 @@ import {
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { Fragment, useState } from "react";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import { Link } from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
+import axios from "axios";
+import { sha256 } from "js-sha256";
 
 export const Route = createFileRoute("/_login/signup")({
   component: Login,
@@ -76,6 +77,11 @@ const signupSchema = z
     path: ["confirmPassword"],
   });
 
+const instance = axios.create({
+  baseURL: "http://localhost:3000/api/user/",
+  timeout: 1000,
+});
+
 function Login() {
   const [currentStep, setCurrentStep] = useState<1 | 2>(1);
   const [showPassword, setShowPassword] = useState(false);
@@ -98,6 +104,38 @@ function Login() {
 
   const onSubmit = async (values: z.infer<typeof signupSchema>) => {
     console.log(values);
+    // hash the password
+    const hash = sha256(values.password);
+    console.log(hash);
+    instance
+      .post("register", {
+        first_name: values.firstName,
+        last_name: values.lastName,
+        birthday:
+          values.birthDay + "-" + values.birthMonth + "-" + values.birthYear,
+        phone: values.phone,
+        email: values.email,
+        password: hash,
+        postal_code: "",
+        city: "",
+        address: "",
+        role: "CLIENT", //jsp
+        created_at: new Date().toISOString(),
+        edited_at: new Date().toISOString(),
+        // id_restaurant: "",
+        // id_users: [],
+      })
+      .then((res) => {
+        console.log("Insertion réussie");
+        redirect({
+          to: "/login",
+        });
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log("Failed");
+        console.log(err);
+      });
   };
 
   return (

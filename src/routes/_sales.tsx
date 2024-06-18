@@ -1,10 +1,19 @@
 import Footer from "@/components/common/footer";
 import Navbar from "@/components/common/navbar";
-import { Outlet } from "@tanstack/react-router";
-import { createFileRoute } from "@tanstack/react-router";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_sales")({
-  component: SalesLayout,
+export const Route = createFileRoute("/_restaurant")({
+  beforeLoad: async ({ context, location }) => {
+    if (!context.auth.isAuthenticated) {
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
+  component: RestaurantLayout,
 });
 
 function SalesLayout() {
