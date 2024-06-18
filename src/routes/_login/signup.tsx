@@ -338,35 +338,36 @@ function Login() {
                       </Label>
                     </div>
                     <div className="flex px-4">
-                      <RadioGroup
-                        defaultValue="option-one"
-                        disabled={isRadioDisabled}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem
-                            value="option-one"
-                            id="option-one"
-                            onClick={() => {
-                              roleContext.setRole(Role.DELIVERYMAN);
-                              setIsFirstRadioChecked(true);
-                            }}
-                          />
-                          <Label htmlFor="option-one">Je suis un livreur</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem
-                            value="option-two"
-                            id="option-two"
-                            onClick={() => {
-                              roleContext.setRole(Role.RESTAURATEUR);
-                              setIsFirstRadioChecked(false);
-                            }}
-                          />
-                          <Label htmlFor="option-two">
-                            Je suis un restaurateur
-                          </Label>
-                        </div>
-                      </RadioGroup>
+                      {!isRadioDisabled && (
+                        <RadioGroup defaultValue="option-one">
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem
+                              value="option-one"
+                              id="option-one"
+                              onClick={() => {
+                                roleContext.setRole(Role.DELIVERYMAN);
+                                setIsFirstRadioChecked(true);
+                              }}
+                            />
+                            <Label htmlFor="option-one">
+                              Je suis un livreur
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem
+                              value="option-two"
+                              id="option-two"
+                              onClick={() => {
+                                roleContext.setRole(Role.RESTAURATEUR);
+                                setIsFirstRadioChecked(false);
+                              }}
+                            />
+                            <Label htmlFor="option-two">
+                              Je suis un restaurateur
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                      )}
                     </div>
                   </FormItem>
                   <div className="flex gap-4 justify-end">
