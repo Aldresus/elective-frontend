@@ -1,16 +1,7 @@
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import { H3 } from "../typography";
-import {
-  Active,
-  DndContext,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
-import { SortableContext, arrayMove, useSortable } from "@dnd-kit/sortable";
-import { useState } from "react";
+import { Active } from "@dnd-kit/core";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -26,58 +17,60 @@ import {
 } from "@/entities/categoryContent";
 import { Menu } from "@/entities/menu";
 import { Product } from "@/entities/product";
+import { Console } from "console";
 
 interface ItemRequiredValues {
   id: string;
   name: string;
 }
 
-interface SortableItemProps extends ItemRequiredValues {
-  deleteItem: (id: string) => void;
-}
-
-const SortableItem = ({ id, name, deleteItem }: SortableItemProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
-  const style = {
-    transform: CSS.Transform.toString(transform),
-  };
-
+const Item = ({ id, name }: ItemRequiredValues) => {
   return (
     <div className="w-full flex items-center gap-2">
-      <div
-        ref={setNodeRef}
-        style={style}
-        {...attributes}
-        {...listeners}
-        className="w-3/4 flex items-center gap-2 p-2 border border-gray-300 rounded-md bg-white"
-      >
+      <div className="w-3/4 flex items-center gap-2 p-2 border border-gray-300 rounded-md bg-white">
         <GripVertical />
         <p>{name}</p>
       </div>
-      <Trash2 onClick={() => deleteItem(id)} className="text-destructive" />
+      <Trash2 className="text-destructive" />
     </div>
   );
 };
 
+interface categoryType {
+  id_product: string;
+  id_category: string;
+  updateProductDto: {
+    ids_menu_category: Array<string>;
+  };
+  updateCategoryDto: {
+    ids_product: Array<string>;
+  };
+}
+
 interface CategoryManagerProps extends React.HTMLAttributes<HTMLDivElement> {
   category: CategoryContent;
-  allItemsList: (Menu | Product)[];
+  allItemsList: Array<Menu | Product>;
+  categoriesEdited: Array<categoryType>;
+  setCategoriesEdited: Dispatch<SetStateAction<Array<categoryType>>>;
 }
 
 export default function CategoryManager({
   category,
   allItemsList,
+  categoriesEdited,
+  setCategoriesEdited,
 }: CategoryManagerProps) {
-  const [itemsList, setitemsList] = useState<(Menu | Product)[]>(allItemsList);
-  const [items, setItems] = useState<(Menu | Product)[]>(category.items);
-  const [active, setActive] = useState<Active | null>(null);
+  const [itemsList, setitemsList] =
+    useState<Array<Menu | Product>>(allItemsList);
+  const [items, setItems] = useState<Array<Menu | Product>>(
+    category.Product || []
+  );
   const [feedbackSelect, setfeedbackSelect] = useState<string | null>(null);
 
-  const mouseSensor = useSensor(MouseSensor);
-  const touchSensor = useSensor(TouchSensor);
-
-  const sensors = useSensors(mouseSensor, touchSensor);
+  useEffect(() => {
+    // Whenever category changes, update the items state
+    setItems(category.Product || []);
+  }, [category]);
 
   function addItem(newId: string) {
     // Check if item is already in the category
@@ -92,6 +85,7 @@ export default function CategoryManager({
     // if item is not in the category, we add it, else do nothing
     if (!checkValue) {
       //get the item from the list with all items
+      console.log("itemslist :", itemsList);
       const newItem = itemsList.find((item) => {
         if (isProduct(item)) {
           return item.id_product === newId;
@@ -99,6 +93,7 @@ export default function CategoryManager({
           return item.id_menu === newId;
         }
       });
+      console.log("newItem :", newItem);
       // add it to the category list
       if (newItem !== undefined && isProduct(newItem)) {
         setItems([
@@ -109,12 +104,30 @@ export default function CategoryManager({
             price: newItem.price,
             description: newItem.description,
             product_image_url: newItem.product_image_url,
-            category: newItem.category,
             id_restaurant: newItem.id_restaurant,
+            ids_menu_category: newItem.ids_menu_category,
           },
         ]);
+        // edit category
+        category.ids_product.push(newItem.id_product);
+        newItem.ids_menu_category.push(category.id_category);
+        console.log("ids_product: ", category.ids_product);
+        console.log("ids_menu_category: ", newItem.ids_menu_category);
+        const categoryToEdit = {
+          id_category: category.id_category,
+          id_product: newItem.id_product,
+          updateProductDto: {
+            ids_menu_category: newItem.ids_menu_category,
+          },
+          updateCategoryDto: {
+            ids_product: category.ids_product,
+          },
+        };
+        console.log(categoryToEdit);
+        // store edited category to process it when click on save button
+        setCategoriesEdited([...categoriesEdited, categoryToEdit]);
       } else if (newItem !== undefined && isMenu(newItem)) {
-        setItems([
+        /*setItems([
           ...items,
           {
             id_menu: newItem.id_menu,
@@ -122,11 +135,8 @@ export default function CategoryManager({
             description: newItem.description,
             menu_image_url: newItem.menu_image_url,
             price: newItem.price,
-            category: newItem.category,
-            menu_ordered_categories: newItem.menu_ordered_categories,
-            products: newItem.products,
           },
-        ]);
+        ]);*/
       }
       setfeedbackSelect("Item ajouté");
     } else {
@@ -146,57 +156,19 @@ export default function CategoryManager({
     );
   }
 
+  console.log("items");
+  console.log(items);
   return (
     <div className="w-full flex flex-col gap-5">
       <div className="flex justify-between items-center pt-2">
-        <H3>{category.category_name}</H3>
+        <H3>{category.name}</H3>
       </div>
+      {items.map((item) => (
+        <div key={getItemId(item)} className="w-full flex justify-start">
+          <Item id={getItemId(item)} name={item.name} />
+        </div>
+      ))}
 
-      <DndContext
-        sensors={sensors}
-        onDragStart={({ active }) => {
-          setActive(active);
-        }}
-        onDragEnd={({ active, over }) => {
-          if (over && active.id !== over?.id) {
-            const activeIndex = items.findIndex((item) => {
-              if (isProduct(item)) {
-                return item.id_product === active.id;
-              } else {
-                return item.id_menu === active.id;
-              }
-            });
-            const overIndex = items.findIndex((item) => {
-              if (isProduct(item)) {
-                return item.id_product === over.id;
-              } else {
-                return item.id_menu === over.id;
-              }
-            });
-            setItems(arrayMove(items, activeIndex, overIndex));
-          }
-          setActive(null);
-        }}
-        onDragCancel={() => {
-          setActive(null);
-        }}
-      >
-        <SortableContext
-          items={items.map((item) => {
-            return getItemId(item);
-          })}
-        >
-          {items.map((item) => (
-            <div key={getItemId(item)} className="w-full flex justify-start">
-              <SortableItem
-                id={getItemId(item)}
-                name={item.name}
-                deleteItem={deleteItem}
-              />
-            </div>
-          ))}
-        </SortableContext>
-      </DndContext>
       <div className="w-3/4">
         <Select value="" onValueChange={addItem}>
           <SelectTrigger>

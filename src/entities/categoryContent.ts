@@ -2,9 +2,11 @@ import type { Menu } from "./menu";
 import type { Product } from "./product";
 
 export interface CategoryContent {
-  category_name: string;
-  category_id: string;
-  items: Array<Menu | Product>;
+  id_category: string;
+  name: string;
+  ids_menu : Array<string>;
+  ids_product : Array<string>;
+  Product: Array<Product>;
 }
 
 export function isProduct(item: Product | Menu): item is Product {

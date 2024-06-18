@@ -1,4 +1,4 @@
-import { categoryData, itemsData } from "@/assets/testData";
+import { itemsData } from "@/assets/testData";
 import CategoryManager from "@/components/restaurant/categoryManager";
 import { H1 } from "@/components/typography";
 import { Button } from "@/components/ui/button";
