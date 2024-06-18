@@ -14,7 +14,10 @@ import { Separator } from "../ui/separator";
 import { useMutation } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { CreateOrder, Order } from "@/entities/order";
-import { redirect, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
+import { BasketProductElement } from "../basket/basketProductElement";
+import { BasketMenuElement } from "../basket/basketMenuElement";
+import { BasketSummary } from "../basket/basketSummary";
 
 interface BasketModalProps extends React.HTMLProps<HTMLDivElement> {}
 
@@ -37,9 +40,9 @@ export default function BasketModal({ ...props }: BasketModalProps) {
       //   },
       // });
       navigate({
-        to: "/order/$id",
+        to: "/delivery/$order_id",
         params: {
-          id: res.id_order,
+          order_id: res.id_order,
         },
       });
     },
@@ -77,46 +80,10 @@ export default function BasketModal({ ...props }: BasketModalProps) {
           <Separator />
 
           <H2>Contenu du panier</H2>
-          <div className="space-y-4">
-            {currentOrder.menus.map((menu, i) => {
-              return (
-                <div key={i} className=" ">
-                  <div className="flex gap-2 items-end">
-                    <div className="w-1/4">1 x</div>
-                    <div className="w-2/4 underline underline-offset-2">
-                      {menu.name}
-                    </div>
-                    <div className="w-1/4">{menu.price} €</div>
-                  </div>
-
-                  {menu.products.map((item, i) => {
-                    return (
-                      <div key={i} className="flex">
-                        <div className="ml-6 w-1/4"> </div>
-                        <Small>{item.name}</Small>
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })}
-
-            {currentOrder.products.map((menu, i) => {
-              return (
-                <div key={i} className="flex gap-2 items-end">
-                  <div className="w-1/4">{menu.quantity} x</div>
-                  <div className="w-2/4">{menu.name}</div>
-                  <div className="w-1/4">{menu.price * menu.quantity} €</div>
-                </div>
-              );
-            })}
-            <div className="flex gap-2 ">
-              <Large className="w-3/4">Total : </Large>
-              <Large className="w-1/4">
-                {currentOrder.calculateTotalPrice()} €
-              </Large>
-            </div>
-          </div>
+          <BasketSummary
+            totalPrice={currentOrder.calculateTotalPrice()}
+            {...currentOrder}
+          />
         </DialogHeader>
         <Separator />
 
