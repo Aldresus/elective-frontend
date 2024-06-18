@@ -2,7 +2,7 @@ import Footer from "@/components/common/footer";
 import Navbar from "@/components/common/navbar";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_restaurant")({
+export const Route = createFileRoute("/_sales")({
   beforeLoad: async ({ context, location }) => {
     if (!context.auth.isAuthenticated) {
       throw redirect({
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/_restaurant")({
       });
     }
   },
-  component: RestaurantLayout,
+  component: SalesLayout,
 });
 
 function SalesLayout() {

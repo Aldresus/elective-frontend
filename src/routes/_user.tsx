@@ -2,27 +2,12 @@ import Footer from "@/components/common/footer";
 import Navbar from "@/components/common/navbar";
 import { currentOrderContext } from "@/contexts/currentOrderContext";
 import { CurrentOrderContext } from "@/entities/currentOrderContext";
-import { useAuth } from "@/hooks/useAuth";
-
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { useLocalStorage } from "@uidotdev/usehooks";
-import {
-  OrderMenu,
-  OrderProduct,
-  productToOrderProduct,
-} from "@/entities/order";
+import { OrderMenu, OrderProduct } from "@/entities/order";
+import { useState } from "react";
 
 export const Route = createFileRoute("/_user")({
-  //   beforeLoad: async ({ context, location }) => {
-  // if (!context.auth.isAuthenticated) {
-  //   throw redirect({
-  // to: "/login",
-  // search: {
-  //   redirect: location.href,
-  // },
-  //   });
-  // }
-  //   },
   component: UserLayout,
 });
 
