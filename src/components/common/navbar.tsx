@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { useContext, useState } from "react";
 import { ModalContext } from "../restaurant/modalContext";
-import { AddressChoiceModal } from "../user/addressChoiceModal";
+import { AddressChoiceModal } from "../address/addressChoiceModal";
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
   isAdress?: boolean;
