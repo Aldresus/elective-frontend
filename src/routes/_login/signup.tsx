@@ -10,13 +10,19 @@ import {
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Fragment, useState } from "react";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
 import { sha256 } from "js-sha256";
+import { RoleEnum } from "@/entities/user";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
+import { useRole } from "@/hooks/useRole";
 
 export const Route = createFileRoute("/_login/signup")({
   component: Login,
@@ -52,6 +58,11 @@ const signupSchema = z
     confirmPassword: z.string(),
     firstName: z.string().min(1, { message: "Entrez votre prénom" }),
     lastName: z.string().min(1, { message: "Entrez votre nom" }),
+    siret: z
+      .string()
+      .min(14, { message: "Merci d'entrer un SIRET valide" })
+      .max(14, { message: "merci d'entrer un SIRET valide" })
+      .optional(),
     birthDay: z.coerce
       .number()
       .min(1, "Entrez un jour valide")
@@ -78,7 +89,7 @@ const signupSchema = z
   });
 
 const instance = axios.create({
-  baseURL: "http://localhost:3000/api/user/",
+  baseURL: "http://localhost:3000/api/",
   timeout: 1000,
 });
 
@@ -86,6 +97,9 @@ function Login() {
   const [currentStep, setCurrentStep] = useState<1 | 2>(1);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const roleContext = useRole();
+  console.log(`role: ${roleContext.role}`);
 
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
@@ -108,7 +122,7 @@ function Login() {
     const hash = sha256(values.password);
     console.log(hash);
     instance
-      .post("register", {
+      .post("user/register", {
         first_name: values.firstName,
         last_name: values.lastName,
         birthday:
@@ -119,17 +133,63 @@ function Login() {
         postal_code: "",
         city: "",
         address: "",
-        role: "CLIENT", //jsp
+        role: roleContext.role,
         created_at: new Date().toISOString(),
         edited_at: new Date().toISOString(),
         // id_restaurant: "",
-        // id_users: [],
+        id_users: [],
       })
       .then((res) => {
+        const id = res.data.id;
         console.log("Insertion réussie");
-        redirect({
-          to: "/login",
-        });
+        console.log(`user inséré ${id}`);
+        console.log(res.data);
+        if (roleContext.role === RoleEnum.RESTAURATEUR) {
+          instance
+            .post("/restaurant", {
+              name: values.firstName,
+              siret: values.siret,
+              email: values.email,
+              food_type: "",
+              price_range: "",
+              address: "",
+              postal_code: "",
+              city: "omg c un test",
+              rating: 0.0,
+              banner_url: "",
+              business_hours: "",
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            })
+            .then((res) => {
+              console.log("Insertion réussie");
+              console.log(`restaurant inséré ${id}`);
+              console.log(res.data);
+              instance
+                .patch("/user/", {
+                  where: {
+                    id: id,
+                  },
+                  data: {
+                    id_restaurant: res.data.id,
+                  },
+                })
+                .then((res) => {
+                  console.log("Update réussie");
+                  console.log(`user updated ${id}`);
+                  console.log(res.data);
+                })
+                .catch((err) => {
+                  console.log("Failed");
+                  console.log(err);
+                });
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log("Failed");
+              console.log(err);
+            });
+        }
         console.log(res);
       })
       .catch((err) => {
@@ -137,6 +197,12 @@ function Login() {
         console.log(err);
       });
   };
+
+  const [isRadioDisabled, setIsRadioDisabled] = useState(
+    roleContext.role === RoleEnum.CLIENT
+  );
+
+  const [isFirstRadioChecked, setIsFirstRadioChecked] = useState(true);
 
   return (
     <div>
@@ -245,6 +311,64 @@ function Login() {
                   <div>
                     Vous êtes parrainé par <b>dskqlmdkqslmd</b>
                   </div>
+                  <FormItem>
+                    <Separator />
+                    <div className="flex items-center gap-4 pt-4 pb-2">
+                      <Switch
+                        defaultChecked={roleContext.role !== RoleEnum.CLIENT}
+                        onCheckedChange={(checked) => {
+                          // if the switch is checked and the first radio is checked, the role is set to DELIVERYMAN
+                          // if the switch is checked and the first radio is not checked, the role is set to RESTAURATEUR
+                          // if the switch is not checked, the role is set to CLIENT
+                          if (checked && isFirstRadioChecked) {
+                            roleContext.setRole(RoleEnum.DELIVERYMAN);
+                          } else if (checked && !isFirstRadioChecked) {
+                            roleContext.setRole(RoleEnum.RESTAURATEUR);
+                          } else {
+                            roleContext.setRole(RoleEnum.CLIENT);
+                          }
+                          setIsRadioDisabled(!checked);
+                        }}
+                        id="switch"
+                        aria-readonly
+                      />
+                      <Label htmlFor="switch">
+                        <p>Vous n'êtes pas un client ?</p>
+                      </Label>
+                    </div>
+                    <div className="flex px-4">
+                      {!isRadioDisabled && (
+                        <RadioGroup defaultValue="option-one">
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem
+                              value="option-one"
+                              id="option-one"
+                              onClick={() => {
+                                roleContext.setRole(RoleEnum.DELIVERYMAN);
+                                setIsFirstRadioChecked(true);
+                              }}
+                            />
+                            <Label htmlFor="option-one">
+                              Je suis un livreur
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem
+                              value="option-two"
+                              id="option-two"
+                              onClick={() => {
+                                roleContext.setRole(RoleEnum.RESTAURATEUR);
+                                setIsFirstRadioChecked(false);
+                              }}
+                            />
+                            <Label htmlFor="option-two">
+                              Je suis un restaurateur
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                      )}
+                    </div>
+                  </FormItem>
                   <div className="flex gap-4 justify-end">
                     <Link to="/login">
                       <Button type="button" variant="link">
@@ -311,6 +435,28 @@ function Login() {
                       </FormItem>
                     )}
                   />
+                  {roleContext.role === RoleEnum.DELIVERYMAN ||
+                    (roleContext.role === RoleEnum.RESTAURATEUR && (
+                      <FormField
+                        control={form.control}
+                        name="siret"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>N° de SIRET</FormLabel>
+                            <Input
+                              placeholder="SIRET"
+                              type="text"
+                              {...field}
+                              onBlur={() => {
+                                form.trigger("siret");
+                              }}
+                            />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+
                   <div>
                     Date de naissance
                     <div className="flex gap-4 justify-end">

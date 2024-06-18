@@ -3,6 +3,7 @@ import { Card } from "../ui/card";
 import { LoginCard } from "./loginCard";
 import { Large } from "../typography";
 import { Button } from "../ui/button";
+import { Link } from "@tanstack/react-router";
 
 interface LoginBannerProps extends React.HTMLAttributes<HTMLDivElement> {
   onclose?: () => void;
@@ -22,16 +23,30 @@ export function LoginBanner({ onclose, ...props }: LoginBannerProps) {
         </Button>
       </div>
       <div className="flex justify-around mb-10">
-        <LoginCard className="">
-          <Large className="pt-2">
-            Vous êtes un <b>livreur</b> ?
-          </Large>
-        </LoginCard>
-        <LoginCard>
-          <Large>
-            Vous êtes un <b>restauratateur</b> ?
-          </Large>
-        </LoginCard>
+        <Link
+          to="/signup"
+          search={{
+            role: "DELIVERYMAN",
+          }}
+        >
+          <LoginCard>
+            <Large className="pt-2">
+              Vous êtes un <b>livreur</b> ?
+            </Large>
+          </LoginCard>
+        </Link>
+        <Link
+          to="/signup"
+          search={{
+            role: "RESTAURATEUR",
+          }}
+        >
+          <LoginCard>
+            <Large>
+              Vous êtes un <b>restaurateur</b> ?
+            </Large>
+          </LoginCard>
+        </Link>
       </div>
     </Card>
   );

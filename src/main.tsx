@@ -6,14 +6,15 @@ import "./index.css";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
+import { RoleProvider, useRole } from "./hooks/useRole";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "./components/ui/sonner";
 
 // Create a new router instance
 const router = createRouter({
   routeTree,
   context: {
     auth: undefined!,
+    roleContext: undefined!,
   },
 });
 
@@ -32,7 +33,6 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <Toaster position="top-right" />
         <App />
       </QueryClientProvider>
     </StrictMode>
@@ -41,13 +41,16 @@ if (!rootElement.innerHTML) {
 
 function InnerApp() {
   const auth = useAuth();
-  return <RouterProvider router={router} context={{ auth }} />;
+  const roleContext = useRole();
+  return <RouterProvider router={router} context={{ auth, roleContext }} />;
 }
 
 function App() {
   return (
     <AuthProvider>
-      <InnerApp />
+      <RoleProvider>
+        <InnerApp />
+      </RoleProvider>
     </AuthProvider>
   );
 }
