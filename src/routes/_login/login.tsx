@@ -33,6 +33,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import axios from "axios";
 import { sha256 } from "js-sha256";
+import { useMutation } from "@tanstack/react-query";
 
 import { useAuth } from "@/lib/auth";
 
@@ -80,20 +81,24 @@ function Login() {
 
   const search = Route.useSearch();
 
-  const onSubmit = async (values: z.infer<typeof signinSchema>) => {
-    const hash = sha256(values.password);
-    instance
-      .post("login", { email: values.email, password: hash })
-      .then(async (res) => {
+  const mutation = useMutation({
+    mutationFn: async (loginData: { email: string; password: string }) => {
+      try {
+        const res = await instance.post("login", loginData);
         console.log("Insertion réussie");
         await auth.login(sha256(res.data.access_token));
         await router.invalidate();
         await navigate({ to: search.redirect ?? fallback });
-      })
-      .catch((err) => {
+      } catch (err) {
         console.log("Failed");
         console.log(err);
-      });
+      }
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof signinSchema>) => {
+    const hash = sha256(values.password);
+    mutation.mutateAsync({ email: values.email, password: hash });
   };
 
   const resetPasswordHandler = (email: string) => {
