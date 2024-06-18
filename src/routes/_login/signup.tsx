@@ -146,7 +146,7 @@ function Login() {
         console.log(res.data);
         if (roleContext.role === Role.RESTAURATEUR) {
           instance
-            .post("/restaurant/", {
+            .post("/restaurant", {
               name: values.firstName,
               siret: values.siret,
               email: values.email,
