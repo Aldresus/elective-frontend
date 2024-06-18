@@ -31,6 +31,7 @@ import { sha256 } from "js-sha256";
 import { useMutation } from "@tanstack/react-query";
 
 import { useAuth } from "@/lib/auth";
+const fallback = "/user";
 
 export const Route = createFileRoute("/_login/login")({
   component: Login,

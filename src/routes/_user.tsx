@@ -2,20 +2,9 @@ import Footer from "@/components/common/footer";
 import Navbar from "@/components/common/navbar";
 import { LoginBanner } from "@/components/user/loginBanner";
 import { useAuth } from "@/lib/auth";
-import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import { z } from "zod";
+import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_user")({
-  validateSearch: z.object({
-    redirect: z.string().optional().catch(""),
-  }),
-  beforeLoad: ({ context, search }) => {
-    const fallback = "/login";
-
-    if (context.auth.isAuthenticated) {
-      throw redirect({ to: search.redirect ?? fallback });
-    }
-  },
   component: UserLayout,
 });
 
