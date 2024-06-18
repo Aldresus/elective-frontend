@@ -6,7 +6,7 @@ export interface CurrentOrderContext extends CreateOrder {
   addProduct: (product: OrderProduct, quantity: number) => void;
   addMenu: (menu: OrderMenu) => void;
 
-  removeProduct: (product: OrderProduct, quantity: number) => void;
+  removeProduct: (product: OrderProduct) => void;
   removeMenu: (menu: OrderMenu) => void;
 
   clearOrder: () => void;

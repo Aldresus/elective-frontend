@@ -96,8 +96,22 @@ export function BasketModal({ ...props }: BasketModalProps) {
 
           <H2>Contenu du panier</H2>
           <BasketSummary
+            editable
             totalPrice={currentOrder.calculateTotalPrice()}
-            {...currentOrder}
+            productMinus={(product) => {
+              currentOrder.removeProduct(product);
+            }}
+            productAdd={(product) => {
+              currentOrder.addProduct(product, 1);
+            }}
+            menuRemove={(menu) => {
+              currentOrder.removeMenu(menu);
+            }}
+            menuAdd={(menu) => {
+              currentOrder.addMenu(menu);
+            }}
+            menus={currentOrder.menus}
+            products={currentOrder.products}
           />
         </DialogHeader>
         <Separator />

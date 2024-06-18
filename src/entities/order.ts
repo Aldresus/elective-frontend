@@ -22,7 +22,6 @@ export interface OrderProduct {
 export interface CreateOrder {
   id_order?: string;
   order_date: Date;
-  status: OrderStatusEnum;
   price: number;
   postal_code: string;
   address: string;
@@ -41,6 +40,7 @@ export interface CreateOrder {
 
 export interface Order extends CreateOrder {
   id_order: string;
+  status: OrderStatusEnum;
 }
 
 export function productToOrderProduct(product: Product): OrderProduct {

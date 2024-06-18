@@ -110,40 +110,55 @@ function UserLayout() {
     });
   };
 
-  const removeProduct = (product: OrderProduct, quantity: number) => {
-    const newItems = [...currentOrder.products];
+  const removeProduct = (product: OrderProduct) => {
+    //find the product in the order and remove 1 to quantity and if quantity is 0 remove the product
+    const productInOrder = currentOrder.products.findIndex(
+      (item) => item.id_product === product.id_product
+    );
 
-    for (let i = 0; i < quantity; i++) {
-      newItems.splice(newItems.indexOf(product), 1);
+    if (productInOrder !== -1) {
+      const newItems = [...currentOrder.products];
+      newItems[productInOrder].quantity -= 1;
+      if (newItems[productInOrder].quantity === 0) {
+        newItems.splice(productInOrder, 1);
+      }
+      setCurrentOrder((prev) => {
+        return {
+          ...prev,
+          products: newItems,
+        };
+      });
+      setLocalStorageCurrentOrder((prev) => {
+        return {
+          ...prev,
+          products: newItems,
+        };
+      });
     }
-
-    setCurrentOrder((prev) => {
-      return {
-        ...prev,
-        products: newItems,
-      };
-    });
-    setLocalStorageCurrentOrder((prev) => {
-      return {
-        ...prev,
-        products: newItems,
-      };
-    });
   };
 
   const removeMenu = (menu: OrderMenu) => {
-    setCurrentOrder((prev) => {
-      return {
-        ...prev,
-        menus: prev.menus.filter((item) => item.id_menu !== menu.id_menu),
-      };
-    });
-    setLocalStorageCurrentOrder((prev) => {
-      return {
-        ...prev,
-        menus: prev.menus.filter((item) => item.id_menu !== menu.id_menu),
-      };
-    });
+    // remove the menu from the order by verifying the id_menu and the products inside, only remove one occurrence
+    const menuInOrder = currentOrder.menus.findIndex(
+      (item) => item.id_menu === menu.id_menu
+    );
+
+    if (menuInOrder !== -1) {
+      const newItems = [...currentOrder.menus];
+      newItems.splice(menuInOrder, 1);
+      setCurrentOrder((prev) => {
+        return {
+          ...prev,
+          menus: newItems,
+        };
+      });
+      setLocalStorageCurrentOrder((prev) => {
+        return {
+          ...prev,
+          menus: newItems,
+        };
+      });
+    }
   };
 
   const clearOrder = () => {

@@ -1,4 +1,5 @@
 import { CurrentOrderContext } from "@/entities/currentOrderContext";
+import { OrderStatusEnum } from "@/enums/orderStatus";
 import { createContext } from "react";
 
 export const currentOrderContext = createContext<CurrentOrderContext>({
@@ -9,7 +10,6 @@ export const currentOrderContext = createContext<CurrentOrderContext>({
   notes: "",
   postal_code: "",
   price: 0,
-  status: "",
   order_date: new Date(),
   restaurant_accepted_datetime: undefined,
   restaurant_to_delivery_datetime: undefined,
