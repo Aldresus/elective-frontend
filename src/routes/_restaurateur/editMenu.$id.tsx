@@ -48,6 +48,7 @@ interface categoryType {
 }
 
 interface menuDataType {
+  id_menu: string;
   name: string;
   description: string;
   menu_image_url: string;
@@ -57,6 +58,7 @@ interface menuDataType {
 function MenuManager() {
   const [data, setData] = useState<Array<CategoryContent>>([]);
   const [menuData, setMenuData] = useState<menuDataType>({
+    id_menu: "",
     name: "",
     description: "",
     menu_image_url: "",
@@ -67,6 +69,7 @@ function MenuManager() {
   const [categoriesEdited, setCategoriesEdited] = useState<Array<categoryType>>(
     []
   );
+  const [categoriesDeleted, setCategoriesDeleted] = useState<Array<string>>([]);
 
   const { id } = Route.useParams();
 
@@ -80,6 +83,7 @@ function MenuManager() {
       setData(finalData);
 
       setMenuData({
+        id_menu: rawData.data.id_menu,
         name: rawData.data.name,
         description: rawData.data.description,
         menu_image_url: rawData.data.menu_image_url,
@@ -129,16 +133,25 @@ function MenuManager() {
     e.preventDefault();
     if (categoryName.trim() === "") return;
 
-    setData([
-      ...data,
-      {
-        name: categoryName,
-        id_category: "30",
-        Product: [],
-        ids_menu: [],
-        ids_product: [],
-      },
-    ]);
+    const createdCategory = {
+      name: categoryName,
+      ids_menu: [menuData.id_menu],
+      ids_product: [],
+    };
+
+    axiosInstance
+      .post("/menu/category", createdCategory)
+      .then((res) => {
+        console.log("Category created");
+        console.log(res);
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log("Failed creation category");
+        console.log(err);
+      });
+
+    setCategoryName("");
     setdisplayCategory(false);
   };
 
@@ -179,6 +192,19 @@ function MenuManager() {
         })
         .catch((err) => {
           console.log("Categories Failed");
+          console.log(err);
+        });
+    });
+
+    categoriesDeleted.map((deletedCategory) => {
+      axiosInstance
+        .delete(`/menu/category/${deletedCategory}`)
+        .then((res) => {
+          console.log("Successfull deleted category");
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log("Failed deleted category");
           console.log(err);
         });
     });
@@ -270,6 +296,10 @@ function MenuManager() {
               allItemsList={itemsData}
               categoriesEdited={categoriesEdited}
               setCategoriesEdited={setCategoriesEdited}
+              data={data}
+              setData={setData}
+              categoriesDeleted={categoriesDeleted}
+              setCategoriesDeleted={setCategoriesDeleted}
             />
           </div>
         ))}

@@ -1,11 +1,16 @@
 import type { Menu } from "./menu";
 import type { Product } from "./product";
 
-export interface CategoryContent {
-  id_category: string;
+export interface CreateCategoryContent {
+  id_category?: string;
   name: string;
   ids_menu : Array<string>;
   ids_product : Array<string>;
+  Product?: Array<Product>;
+}
+
+export interface CategoryContent extends CreateCategoryContent{
+  id_category: string;
   Product: Array<Product>;
 }
 

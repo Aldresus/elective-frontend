@@ -16,6 +16,7 @@ import {
 } from "@/entities/categoryContent";
 import { Menu } from "@/entities/menu";
 import { Product } from "@/entities/product";
+import { Button } from "../ui/button";
 
 interface ItemRequiredValues {
   id: string;
@@ -30,7 +31,13 @@ const Item = ({ id, name, deleteItem }: ItemRequiredValues) => {
         <Dot />
         <p>{name}</p>
       </div>
-      <Trash2 className="text-destructive" onClick={() => deleteItem(id)} />
+      <Button
+        className="flex gap-1 text-destructive"
+        variant="outline"
+        onClick={() => deleteItem(id)}
+      >
+        <Trash2 />
+      </Button>
     </div>
   );
 };
@@ -51,6 +58,10 @@ interface CategoryManagerProps extends React.HTMLAttributes<HTMLDivElement> {
   allItemsList: Array<Menu | Product>;
   categoriesEdited: Array<categoryType>;
   setCategoriesEdited: Dispatch<SetStateAction<Array<categoryType>>>;
+  data: Array<CategoryContent>;
+  setData: Dispatch<SetStateAction<Array<CategoryContent>>>;
+  categoriesDeleted: Array<string>;
+  setCategoriesDeleted: Dispatch<SetStateAction<Array<string>>>;
 }
 
 export default function CategoryManager({
@@ -58,6 +69,10 @@ export default function CategoryManager({
   allItemsList,
   categoriesEdited,
   setCategoriesEdited,
+  data,
+  setData,
+  categoriesDeleted,
+  setCategoriesDeleted,
 }: CategoryManagerProps) {
   const [itemsList, setitemsList] =
     useState<Array<Menu | Product>>(allItemsList);
@@ -142,6 +157,16 @@ export default function CategoryManager({
     }
   }
 
+  function deleteCategory(id: string) {
+    console.log(data);
+    setData(
+      data.filter((category) => {
+        return category.id_category !== id;
+      })
+    );
+    setCategoriesDeleted([...categoriesDeleted, id]);
+  }
+
   function deleteItem(id: string) {
     var idProduct: string = "";
     var idsMenuCategory: Array<string> = [];
@@ -186,8 +211,15 @@ export default function CategoryManager({
   console.log(items);
   return (
     <div className="w-full flex flex-col gap-5">
-      <div className="flex justify-between items-center pt-2">
-        <H3>{category.name}</H3>
+      <div className="flex items-center pt-2">
+        <H3 className="pr-4">{category.name}</H3>
+        <Button
+          className="flex gap-1"
+          variant="destructive"
+          onClick={() => deleteCategory(category.id_category)}
+        >
+          <Trash2 />
+        </Button>
       </div>
       {items.map((item) => (
         <div key={getItemId(item)} className="w-full flex justify-start">
