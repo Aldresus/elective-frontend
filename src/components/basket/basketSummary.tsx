@@ -35,7 +35,7 @@ export function BasketSummary({
           <BasketMenuElement
             minus={() => menuRemove && menuRemove(menu)}
             add={() => menuAdd && menuAdd(menu)}
-            editable
+            editable={editable}
             key={i}
             {...menu}
           />
