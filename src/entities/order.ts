@@ -1,3 +1,4 @@
+import { OrderStatusEnum } from "@/enums/orderStatus";
 import { Product } from "./product";
 
 export interface OrderMenu {
@@ -21,7 +22,7 @@ export interface OrderProduct {
 export interface CreateOrder {
   id_order?: string;
   order_date: Date;
-  status: string;
+  status: OrderStatusEnum;
   price: number;
   postal_code: string;
   address: string;

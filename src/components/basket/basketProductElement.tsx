@@ -11,10 +11,10 @@ export function BasketProductElement({
   ...props
 }: ProductElementProps) {
   return (
-    <div className="flex gap-2 items-end">
-      <div className="w-1/4">{quantity} x</div>
+    <div className="flex gap-2 items-end ">
+      <div className="w-1/4 text-center">{quantity} x</div>
       <div className="w-2/4">{name}</div>
-      <div className="w-1/4">{price * quantity} €</div>
+      <div className="w-1/4 text-center">{price * quantity} €</div>
     </div>
   );
 }

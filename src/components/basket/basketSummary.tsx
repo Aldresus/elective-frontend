@@ -2,6 +2,7 @@ import { OrderMenu, OrderProduct } from "@/entities/order";
 import { BasketMenuElement } from "./basketMenuElement";
 import { BasketProductElement } from "./basketProductElement";
 import { Large } from "../typography";
+import { Separator } from "../ui/separator";
 
 interface BasketSummaryProps extends React.HTMLAttributes<HTMLDivElement> {
   menus: OrderMenu[];
@@ -24,9 +25,11 @@ export function BasketSummary({
       {products.map((product, i) => {
         return <BasketProductElement key={i} {...product} />;
       })}
-      <div className="flex gap-2 ">
-        <Large className="w-3/4">Total : </Large>
-        <Large className="w-1/4">{totalPrice} €</Large>
+
+      <div className="flex gap-2 justify-between">
+        <Large className="w-1/4 text-center">Total : </Large>
+        <Large className="w-2/4 text-center"></Large>
+        <Large className="w-1/4 text-center">{totalPrice} €</Large>
       </div>
     </div>
   );

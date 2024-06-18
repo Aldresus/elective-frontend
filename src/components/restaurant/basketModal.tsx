@@ -18,6 +18,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { BasketProductElement } from "../basket/basketProductElement";
 import { BasketMenuElement } from "../basket/basketMenuElement";
 import { BasketSummary } from "../basket/basketSummary";
+import { BasketAddressDisplay } from "../basket/basketAddressDisplay";
 
 interface BasketModalProps extends React.HTMLProps<HTMLDivElement> {}
 
@@ -72,10 +73,7 @@ export default function BasketModal({ ...props }: BasketModalProps) {
           <H1>Votre panier</H1>
           <div>
             <H2>Adresse de livraison</H2>
-            <div>
-              <div>{currentOrder.address}</div>
-              <div>{`${currentOrder.postal_code} ${currentOrder.city}`}</div>
-            </div>
+            <BasketAddressDisplay {...currentOrder} />
           </div>
           <Separator />
 

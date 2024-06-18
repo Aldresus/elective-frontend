@@ -1,8 +1,11 @@
+import { BasketAddressDisplay } from "@/components/basket/basketAddressDisplay";
 import { BasketMenuElement } from "@/components/basket/basketMenuElement";
 import { BasketProductElement } from "@/components/basket/basketProductElement";
 import { BasketSummary } from "@/components/basket/basketSummary";
-import { H1, H2 } from "@/components/typography";
+import { H1, H2, Large } from "@/components/typography";
+import { Separator } from "@/components/ui/separator";
 import { Order } from "@/entities/order";
+import { OrderStatus } from "@/enums/orderStatus";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
@@ -35,25 +38,30 @@ function DeliveryTracker() {
   return (
     <div className="max-w-lg mx-auto space-y-4">
       <H1 className="text-center">Votre commande</H1>
+      <Large className="bg-hungry-yellow-500 h-12 rounded-lg flex items-center justify-center">
+        {query.data?.status
+          ? OrderStatus[query.data?.status]
+          : "En attente de traitement"}
+      </Large>
+      <Separator />
       <div>
-        Votre commande est en cours de traitement. Vous pouvez suivre son
-        execution ici
+        <H2>Adresse de livraison</H2>
+        <BasketAddressDisplay
+          {...(query.data || {
+            //backup data
+            address: "",
+            postal_code: "",
+            city: "",
+          })}
+        />
       </div>
-      <H2>Adresse de livraison</H2>
-      <div>
-        <div>{query.data?.address}</div>
-        <div>{query.data?.postal_code}</div>
-        <div>{query.data?.city}</div>
-      </div>
+      <Separator />
       <H2>Contenu de la commande</H2>
       <BasketSummary
         totalPrice={totalPrice}
         menus={query.data?.menus || []}
         products={query.data?.products || []}
       />
-      <div className="text-center">
-        {query.data?.status || "En attente de traitement"}
-      </div>
     </div>
   );
 }
