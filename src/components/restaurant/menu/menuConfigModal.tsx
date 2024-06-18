@@ -168,7 +168,7 @@ export function MenuConfigModal({
                 </div>
               </DialogHeader>
             </div>
-            <DialogFooter className="flex flex-row justify-center sm:justify-center p-6">
+            <DialogFooter className="flex flex-row justify-center sm:justify-center p-6 gap-4">
               <Button variant="link" onClick={close}>
                 Annuler
               </Button>

@@ -7,19 +7,10 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "../ui/dialog";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
-import { FeatureCollection } from "@/entities/featureCollection";
-import { AddressSuggestion } from "../user/addressSuggestion";
-import { Search } from "lucide-react";
-import clsx from "clsx";
 import { Button } from "../ui/button";
 import { H1 } from "../typography";
 import { currentOrderContext } from "@/contexts/currentOrderContext";
-import { set } from "react-hook-form";
-import AddressInput from "./addressInput";
+import { AddressInput } from "./addressInput";
 
 interface AddressChoiceModalProps extends React.HTMLAttributes<HTMLDivElement> {
   currentAddress: string;

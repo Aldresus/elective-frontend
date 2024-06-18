@@ -1,8 +1,7 @@
-import BasketModal from "@/components/restaurant/basketModal";
+import { BasketModal } from "@/components/restaurant/basketModal";
 import { ItemCarrousel } from "@/components/restaurant/itemCarrousel";
 import { RestaurantCategory } from "@/components/restaurant/restaurantCategory";
 import { H1 } from "@/components/typography";
-import { Button } from "@/components/ui/button";
 import { currentOrderContext } from "@/contexts/currentOrderContext";
 
 import {
@@ -13,7 +12,6 @@ import {
 import { axiosInstance } from "@/lib/axiosConfig";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { ShoppingBasket } from "lucide-react";
 import { useContext, useEffect } from "react";
 
 export const Route = createFileRoute("/_user/restaurant/$id")({

@@ -7,20 +7,24 @@ import { FeatureCollection } from "@/entities/featureCollection";
 import { Input } from "../ui/input";
 import { Search } from "lucide-react";
 import axios from "axios";
+import { cn } from "@/lib/utils";
 
-interface AddressInputProps extends React.HTMLAttributes<HTMLInputElement> {
-  address: {
-    address: string;
-    city: string;
-    postal_code: string;
-    label: string;
-  };
-  onAddressChange: (address: AddressInputProps["address"]) => void;
+export interface AddressInputType {
+  address: string;
+  city: string;
+  postal_code: string;
+  label: string;
 }
 
-export default function AddressInput({
+interface AddressInputProps extends React.HTMLAttributes<HTMLDivElement> {
+  address: AddressInputType;
+  onAddressChange: (address: AddressInputType) => void;
+}
+
+export function AddressInput({
   address,
   onAddressChange,
+  className,
   ...props
 }: AddressInputProps) {
   const [addressState, setAddressState] = useState(address || {});
@@ -66,7 +70,7 @@ export default function AddressInput({
   };
 
   return (
-    <div>
+    <div className={cn(className)} {...props}>
       <Label>Adresse</Label>
       <div className="relative">
         <Input

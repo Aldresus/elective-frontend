@@ -9,22 +9,28 @@ import {
 import { useContext, useState } from "react";
 import { Button } from "../ui/button";
 import { PartyPopper, ShoppingBasket } from "lucide-react";
-import { H1, H2, Large, Small } from "../typography";
+import { H1, H2 } from "../typography";
 import { Separator } from "../ui/separator";
 import { useMutation } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { CreateOrder, Order } from "@/entities/order";
 import { useNavigate } from "@tanstack/react-router";
-import { BasketProductElement } from "../basket/basketProductElement";
-import { BasketMenuElement } from "../basket/basketMenuElement";
 import { BasketSummary } from "../basket/basketSummary";
 import { BasketAddressDisplay } from "../basket/basketAddressDisplay";
+import { AddressInput, AddressInputType } from "../address/addressInput";
 
 interface BasketModalProps extends React.HTMLProps<HTMLDivElement> {}
 
-export default function BasketModal({ ...props }: BasketModalProps) {
+export function BasketModal({ ...props }: BasketModalProps) {
   const currentOrder = useContext(currentOrderContext);
   const [open, setOpen] = useState(false);
+  const [address, setAddress] = useState<AddressInputType>({
+    address: currentOrder.address,
+    city: currentOrder.city,
+    postal_code: currentOrder.postal_code,
+    label: "",
+  });
+
   const navigate = useNavigate({ from: "/restaurant/$id" });
 
   const mutation = useMutation({
@@ -34,12 +40,6 @@ export default function BasketModal({ ...props }: BasketModalProps) {
     onSuccess(data, variables, context) {
       console.log("success", data);
       const res = data.data as Order;
-      // redirect({
-      //   to: "/order/$id",
-      //   params: {
-      //     id: res.id_order,
-      //   },
-      // });
       navigate({
         to: "/delivery/$order_id",
         params: {
@@ -73,7 +73,24 @@ export default function BasketModal({ ...props }: BasketModalProps) {
           <H1>Votre panier</H1>
           <div>
             <H2>Adresse de livraison</H2>
-            <BasketAddressDisplay {...currentOrder} />
+            {currentOrder.address ? (
+              <BasketAddressDisplay {...currentOrder} />
+            ) : (
+              <div className="flex flex-col items-end gap-4">
+                <AddressInput
+                  className="w-full"
+                  address={address}
+                  onAddressChange={setAddress}
+                />
+                <Button
+                  onClick={() => {
+                    currentOrder.setAddress(address);
+                  }}
+                >
+                  Valider l'adresse
+                </Button>
+              </div>
+            )}
           </div>
           <Separator />
 
@@ -95,7 +112,10 @@ export default function BasketModal({ ...props }: BasketModalProps) {
           <Button
             className="gap-2"
             onClick={() => {
+              if (currentOrder.address === "") return;
+
               mutation.mutate(currentOrder);
+              currentOrder.clearOrder();
             }}
           >
             Valider la commande <PartyPopper />
@@ -105,6 +125,13 @@ export default function BasketModal({ ...props }: BasketModalProps) {
           <div className="flex justify-center items-center gap-4">
             <div className="text-red-500">
               {mutation.error.response?.data.message}
+            </div>
+          </div>
+        )}
+        {currentOrder.address === "" && (
+          <div className="flex justify-center items-center gap-4">
+            <div className="text-red-500">
+              Veuillez saisir une adresse de livraison
             </div>
           </div>
         )}

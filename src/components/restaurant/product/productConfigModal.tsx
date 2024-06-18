@@ -58,7 +58,7 @@ export function ProductConfigModal({
             </div>
           </DialogHeader>
         </div>
-        <DialogFooter className="sm:justify-center p-6">
+        <DialogFooter className="sm:justify-center p-6 gap-4">
           <div className="space-y-4">
             <div className="flex justify-center items-center gap-4">
               <Label>Quantité</Label>
