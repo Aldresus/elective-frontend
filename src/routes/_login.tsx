@@ -1,17 +1,19 @@
 import Footer from "@/components/common/footer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
+import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_login")({
-  beforeLoad: async ({ context, location }) => {
-    if (context.auth.isAuthenticated) {
-      throw redirect({
-        to: "/user",
-        search: {
-          redirect: location.href,
-        },
-      });
-    }
+  beforeLoad: async ({ context }) => {
+    console.log("beforeLoad", context);
+
+    // if (context.auth.isAuthenticated) {
+    //   throw redirect({
+    //     to: "/user",
+    //     search: {
+    //       redirect: location.href,
+    //     },
+    //   });
+    // }
   },
   component: LoginLayout,
 });

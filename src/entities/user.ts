@@ -3,9 +3,6 @@ export interface User {
   last_name?: string;
   first_name?: string;
   email?: string;
-  postal_code?: string;
-  address?: string;
-  city?: string;
   created_at?: Date;
   edited_at?: Date;
   birthday?: string;
