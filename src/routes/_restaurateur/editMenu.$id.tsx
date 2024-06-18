@@ -70,7 +70,7 @@ function MenuManager() {
 
   const { id } = Route.useParams();
 
-  const query = useQuery({
+  useQuery({
     queryKey: ["getMenuItems", id],
     queryFn: async () => {
       const rawData = await axiosInstance.get(`/menu/${id}`);
@@ -129,18 +129,11 @@ function MenuManager() {
     e.preventDefault();
     if (categoryName.trim() === "") return;
 
-    // get max category id
-    const newId = Math.max.apply(
-      Math,
-      query.data.map(function (o) {
-        return parseInt(o.category_id);
-      })
-    );
     setData([
       ...data,
       {
         name: categoryName,
-        id_category: (newId + 1).toString(),
+        id_category: "30",
         Product: [],
         ids_menu: [],
         ids_product: [],
@@ -178,7 +171,6 @@ function MenuManager() {
       });
 
     categoriesEdited.map((editedCategory) => {
-      console.log("oui: ", editedCategory);
       axiosInstance
         .patch(`/menu/productCategory`, editedCategory)
         .then((res) => {

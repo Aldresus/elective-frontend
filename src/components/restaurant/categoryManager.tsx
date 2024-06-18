@@ -1,6 +1,5 @@
-import { GripVertical, Plus, Trash2 } from "lucide-react";
+import { Dot, Plus, Trash2 } from "lucide-react";
 import { H3 } from "../typography";
-import { Active } from "@dnd-kit/core";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Select,
@@ -17,21 +16,21 @@ import {
 } from "@/entities/categoryContent";
 import { Menu } from "@/entities/menu";
 import { Product } from "@/entities/product";
-import { Console } from "console";
 
 interface ItemRequiredValues {
   id: string;
   name: string;
+  deleteItem: (id: string) => void;
 }
 
-const Item = ({ id, name }: ItemRequiredValues) => {
+const Item = ({ id, name, deleteItem }: ItemRequiredValues) => {
   return (
     <div className="w-full flex items-center gap-2">
       <div className="w-3/4 flex items-center gap-2 p-2 border border-gray-300 rounded-md bg-white">
-        <GripVertical />
+        <Dot />
         <p>{name}</p>
       </div>
-      <Trash2 className="text-destructive" />
+      <Trash2 className="text-destructive" onClick={() => deleteItem(id)} />
     </div>
   );
 };
@@ -73,6 +72,7 @@ export default function CategoryManager({
   }, [category]);
 
   function addItem(newId: string) {
+    console.log("newId: ", newId);
     // Check if item is already in the category
     const checkValue = items.find((item) => {
       if (isProduct(item)) {
@@ -108,11 +108,9 @@ export default function CategoryManager({
             ids_menu_category: newItem.ids_menu_category,
           },
         ]);
-        // edit category
+        // store category in local to send it when click on save
         category.ids_product.push(newItem.id_product);
         newItem.ids_menu_category.push(category.id_category);
-        console.log("ids_product: ", category.ids_product);
-        console.log("ids_menu_category: ", newItem.ids_menu_category);
         const categoryToEdit = {
           id_category: category.id_category,
           id_product: newItem.id_product,
@@ -145,15 +143,43 @@ export default function CategoryManager({
   }
 
   function deleteItem(id: string) {
+    var idProduct: string = "";
+    var idsMenuCategory: Array<string> = [];
+    var idsProduct: Array<string> = [];
     setItems(
       items.filter((item) => {
         if (isProduct(item)) {
-          item.id_product !== id;
+          if (item.id_product !== id) {
+            return true;
+          } else {
+            idProduct = item.id_product;
+            idsMenuCategory = item.ids_menu_category.filter((idMenuCat) => {
+              return idMenuCat !== category.id_category;
+            });
+            idsProduct = category.ids_product.filter((id_product) => {
+              return id_product !== idProduct;
+            });
+            return false;
+          }
         } else {
-          item.id_menu !== id;
+          return item.id_menu !== id;
         }
       })
     );
+    console.log("idsMenuCategory: ", idsMenuCategory);
+    console.log("category.ids_product: ", idsProduct);
+    const categoryToEdit = {
+      id_category: category.id_category,
+      id_product: idProduct,
+      updateProductDto: {
+        ids_menu_category: idsMenuCategory,
+      },
+      updateCategoryDto: {
+        ids_product: idsProduct,
+      },
+    };
+    console.log("categoryToEdit: ", categoryToEdit);
+    setCategoriesEdited([...categoriesEdited, categoryToEdit]);
   }
 
   console.log("items");
@@ -165,7 +191,11 @@ export default function CategoryManager({
       </div>
       {items.map((item) => (
         <div key={getItemId(item)} className="w-full flex justify-start">
-          <Item id={getItemId(item)} name={item.name} />
+          <Item
+            id={getItemId(item)}
+            name={item.name}
+            deleteItem={() => deleteItem(getItemId(item))}
+          />
         </div>
       ))}
 
