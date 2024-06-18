@@ -58,6 +58,7 @@ export function AddressChoiceModal({
         }
         closed();
       }}
+      {...props}
     >
       <DialogTrigger
         onClick={() => {

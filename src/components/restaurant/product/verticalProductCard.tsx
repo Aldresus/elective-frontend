@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { Product } from "@/entities/product";
 import { ProductConfigModal } from "./productConfigModal";
 import { VerticalItemCard } from "../primitives/verticalItemCard";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { currentOrderContext } from "@/contexts/currentOrderContext";
 import { productToOrderProduct } from "@/entities/order";

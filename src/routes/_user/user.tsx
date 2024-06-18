@@ -3,22 +3,23 @@ import { RestaurantCard } from "@/components/common/restaurantCard";
 import { H2 } from "@/components/typography";
 import { Separator } from "@/components/ui/separator";
 import { LoginBanner } from "@/components/user/loginBanner";
-import { currentOrderContext } from "@/contexts/currentOrderContext";
 import { Restaurant } from "@/entities/restaurant";
+import { useAuth } from "@/hooks/useAuth";
 import { axiosInstance } from "@/lib/axiosConfig";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Beer, IceCreamBowl, Pizza, Sandwich, Vegan } from "lucide-react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 export const Route = createFileRoute("/_user/user")({
   component: UserComponent,
 });
 
 function UserComponent() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [hideBanner, setHideBanner] = useState(false);
   // Access the client
-  const queryClient = useQueryClient();
+
+  const { isAuthenticated } = useAuth();
 
   // Queries
   const query = useQuery({
@@ -32,15 +33,11 @@ function UserComponent() {
     refetchInterval: 1000 * 60, // refresh every minute
   });
 
-  const currentOrder = useContext(currentOrderContext);
-
   return (
     <div className="flex flex-col gap-6 w-full">
-      <LoginBanner
-        className="mb-6"
-        hidden={!isLoggedIn}
-        onclose={() => setIsLoggedIn(false)}
-      />
+      {!isAuthenticated && !hideBanner && (
+        <LoginBanner className="mb-6" onclose={() => setHideBanner(true)} />
+      )}
       <div className="w-full flex justify-center gap-9">
         <FilterButton>
           <Pizza size={35} />

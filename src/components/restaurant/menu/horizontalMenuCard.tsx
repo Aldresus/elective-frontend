@@ -1,9 +1,8 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Menu } from "@/entities/menu";
 import { MenuConfigModal } from "./menuConfigModal";
 import { HorizontalItemCard } from "../primitives/horizontalItemCard";
 import { cn } from "@/lib/utils";
-import { currentOrderContext } from "@/contexts/currentOrderContext";
 
 interface HorizontalMenuCardProps extends React.HTMLProps<HTMLDivElement> {
   menuContent: Menu;
@@ -15,8 +14,6 @@ export function HorizontalMenuCard({
   ...props
 }: HorizontalMenuCardProps) {
   const [open, setOpen] = useState(false);
-
-  const currentOrder = useContext(currentOrderContext);
 
   return (
     <>

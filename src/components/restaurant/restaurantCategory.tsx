@@ -1,7 +1,6 @@
 import type { Product } from "@/entities/product";
 import { H2 } from "../typography";
-import { VerticalProductCard } from "./product/verticalProductCard";
-import { isProduct, type CategoryContent } from "@/entities/categoryContent";
+import { isProduct } from "@/entities/categoryContent";
 import { Menu } from "@/entities/menu";
 import { HorizontalProductCard } from "./product/horizontalProductCard";
 import { HorizontalMenuCard } from "./menu/horizontalMenuCard";

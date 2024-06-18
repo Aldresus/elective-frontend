@@ -2,8 +2,7 @@ import Logo from "./logo";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
-import { useContext, useState } from "react";
-import { ModalContext } from "../restaurant/modalContext";
+import { useState } from "react";
 import { AddressChoiceModal } from "../address/addressChoiceModal";
 import { useAuth } from "@/hooks/useAuth";
 import { DecodedAccessToken } from "@/entities/login";
@@ -18,11 +17,9 @@ interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export default function Navbar({
   isAdress = true,
-  isRestaurateur = false,
   className,
   ...props
 }: NavbarProps) {
-  const { modalIsOpen, setmodalIsOpen } = useContext(ModalContext);
   const [addressModalIsOpen, setAddressModalIsOpen] = useState(false);
   const [user] = useLocalStorage<DecodedAccessToken>("user");
   const auth = useAuth();

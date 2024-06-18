@@ -1,10 +1,8 @@
 import { OrderProduct } from "@/entities/order";
 import { Button } from "../ui/button";
-import { ProductConfigModal } from "../restaurant/product/productConfigModal";
-import { Product } from "@/entities/product";
-import { useState } from "react";
 import { Minus, Plus } from "lucide-react";
 import clsx from "clsx";
+import { cn } from "@/lib/utils";
 
 interface ProductElementProps
   extends OrderProduct,
@@ -21,10 +19,14 @@ export function BasketProductElement({
   editable = false,
   minus,
   add,
+  className,
   ...props
 }: ProductElementProps) {
   return (
-    <div className={clsx({ "flex gap-2 items-center": editable })}>
+    <div
+      className={cn(clsx({ "flex gap-2 items-center": editable }), className)}
+      {...props}
+    >
       {editable && (
         <Button
           className="w-6 h-6 shrink-0"

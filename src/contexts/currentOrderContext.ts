@@ -1,5 +1,4 @@
 import { CurrentOrderContext } from "@/entities/currentOrderContext";
-import { OrderStatusEnum } from "@/enums/orderStatus";
 import { createContext } from "react";
 
 export const currentOrderContext = createContext<CurrentOrderContext>({

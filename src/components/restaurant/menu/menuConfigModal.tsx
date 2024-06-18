@@ -3,22 +3,17 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
 } from "../../ui/dialog";
 import type { FullMenu, Menu } from "@/entities/menu";
-import { H1, H2, Large, Small } from "../../typography";
+import { H1, Large, Small } from "../../typography";
 import { Separator } from "../../ui/separator";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { MenuCategoryProducts } from "./menuCategoryProducts";
 import { Button } from "@/components/ui/button";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Product } from "@/entities/product";
-import {
-  OrderMenu,
-  OrderProduct,
-  productToOrderProduct,
-} from "@/entities/order";
+import { OrderProduct, productToOrderProduct } from "@/entities/order";
 import { Form, FormField } from "@/components/ui/form";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -128,6 +123,7 @@ export function MenuConfigModal({
         console.log(e);
         close();
       }}
+      {...props}
     >
       <DialogContent className="p-0 border-none">
         <Form {...form}>

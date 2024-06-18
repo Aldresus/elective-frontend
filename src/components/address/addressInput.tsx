@@ -73,21 +73,23 @@ export function AddressInput({
     <div className={cn(className)} {...props}>
       <Label>Adresse</Label>
       <div className="relative">
-        <Input
-          value={addressState.label}
-          onChange={(e) => addressChangeHandler(e)}
-          id="address"
-          autoComplete="address-line1"
-          className={clsx({
-            "border-b-0 rounded-b-none": query.data?.features.length > 0,
-          })}
-        />
+        {query.isSuccess && (
+          <Input
+            value={addressState.label}
+            onChange={(e) => addressChangeHandler(e)}
+            id="address"
+            autoComplete="address-line1"
+            className={clsx({
+              "border-b-0 rounded-b-none": query.data?.features.length > 0,
+            })}
+          />
+        )}
         <Search className="absolute right-2 top-2 " />
         <div className="relative w-full h-0 ">
           <div className="absolute flex flex-col w-full px-3 rounded-b  bg-secondary gap-2">
             {query.data?.features.map((feature) => (
               <AddressSuggestion
-                onClick={(feature) => {
+                onSuggestionClick={(feature) => {
                   const newAddress = {
                     address: feature.properties.name,
                     city: feature.properties.city,

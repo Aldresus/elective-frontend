@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { VerticalItemCard } from "../primitives/verticalItemCard";
-import { FullMenu, Menu } from "@/entities/menu";
+import { Menu } from "@/entities/menu";
 import { MenuConfigModal } from "./menuConfigModal";
 import { cn } from "@/lib/utils";
 

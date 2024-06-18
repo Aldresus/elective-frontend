@@ -37,7 +37,7 @@ export function BasketModal({ ...props }: BasketModalProps) {
     mutationFn: (currentOrder: CreateOrder) => {
       return axiosInstance.post("/order", currentOrder);
     },
-    onSuccess(data, variables, context) {
+    onSuccess(data) {
       console.log("success", data);
       const res = data.data as Order;
       currentOrder.clearOrder();
@@ -137,9 +137,7 @@ export function BasketModal({ ...props }: BasketModalProps) {
         </div>
         {mutation.error && (
           <div className="flex justify-center items-center gap-4">
-            <div className="text-red-500">
-              {mutation.error.response?.data.message}
-            </div>
+            <div className="text-red-500">{mutation.error.message}</div>
           </div>
         )}
         {currentOrder.address === "" && (

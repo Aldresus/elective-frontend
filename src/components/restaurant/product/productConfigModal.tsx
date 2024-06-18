@@ -3,9 +3,8 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
 } from "../../ui/dialog";
-import { H1, H2, Large, Small } from "../../typography";
+import { H1, Large, Small } from "../../typography";
 import { Product } from "@/entities/product";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,6 +38,7 @@ export function ProductConfigModal({
         console.log(e);
         close();
       }}
+      {...props}
     >
       <DialogContent className="p-0 border-none">
         <div className="rounded-t-lg h-[200px] overflow-hidden object-fill">

@@ -1,4 +1,4 @@
-import { H2, H3, H4, Large, Small } from "@/components/typography";
+import { H2, Large, Small } from "@/components/typography";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { MenuCategory } from "@/entities/menu";
@@ -12,6 +12,7 @@ interface MenuCategoryProps extends React.HTMLProps<HTMLDivElement> {
   bottomDivider?: boolean;
   field?: ControllerRenderProps<
     {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [x: string]: any;
     },
     string

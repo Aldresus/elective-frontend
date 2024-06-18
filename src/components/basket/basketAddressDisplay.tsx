@@ -11,7 +11,7 @@ export function BasketAddressDisplay({
   ...props
 }: BasketAddressDisplayProps) {
   return (
-    <div>
+    <div {...props}>
       <div>{address}</div>
       <div>{`${postal_code} ${city}`}</div>
     </div>

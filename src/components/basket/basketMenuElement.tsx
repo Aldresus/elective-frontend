@@ -3,6 +3,7 @@ import { Small } from "../typography";
 import { Button } from "../ui/button";
 import { Minus, Plus } from "lucide-react";
 import clsx from "clsx";
+import { cn } from "@/lib/utils";
 
 interface MenuElementProps
   extends OrderMenu,
@@ -19,10 +20,14 @@ export function BasketMenuElement({
   editable = false,
   minus,
   add,
+  className,
   ...props
 }: MenuElementProps) {
   return (
-    <div className={clsx({ "flex gap-2 items-center": editable })}>
+    <div
+      className={cn(clsx({ "flex gap-2 items-center": editable }), className)}
+      {...props}
+    >
       {editable && (
         <Button
           className="w-6 h-6 shrink-0"

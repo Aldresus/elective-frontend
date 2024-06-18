@@ -2,8 +2,7 @@ import { OrderMenu, OrderProduct } from "@/entities/order";
 import { BasketMenuElement } from "./basketMenuElement";
 import { BasketProductElement } from "./basketProductElement";
 import { Large } from "../typography";
-import { Separator } from "../ui/separator";
-import { Product } from "@/entities/product";
+import { cn } from "@/lib/utils";
 
 interface BasketSummaryProps extends React.HTMLAttributes<HTMLDivElement> {
   menus: OrderMenu[];
@@ -26,10 +25,11 @@ export function BasketSummary({
   productAdd,
   menuRemove,
   menuAdd,
+  className,
   ...props
 }: BasketSummaryProps) {
   return (
-    <div className="space-y-4">
+    <div className={cn("space-y-4", className)} {...props}>
       {menus.map((menu, i) => {
         return (
           <BasketMenuElement
