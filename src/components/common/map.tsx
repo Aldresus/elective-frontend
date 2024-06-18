@@ -11,16 +11,18 @@ interface MapProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export default function Map({ x, y, className, ...props }: MapProps) {
   return (
-    <div className={cn("h-full w-full", className)} {...props}>
+    <div className={cn("h-full w-full", className)} {...props} id="startMap">
       <MapContainer
         center={[x, y]}
         zoom={13}
         scrollWheelZoom={false}
-        className="h-full w-full"
+        className="h-full w-full rounded-xl"
+        id="map"
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          id="tilelayer"
         />
         <Marker position={[x, y]}>
           <Popup>

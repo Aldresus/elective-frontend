@@ -21,12 +21,22 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "@tanstack/react-router";
-import { createFileRoute } from "@tanstack/react-router";
+import {
+  Link,
+  createFileRoute,
+  redirect,
+  useRouter,
+} from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import axios from "axios";
+import { sha256 } from "js-sha256";
+import { useMutation } from "@tanstack/react-query";
+
+import { useAuth } from "@/lib/auth";
+import { useSearch } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_login/login")({
   component: Login,
@@ -37,6 +47,11 @@ const signinSchema = z.object({
     message: "Entrez une adresse email valide",
   }),
   password: z.string(),
+});
+
+const instance = axios.create({
+  baseURL: "http://localhost:3000/api/user/",
+  timeout: 1000,
 });
 
 function Login() {
@@ -51,8 +66,31 @@ function Login() {
     },
   });
 
+  const auth = useAuth();
+  const router = useRouter();
+  const navigate = Route.useNavigate();
+  const fallback = "/user";
+
+  const search = Route.useSearch();
+
+  const mutation = useMutation({
+    mutationFn: async (loginData: { email: string; password: string }) => {
+      try {
+        const res = await instance.post("login", loginData);
+        console.log("Insertion réussie");
+        await auth.login(res.data.access_token);
+        await router.invalidate();
+        await navigate({ to: search.redirect ?? fallback });
+      } catch (err) {
+        console.log("Failed");
+        console.log(err);
+      }
+    },
+  });
+
   const onSubmit = async (values: z.infer<typeof signinSchema>) => {
-    console.log(values);
+    const hash = sha256(values.password);
+    mutation.mutateAsync({ email: values.email, password: hash });
   };
 
   const resetPasswordHandler = (email: string) => {

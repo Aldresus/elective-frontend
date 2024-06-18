@@ -1,8 +1,18 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import Footer from "@/components/common/footer";
 import Navbar from "@/components/common/navbar";
 
 export const Route = createFileRoute("/_delivery")({
+  beforeLoad: async ({ context, location }) => {
+    if (!context.auth.isAuthenticated) {
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
   component: DeliveryLayout,
 });
 
