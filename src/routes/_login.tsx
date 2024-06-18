@@ -1,17 +1,16 @@
 import Footer from "@/components/common/footer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import { z } from "zod";
 
 export const Route = createFileRoute("/_login")({
-  validateSearch: z.object({
-    redirect: z.string().optional().catch(""),
-  }),
-  beforeLoad: ({ context, search }) => {
-    const fallback = "/user";
-
+  beforeLoad: async ({ context, location }) => {
     if (context.auth.isAuthenticated) {
-      throw redirect({ to: search.redirect ?? fallback });
+      throw redirect({
+        to: "/user",
+        search: {
+          redirect: location.href,
+        },
+      });
     }
   },
   component: LoginLayout,

@@ -21,7 +21,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, createFileRoute, useRouter } from "@tanstack/react-router";
+import {
+  Link,
+  createFileRoute,
+  redirect,
+  useRouter,
+} from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -31,7 +36,7 @@ import { sha256 } from "js-sha256";
 import { useMutation } from "@tanstack/react-query";
 
 import { useAuth } from "@/lib/auth";
-const fallback = "/user";
+import { useSearch } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_login/login")({
   component: Login,

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { Fragment, useState } from "react";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
@@ -127,6 +127,7 @@ function Login() {
       })
       .then((res) => {
         console.log("Insertion réussie");
+        redirect("/login");
         console.log(res);
       })
       .catch((err) => {
