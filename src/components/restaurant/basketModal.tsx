@@ -40,6 +40,7 @@ export function BasketModal({ ...props }: BasketModalProps) {
     onSuccess(data, variables, context) {
       console.log("success", data);
       const res = data.data as Order;
+      currentOrder.clearOrder();
       navigate({
         to: "/delivery/$order_id",
         params: {
@@ -129,7 +130,6 @@ export function BasketModal({ ...props }: BasketModalProps) {
               if (currentOrder.address === "") return;
 
               mutation.mutate(currentOrder);
-              currentOrder.clearOrder();
             }}
           >
             Valider la commande <PartyPopper />

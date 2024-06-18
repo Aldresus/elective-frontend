@@ -29,7 +29,6 @@ function UserLayout() {
     products: localStorageCurrentOrder?.products || [],
     postal_code: localStorageCurrentOrder?.postal_code || "",
     price: localStorageCurrentOrder?.price || 0,
-    status: localStorageCurrentOrder?.status || "",
     order_date: localStorageCurrentOrder?.order_date || new Date(),
     restaurant_accepted_datetime:
       localStorageCurrentOrder?.restaurant_accepted_datetime,
@@ -163,14 +162,14 @@ function UserLayout() {
 
   const clearOrder = () => {
     const emptyOrder: CurrentOrderContext = {
-      address: "",
-      city: "",
+      address: currentOrder.address,
+      city: currentOrder.city,
+      postal_code: currentOrder.postal_code,
       id_restaurant: "",
       id_user: "111111111111111111111111",
       notes: "",
-      postal_code: "",
+
       price: 0,
-      status: "",
       order_date: new Date(),
       restaurant_accepted_datetime: undefined,
       restaurant_to_delivery_datetime: undefined,

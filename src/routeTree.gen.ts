@@ -39,6 +39,7 @@ import { Route as DeliveryDeliveryImport } from './routes/_delivery/delivery'
 import { Route as DeliveryDeliveriesHistoryImport } from './routes/_delivery/deliveries-history'
 import { Route as DeliveryDeliveriesImport } from './routes/_delivery/deliveries'
 import { Route as UserRestaurantIdImport } from './routes/_user/restaurant.$id'
+import { Route as UserDeliveryOrderidImport } from './routes/_user/delivery.$order_id'
 
 // Create/Update Routes
 
@@ -189,6 +190,11 @@ const DeliveryDeliveriesRoute = DeliveryDeliveriesImport.update({
 
 const UserRestaurantIdRoute = UserRestaurantIdImport.update({
   path: '/restaurant/$id',
+  getParentRoute: () => UserRoute,
+} as any)
+
+const UserDeliveryOrderidRoute = UserDeliveryOrderidImport.update({
+  path: '/delivery/$order_id',
   getParentRoute: () => UserRoute,
 } as any)
 
@@ -385,6 +391,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/_user/delivery/$order_id': {
+      id: '/_user/delivery/$order_id'
+      path: '/delivery/$order_id'
+      fullPath: '/delivery/$order_id'
+      preLoaderRoute: typeof UserDeliveryOrderidImport
+      parentRoute: typeof UserImport
+    }
     '/_user/restaurant/$id': {
       id: '/_user/restaurant/$id'
       path: '/restaurant/$id'
@@ -423,7 +436,11 @@ export const routeTree = rootRoute.addChildren({
     SalesPassationsCommandesRoute,
     SalesSalesRoute,
   }),
-  UserRoute: UserRoute.addChildren({ UserUserRoute, UserRestaurantIdRoute }),
+  UserRoute: UserRoute.addChildren({
+    UserUserRoute,
+    UserDeliveryOrderidRoute,
+    UserRestaurantIdRoute,
+  }),
   ComponentsIndexRoute,
 })
 
@@ -490,6 +507,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_user.tsx",
       "children": [
         "/_user/user",
+        "/_user/delivery/$order_id",
         "/_user/restaurant/$id"
       ]
     },
@@ -575,6 +593,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/components/": {
       "filePath": "components/index.tsx"
+    },
+    "/_user/delivery/$order_id": {
+      "filePath": "_user/delivery.$order_id.tsx",
+      "parent": "/_user"
     },
     "/_user/restaurant/$id": {
       "filePath": "_user/restaurant.$id.tsx",
