@@ -1,16 +1,17 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import Footer from "@/components/common/footer";
 import Navbar from "@/components/common/navbar";
+import { z } from "zod";
 
 export const Route = createFileRoute("/_delivery")({
-  beforeLoad: ({ context, location }) => {
-    if (!context.auth.isAuthenticated) {
-      throw redirect({
-        to: "/login",
-        search: {
-          redirect: location.href,
-        },
-      });
+  validateSearch: z.object({
+    redirect: z.string().optional().catch(""),
+  }),
+  beforeLoad: ({ context, search }) => {
+    const fallback = "/user";
+
+    if (context.auth.isAuthenticated) {
+      throw redirect({ to: search.redirect ?? fallback });
     }
   },
   component: DeliveryLayout,

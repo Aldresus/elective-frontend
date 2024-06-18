@@ -3,16 +3,17 @@ import Navbar from "@/components/common/navbar";
 import { LoginBanner } from "@/components/user/loginBanner";
 import { useAuth } from "@/lib/auth";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
+import { z } from "zod";
 
 export const Route = createFileRoute("/_user")({
-  beforeLoad: ({ context, location }) => {
-    if (!context.auth.isAuthenticated) {
-      throw redirect({
-        to: "/login",
-        search: {
-          redirect: location.href,
-        },
-      });
+  validateSearch: z.object({
+    redirect: z.string().optional().catch(""),
+  }),
+  beforeLoad: ({ context, search }) => {
+    const fallback = "/login";
+
+    if (context.auth.isAuthenticated) {
+      throw redirect({ to: search.redirect ?? fallback });
     }
   },
   component: UserLayout,

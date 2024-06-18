@@ -21,12 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Link,
-  createFileRoute,
-  redirect,
-  useRouter,
-} from "@tanstack/react-router";
+import { Link, createFileRoute, useRouter } from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -37,17 +32,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import { useAuth } from "@/lib/auth";
 
-const fallback = "/user" as const;
-
 export const Route = createFileRoute("/_login/login")({
-  validateSearch: z.object({
-    redirect: z.string().optional().catch(""),
-  }),
-  beforeLoad: ({ context, search }) => {
-    if (context.auth.isAuthenticated) {
-      throw redirect({ to: search.redirect ?? fallback });
-    }
-  },
   component: Login,
 });
 
@@ -78,6 +63,7 @@ function Login() {
   const auth = useAuth();
   const router = useRouter();
   const navigate = Route.useNavigate();
+  const fallback = "/user";
 
   const search = Route.useSearch();
 
