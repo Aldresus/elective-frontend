@@ -5,9 +5,8 @@ import "./index.css";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
-import { AuthProvider, useAuth } from "./hooks/useAuth";
-import { RoleProvider, useRole } from "./hooks/useRole";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AuthProvider, useAuth } from "./lib/auth";
+import { RoleProvider, useRole } from "./lib/role";
 
 // Create a new router instance
 const router = createRouter({
