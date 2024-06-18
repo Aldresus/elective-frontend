@@ -73,7 +73,7 @@ function Login() {
       try {
         const res = await instance.post("login", loginData);
         console.log("Insertion réussie");
-        await auth.login(sha256(res.data.access_token));
+        await auth.login(res.data.access_token);
         await router.invalidate();
         await navigate({ to: search.redirect ?? fallback });
       } catch (err) {
