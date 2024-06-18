@@ -127,7 +127,9 @@ function Login() {
       })
       .then((res) => {
         console.log("Insertion réussie");
-        redirect("/login");
+        redirect({
+          to: "/login",
+        });
         console.log(res);
       })
       .catch((err) => {

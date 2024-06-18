@@ -1,9 +1,9 @@
 import { CircleDashed, CircleDot } from "lucide-react";
 import { Large } from "../typography";
 import OrderEntity from "@/entities/order";
-import UserEntity from "@/entities/user";
+import { User } from "@/entities/user";
 
-interface IDeliveries extends OrderEntity, UserEntity {
+interface IDeliveries extends OrderEntity, User {
   price?: string;
   order_name?: string;
   status?: string;

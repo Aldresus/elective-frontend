@@ -17,8 +17,8 @@ import ReactModal from "react-modal";
 import QrScanner from "qr-scanner";
 import DeliveryEntity from "@/entities/delivery";
 import OrderEntity from "@/entities/order";
-import UserEntity from "@/entities/user";
 import RestaurantEntity from "@/entities/restaurant";
+import { User } from "@/entities/user";
 
 export const Route = createFileRoute("/_delivery/delivery")({
   component: Delivery,
@@ -34,7 +34,7 @@ const DeliveriesContext = createContext<IDeliveriesContext>({
   setIsOpen: () => {},
 });
 
-interface IDelivery extends DeliveryEntity, OrderEntity, UserEntity {
+interface IDelivery extends DeliveryEntity, OrderEntity, User {
   order_id: string;
   status?: string;
   price?: string;
@@ -124,7 +124,7 @@ function Delivery() {
     };
   }, [modalIsOpen]);
 
-  const userData: UserEntity = {
+  const userData: User = {
     first_name: "Jean",
     last_name: "Dupont",
     address: "Rue de la Guerre",
@@ -160,7 +160,9 @@ function Delivery() {
   };
 
   return (
-    <DeliveriesContext.Provider value={{ modalIsOpen, setModalIsOpen }}>
+    <DeliveriesContext.Provider
+      value={{ modalIsOpen, setIsOpen: setModalIsOpen }}
+    >
       <div className="flex flex-col mx-auto h-full pb-0 gap-2">
         {delivery ? (
           <>

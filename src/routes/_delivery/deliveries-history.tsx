@@ -1,14 +1,14 @@
 import DeliveryHistoryCard from "@/components/delivery/deliveryHistoryCard";
 import { H1 } from "@/components/typography";
 import OrderEntity from "@/entities/order";
-import UserEntity from "@/entities/user";
+import { User } from "@/entities/user";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_delivery/deliveries-history")({
   component: DeliveriesHistory,
 });
 
-interface IDeliveries extends OrderEntity, UserEntity {
+interface IDeliveries extends OrderEntity, User {
   id_order?: string;
   price?: string;
   status?: string;
@@ -20,7 +20,7 @@ interface IDeliveries extends OrderEntity, UserEntity {
 }
 
 function DeliveriesHistory() {
-  const userData: Array<UserEntity> = [
+  const userData: Array<User> = [
     {
       first_name: "Client1",
       last_name: "kks",

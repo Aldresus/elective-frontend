@@ -5,7 +5,7 @@ import "./index.css";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
-import { AuthProvider, useAuth } from "./lib/auth";
+import { AuthProvider, useAuth } from "./hooks/useAuth";
 
 // Create a new router instance
 const router = createRouter({

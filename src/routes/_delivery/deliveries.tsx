@@ -3,14 +3,14 @@ import DeliveryChoice from "@/components/delivery/deliveryChoice";
 import { H1, H2 } from "@/components/typography";
 import { Separator } from "@/components/ui/separator";
 import OrderEntity from "@/entities/order";
-import UserEntity from "@/entities/user";
+import { User } from "@/entities/user";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_delivery/deliveries")({
   component: Deliveries,
 });
 
-interface IDelivery extends OrderEntity, UserEntity {
+interface IDelivery extends OrderEntity, User {
   id_order?: string;
   user_address?: string;
   user_city?: string;
@@ -20,7 +20,7 @@ interface IDelivery extends OrderEntity, UserEntity {
 }
 
 function Deliveries() {
-  const userData: Array<UserEntity> = [
+  const userData: Array<User> = [
     {
       first_name: "Jean",
       last_name: "Dupont",

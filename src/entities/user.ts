@@ -1,4 +1,4 @@
-export default interface UserEntity {
+export interface User {
   id?: string;
   last_name?: string;
   first_name?: string;
@@ -10,19 +10,24 @@ export default interface UserEntity {
   edited_at?: Date;
   birthday?: string;
   phone?: string;
-  role?: Role;
+  role?: RoleEnum;
   password?: string;
   id_restaurant?: string;
   id_users?: Array<string>;
-  notifications?: Array<Notifications>;
+  notifications?: Array<NotificationsEnum>;
 }
 
-export enum Role {
-  USER = "user",
-  ADMIN = "admin",
+export enum RoleEnum {
+  USER = "USER",
+  ADMIN = "ADMIN",
+  RESTAURATEUR = "RESTAURATEUR",
+  DELIVERYMAN = "DELIVERYMAN",
+  TECHNICIAN = "TECHNICIAN",
+  CLIENT = "CLIENT",
+  DEV = "DEV",
 }
 
-export enum Notifications {
+export enum NotificationsEnum {
   ORDER_CREATED = "order_created",
   ORDER_PAID = "order_paid",
   ORDER_DELIVERED = "order_delivered",

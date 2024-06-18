@@ -1,10 +1,10 @@
 import { Check, X } from "lucide-react";
 import { H3, Large } from "../typography";
-import UserEntity from "@/entities/user";
 import OrderEntity from "@/entities/order";
 import { Card } from "../ui/card";
+import { User } from "@/entities/user";
 
-export interface IDelivery extends OrderEntity, UserEntity {
+export interface IDelivery extends OrderEntity, User {
   user_address?: string;
   user_city?: string;
   user_postal_code?: string;
