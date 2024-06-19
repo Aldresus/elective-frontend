@@ -69,7 +69,7 @@ export default function Navbar({
           </DialogTrigger>
           <DialogPortal>
             <DialogContent className="flex flex-col items-center justify-center fixed overflow-y-auto">
-              <Large>Account information</Large>
+              <Large>Informations du compte</Large>
               <DialogClose>
                 <Button
                   type="button"
@@ -77,7 +77,7 @@ export default function Navbar({
                   className="w-96 flex flex-row justify-between"
                   onClick={() => navigate({ to: "/user" })}
                 >
-                  <p>Orders</p>
+                  Commandes
                   <ChevronRight size={24} />
                 </Button>
               </DialogClose>
@@ -88,7 +88,7 @@ export default function Navbar({
                   className="w-96 flex flex-row justify-between"
                   //   onClick={() => navigate({ to: `${context.user.id}` })}
                 >
-                  <p>Refer</p>
+                  Parrainage
                   <ChevronRight size={24} />
                 </Button>
               </DialogClose>
@@ -99,7 +99,7 @@ export default function Navbar({
                   className="w-96 flex flex-row justify-between"
                   //   onClick={() => navigate({ to: `${context.user.id}` })}
                 >
-                  <p>Account settings</p>
+                  Paramètres du compte
                   <ChevronRight size={24} />
                 </Button>
               </DialogClose>
@@ -109,7 +109,7 @@ export default function Navbar({
                   variant="ghost"
                   className="w-96 flex flex-row justify-between"
                 >
-                  <p>Others</p>
+                  Autre
                   <ChevronRight size={24} />
                 </Button>
               </DialogClose>
