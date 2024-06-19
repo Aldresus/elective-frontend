@@ -6,6 +6,7 @@ import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { OrderMenu, OrderProduct } from "@/entities/order";
 import { useState } from "react";
+import { DecodedAccessToken } from "@/entities/login";
 
 export const Route = createFileRoute("/_user")({
   component: UserLayout,
@@ -14,12 +15,14 @@ export const Route = createFileRoute("/_user")({
 function UserLayout() {
   const [localStorageCurrentOrder, setLocalStorageCurrentOrder] =
     useLocalStorage<CurrentOrderContext>("currentOrder");
+  const [decodedAccessToken, setDecodedAccessToken] =
+    useLocalStorage<DecodedAccessToken>("user");
 
   const [currentOrder, setCurrentOrder] = useState<CurrentOrderContext>({
     address: localStorageCurrentOrder?.address || "",
     city: localStorageCurrentOrder?.city || "",
     id_restaurant: localStorageCurrentOrder?.id_restaurant || "",
-    id_user: localStorageCurrentOrder?.id_user || "111111111111111111111111", //placeholder
+    id_user: decodedAccessToken?.sub || "",
     notes: localStorageCurrentOrder?.notes || "",
     menus: localStorageCurrentOrder?.menus || [],
     products: localStorageCurrentOrder?.products || [],
@@ -40,6 +43,7 @@ function UserLayout() {
     removeMenu: () => {},
     clearOrder: () => {},
     setRestaurantId: () => {},
+    setUserId: () => {},
     setAddress: () => {},
     calculateTotalPrice: () => 0,
   });
@@ -55,6 +59,21 @@ function UserLayout() {
       return {
         ...prev,
         id_restaurant: restaurantId,
+      };
+    });
+  };
+
+  const setUserId = (userId: string) => {
+    setCurrentOrder((prev) => {
+      return {
+        ...prev,
+        id_user: userId,
+      };
+    });
+    setLocalStorageCurrentOrder((prev) => {
+      return {
+        ...prev,
+        id_user: userId,
       };
     });
   };
@@ -162,7 +181,7 @@ function UserLayout() {
       city: currentOrder.city,
       postal_code: currentOrder.postal_code,
       id_restaurant: "",
-      id_user: "111111111111111111111111",
+      id_user: decodedAccessToken?.sub || "",
       notes: "",
 
       price: 0,
@@ -177,6 +196,7 @@ function UserLayout() {
       products: [],
 
       setRestaurantId: () => {},
+      setUserId: () => {},
 
       addProduct: () => {},
       addMenu: () => {},
@@ -246,6 +266,7 @@ function UserLayout() {
           removeMenu,
           clearOrder: clearOrder,
           setRestaurantId,
+          setUserId,
           setAddress,
           calculateTotalPrice,
         }}

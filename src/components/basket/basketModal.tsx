@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "../ui/dialog";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { PartyPopper, ShoppingBasket } from "lucide-react";
 import { H1, H2 } from "../typography";
@@ -14,10 +14,12 @@ import { Separator } from "../ui/separator";
 import { useMutation } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { CreateOrder, Order } from "@/entities/order";
-import { useNavigate } from "@tanstack/react-router";
-import { BasketSummary } from "../basket/basketSummary";
-import { BasketAddressDisplay } from "../basket/basketAddressDisplay";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
+import { BasketSummary } from "./basketSummary";
+import { BasketAddressDisplay } from "./basketAddressDisplay";
 import { AddressInput, AddressInputType } from "../address/addressInput";
+import { useLocalStorage } from "@uidotdev/usehooks";
+import { DecodedAccessToken } from "@/entities/login";
 
 interface BasketModalProps extends React.HTMLProps<HTMLDivElement> {}
 
@@ -30,8 +32,20 @@ export function BasketModal({ ...props }: BasketModalProps) {
     postal_code: currentOrder.postal_code,
     label: "",
   });
+  const router = useRouterState();
 
-  const navigate = useNavigate({ from: "/restaurant/$id" });
+  const navigate = useNavigate({ from: router.location.pathname });
+
+  console.log("path", router.location.pathname);
+
+  const [decodedAccessToken, setDecodedAccessToken] =
+    useLocalStorage<DecodedAccessToken>("user");
+
+  useEffect(() => {
+    if (decodedAccessToken?.sub === currentOrder.id_user) {
+      currentOrder.setUserId(decodedAccessToken?.sub);
+    }
+  }, [decodedAccessToken, currentOrder]);
 
   const mutation = useMutation({
     mutationFn: (currentOrder: CreateOrder) => {
@@ -49,6 +63,7 @@ export function BasketModal({ ...props }: BasketModalProps) {
       });
     },
   });
+
   return (
     <Dialog open={open} onOpenChange={setOpen} {...props} modal={true}>
       <DialogTrigger className="sticky mx-auto bottom-10 w-full z-50 ">
@@ -123,17 +138,32 @@ export function BasketModal({ ...props }: BasketModalProps) {
               Retour au menu
             </Button>
           </DialogClose>
+          {decodedAccessToken?.sub === currentOrder.id_user ? (
+            <Button
+              className="gap-2"
+              onClick={() => {
+                if (currentOrder.address === "") return;
 
-          <Button
-            className="gap-2"
-            onClick={() => {
-              if (currentOrder.address === "") return;
-
-              mutation.mutate(currentOrder);
-            }}
-          >
-            Valider la commande <PartyPopper />
-          </Button>
+                mutation.mutate(currentOrder);
+              }}
+            >
+              Valider la commande <PartyPopper />
+            </Button>
+          ) : (
+            <Button
+              className="gap-2"
+              onClick={() => {
+                navigate({
+                  to: "/login",
+                  search: {
+                    redirect: router.location.pathname,
+                  },
+                });
+              }}
+            >
+              Connectez-vous pour continuer
+            </Button>
+          )}
         </div>
         {mutation.error && (
           <div className="flex justify-center items-center gap-4">

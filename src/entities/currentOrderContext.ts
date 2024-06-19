@@ -2,6 +2,7 @@ import { CreateOrder, OrderMenu, OrderProduct } from "./order";
 
 export interface CurrentOrderContext extends CreateOrder {
   setRestaurantId: (restaurantId: string) => void;
+  setUserId: (userId: string) => void;
 
   addProduct: (product: OrderProduct, quantity: number) => void;
   addMenu: (menu: OrderMenu) => void;

@@ -73,40 +73,43 @@ export function AddressInput({
     <div className={cn(className)} {...props}>
       <Label>Adresse</Label>
       <div className="relative">
-        {query.isSuccess && (
-          <Input
-            value={addressState.label}
-            onChange={(e) => addressChangeHandler(e)}
-            id="address"
-            autoComplete="address-line1"
-            className={clsx({
-              "border-b-0 rounded-b-none": query.data?.features.length > 0,
-            })}
-          />
-        )}
+        <Input
+          value={addressState.label}
+          onChange={(e) => addressChangeHandler(e)}
+          id="address"
+          autoComplete="address-line1"
+          className={clsx({
+            "border-b-0 rounded-b-none": query.data?.features.length > 0,
+          })}
+        />
+
         <Search className="absolute right-2 top-2 " />
         <div className="relative w-full h-0 ">
-          <div className="absolute flex flex-col w-full px-3 rounded-b  bg-secondary gap-2">
-            {query.data?.features.map((feature) => (
-              <AddressSuggestion
-                onSuggestionClick={(feature) => {
-                  const newAddress = {
-                    address: feature.properties.name,
-                    city: feature.properties.city,
-                    postal_code: feature.properties.postcode,
-                    label: feature.properties.label,
-                  };
+          {query.isSuccess && (
+            <div className="absolute flex flex-col w-full px-3 rounded-b  bg-secondary gap-2">
+              {query.data?.features.map((feature) => (
+                <AddressSuggestion
+                  onSuggestionClick={(feature) => {
+                    const newAddress = {
+                      address: feature.properties.name,
+                      city: feature.properties.city,
+                      postal_code: feature.properties.postcode,
+                      label: feature.properties.label,
+                    };
 
-                  setAddressState(newAddress);
-                  onAddressChange(newAddress);
-                }}
-                feature={feature}
-                key={feature.properties.id}
-              />
-            ))}
+                    setAddressState(newAddress);
+                    onAddressChange(newAddress);
+                  }}
+                  feature={feature}
+                  key={feature.properties.id}
+                />
+              ))}
 
-            {query.data?.features.length === 0 && <p>Aucune adresse trouvée</p>}
-          </div>
+              {query.data?.features.length === 0 && (
+                <p>Aucune adresse trouvée</p>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -20,6 +20,7 @@ export const currentOrderContext = createContext<CurrentOrderContext>({
   products: [],
 
   setRestaurantId: () => {},
+  setUserId: () => {},
 
   addProduct: () => {},
   addMenu: () => {},

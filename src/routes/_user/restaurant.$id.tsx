@@ -1,8 +1,9 @@
-import { BasketModal } from "@/components/restaurant/basketModal";
+import { BasketModal } from "@/components/basket/basketModal";
 import { ItemCarrousel } from "@/components/restaurant/itemCarrousel";
 import { RestaurantCategory } from "@/components/restaurant/restaurantCategory";
 import { H1 } from "@/components/typography";
 import { currentOrderContext } from "@/contexts/currentOrderContext";
+import { DecodedAccessToken } from "@/entities/login";
 
 import {
   FullRestaurant,
@@ -12,6 +13,7 @@ import {
 import { axiosInstance } from "@/lib/axiosConfig";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { useLocalStorage } from "@uidotdev/usehooks";
 import { useContext, useEffect } from "react";
 
 export const Route = createFileRoute("/_user/restaurant/$id")({
@@ -20,6 +22,7 @@ export const Route = createFileRoute("/_user/restaurant/$id")({
 
 function RestaurantPage() {
   const { id } = Route.useParams();
+  const [decodedAccessToken] = useLocalStorage<DecodedAccessToken>("user");
 
   const query = useQuery({
     queryKey: ["restaurant", id],
@@ -52,6 +55,10 @@ function RestaurantPage() {
       currentOrder.id_restaurant,
       id !== currentOrder.id_restaurant
     );
+
+    if (decodedAccessToken) {
+      currentOrder.setUserId(decodedAccessToken.sub);
+    }
 
     if (!currentOrder.id_restaurant || id !== currentOrder.id_restaurant) {
       currentOrder.clearOrder();
