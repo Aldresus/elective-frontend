@@ -14,6 +14,11 @@ export interface User {
   notifications?: Array<NotificationsEnum>;
 }
 
+export interface UpdateRoleUser {
+  id_user?: string;
+  role?: RoleEnum.CLIENT | RoleEnum.RESTAURATEUR | RoleEnum.DELIVERYMAN;
+}
+
 export enum RoleEnum {
   USER = "USER",
   ADMIN = "ADMIN",
