@@ -20,6 +20,7 @@ import { BasketAddressDisplay } from "./basketAddressDisplay";
 import { AddressInput, AddressInputType } from "../address/addressInput";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { DecodedAccessToken } from "@/entities/login";
+import { toast } from "sonner";
 
 interface BasketModalProps extends React.HTMLProps<HTMLDivElement> {}
 
@@ -41,7 +42,7 @@ export function BasketModal({ ...props }: BasketModalProps) {
   const [decodedAccessToken] = useLocalStorage<DecodedAccessToken>("user");
 
   useEffect(() => {
-    if (decodedAccessToken?.sub === currentOrder.id_user) {
+    if (decodedAccessToken?.sub !== currentOrder.id_user) {
       currentOrder.setUserId(decodedAccessToken?.sub);
     }
   }, [decodedAccessToken, currentOrder]);
@@ -60,6 +61,7 @@ export function BasketModal({ ...props }: BasketModalProps) {
           order_id: res.id_order,
         },
       });
+      toast.success("Commande créée !");
     },
   });
 

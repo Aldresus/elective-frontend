@@ -23,6 +23,7 @@ export const Route = createFileRoute("/_user/restaurant/$id")({
 function RestaurantPage() {
   const { id } = Route.useParams();
   const [decodedAccessToken] = useLocalStorage<DecodedAccessToken>("user");
+  const currentOrder = useContext(currentOrderContext);
 
   const query = useQuery({
     queryKey: ["restaurant", id],
@@ -45,26 +46,26 @@ function RestaurantPage() {
     refetchInterval: 1000 * 60, // refresh every minute
   });
 
-  const currentOrder = useContext(currentOrderContext);
+  // useEffect(() => {
+  //   console.log("useEffect", currentOrder);
+  //   console.log(
+  //     "useEffect",
+  //     id,
+  //     currentOrder.id_restaurant,
+  //     id !== currentOrder.id_restaurant
+  //   );
 
-  useEffect(() => {
-    console.log("useEffect", currentOrder);
-    console.log(
-      "useEffect",
-      id,
-      currentOrder.id_restaurant,
-      id !== currentOrder.id_restaurant
-    );
+  //   if (decodedAccessToken) {
+  //     console.log("hit decodedAccessToken", decodedAccessToken);
 
-    if (decodedAccessToken) {
-      currentOrder.setUserId(decodedAccessToken.sub);
-    }
+  //     currentOrder.setUserId(decodedAccessToken.sub);
+  //   }
 
-    if (!currentOrder.id_restaurant || id !== currentOrder.id_restaurant) {
-      currentOrder.clearOrder();
-      currentOrder.setRestaurantId(id);
-    }
-  }, [currentOrder, decodedAccessToken, id]);
+  //   if (!currentOrder.id_restaurant || id !== currentOrder.id_restaurant) {
+  //     currentOrder.clearOrder();
+  //     currentOrder.setRestaurantId(id);
+  //   }
+  // }, [currentOrder, decodedAccessToken, id]);
 
   return (
     <div className="space-y-6 w-full">
