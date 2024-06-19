@@ -1,4 +1,4 @@
-import { ChevronRight, CircleUser } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Logo from "./logo";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
