@@ -25,7 +25,7 @@ function UserComponent() {
   const query = useQuery({
     queryKey: ["restaurants"],
     queryFn: async () => {
-      const response = await axiosInstance.get("/restaurant");
+      const response = await axiosInstance().get("/restaurant");
       console.log(response.data);
 
       return response.data as Array<Restaurant>;

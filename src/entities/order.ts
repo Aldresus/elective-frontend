@@ -28,7 +28,7 @@ export interface CreateOrder {
   city: string;
   notes: string;
   restaurant_to_delivery_datetime?: Date;
-  received_datetime?: Date;
+  received_datetime: Date;
   restaurant_accepted_datetime?: Date;
   delivery_accepted_datetime?: Date;
   id_user: string;

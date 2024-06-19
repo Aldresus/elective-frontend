@@ -49,7 +49,7 @@ export function BasketModal({ ...props }: BasketModalProps) {
 
   const mutation = useMutation({
     mutationFn: (currentOrder: CreateOrder) => {
-      return axiosInstance.post("/order", currentOrder);
+      return axiosInstance().post("/order", currentOrder);
     },
     onSuccess(data) {
       console.log("success", data);
