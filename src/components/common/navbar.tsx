@@ -58,14 +58,25 @@ export default function Navbar({
       <div className="flex items-center gap-2">
         <Dialog>
           <DialogTrigger>
-            <Button variant="link">
-              {user?.first_name} {user?.last_name}
-              <Avatar>
-                <AvatarFallback>{`${user?.first_name.charAt(0)}${user?.last_name.charAt(
-                  0
-                )}`}</AvatarFallback>
-              </Avatar>
-            </Button>
+            {auth.isAuthenticated ? (
+              <Button variant="link">
+                {user?.first_name} {user?.last_name}
+                <Avatar>
+                  <AvatarFallback>{`${user?.first_name.charAt(0)}${user?.last_name.charAt(
+                    0
+                  )}`}</AvatarFallback>
+                </Avatar>
+              </Button>
+            ) : (
+              <Link to="/login">
+                <Button
+                  className="w-full flex gap-1 justify-between"
+                  variant="default"
+                >
+                  Se connecter
+                </Button>
+              </Link>
+            )}
           </DialogTrigger>
           <DialogPortal>
             <DialogContent className="flex flex-col items-center justify-center fixed overflow-y-auto">
