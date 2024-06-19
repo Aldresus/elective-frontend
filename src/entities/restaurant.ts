@@ -15,6 +15,19 @@ export interface Restaurant {
   rating: number;
 }
 
+export interface CreateEmptyRestaurant {
+  address?: string;
+  banner_url?: string;
+  business_hours?: string;
+  city?: string;
+  email?: string;
+  food_type?: string;
+  name?: string;
+  postal_code?: string;
+  price_range?: string;
+  rating?: number;
+}
+
 export interface RestaurantCategory {
   id_restaurant_category: string;
   name: string;
