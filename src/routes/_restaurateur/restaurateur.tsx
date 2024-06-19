@@ -3,7 +3,7 @@ import { H1, H2 } from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_restaurant/restaurant")({
+export const Route = createFileRoute("/_restaurateur/restaurateur")({
   component: Restaurant,
 });
 

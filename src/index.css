@@ -74,3 +74,24 @@
     @apply bg-background text-foreground;
   }
 }
+
+*::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+*::-webkit-scrollbar-track {
+  background: hsl(var(--accent-foreground));
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: hsl(var(--accent));
+  border-radius: 3px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-color: hsl(var(--accent)) hsl(var(--accent-foreground));
+  }
+}
