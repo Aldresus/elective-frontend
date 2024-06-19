@@ -52,12 +52,10 @@ export default function Navbar({
           opened={() => setAddressModalIsOpen(true)}
           open={addressModalIsOpen}
           closed={() => setAddressModalIsOpen(false)}
-          currentAddress="adresse test" //needs to come from the context
         />
       )}
       <Input className="w-full max-w-xs" placeholder="Rechercher" />
       <div className="flex items-center gap-2">
-        <div></div>
         <Dialog>
           <DialogTrigger>
             <Button variant="link">
