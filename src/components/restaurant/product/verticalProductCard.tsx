@@ -5,6 +5,7 @@ import { VerticalItemCard } from "../primitives/verticalItemCard";
 import { cn } from "@/lib/utils";
 import { currentOrderContext } from "@/contexts/currentOrderContext";
 import { productToOrderProduct } from "@/entities/order";
+import { toast } from "sonner";
 
 interface VerticalProductCardProps extends React.HTMLProps<HTMLDivElement> {
   product: Product;
@@ -35,6 +36,7 @@ export function VerticalProductCard({
           e.stopPropagation();
           console.log("add product", product);
           currentOrder.addProduct(productToOrderProduct(product), 1);
+          toast.success(`1x ${product.name} ajouté à votre commande`);
         }}
         cardDescription={product.description}
         cardPrice={product.price}

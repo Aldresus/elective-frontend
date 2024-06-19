@@ -11,6 +11,7 @@ import { Button } from "../ui/button";
 import { H1 } from "../typography";
 import { currentOrderContext } from "@/contexts/currentOrderContext";
 import { AddressInput } from "./addressInput";
+import { toast } from "sonner";
 
 interface AddressChoiceModalProps extends React.HTMLAttributes<HTMLDivElement> {
   currentAddress: string;
@@ -72,7 +73,7 @@ export function AddressChoiceModal({
             : `${currentOrder.address} ${currentOrder.city} ${currentOrder.postal_code}`}
         </Button>
       </DialogTrigger>
-      <DialogContent className="space-y-4">
+      <DialogContent className="space-y-4 z-[10000]">
         <DialogHeader>
           <H1>Adresse de livraison</H1>
         </DialogHeader>
@@ -95,6 +96,7 @@ export function AddressChoiceModal({
                 return;
 
               currentOrder.setAddress(address);
+              toast.success("Adresse de livraison modifiée");
 
               closed();
             }}

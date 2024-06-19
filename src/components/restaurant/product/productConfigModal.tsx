@@ -12,6 +12,7 @@ import { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { currentOrderContext } from "@/contexts/currentOrderContext";
 import { productToOrderProduct } from "@/entities/order";
+import { toast } from "sonner";
 
 interface ProductConfigModalProps extends React.HTMLAttributes<HTMLDivElement> {
   open: boolean;
@@ -79,6 +80,9 @@ export function ProductConfigModal({
                 currentOrder.addProduct(
                   productToOrderProduct(product),
                   selectedQuantity
+                );
+                toast.success(
+                  `${selectedQuantity}x ${product.name} ajouté à votre commande`
                 );
                 close();
               }}
