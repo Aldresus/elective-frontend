@@ -88,7 +88,7 @@ function Restaurant() {
       });
       console.log(response.data);
 
-      return response.data as Order[];
+      return response.data as Array<Order>;
     },
   });
 
