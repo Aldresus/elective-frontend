@@ -23,6 +23,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { useRole } from "@/hooks/useRole";
+import { axiosInstance } from "@/lib/axiosConfig";
 
 export const Route = createFileRoute("/_login/signup")({
   component: Login,
@@ -88,11 +89,6 @@ const signupSchema = z
     path: ["confirmPassword"],
   });
 
-const instance = axios.create({
-  baseURL: "http://localhost:3000/api/",
-  timeout: 1000,
-});
-
 function Login() {
   const [currentStep, setCurrentStep] = useState<1 | 2>(1);
   const [showPassword, setShowPassword] = useState(false);
@@ -121,7 +117,7 @@ function Login() {
     // hash the password
     const hash = sha256(values.password);
     console.log(hash);
-    instance
+    axiosInstance()
       .post("user/register", {
         first_name: values.firstName,
         last_name: values.lastName,
