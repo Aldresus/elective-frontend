@@ -46,26 +46,28 @@ function RestaurantPage() {
     refetchInterval: 1000 * 60, // refresh every minute
   });
 
-  // useEffect(() => {
-  //   console.log("useEffect", currentOrder);
-  //   console.log(
-  //     "useEffect",
-  //     id,
-  //     currentOrder.id_restaurant,
-  //     id !== currentOrder.id_restaurant
-  //   );
+  useEffect(() => {
+    //reset the basket when the restaurant changes
+    //set the userid to the current user inside the order
+    console.log("useEffect", currentOrder);
+    console.log(
+      "useEffect",
+      id,
+      currentOrder.id_restaurant,
+      id !== currentOrder.id_restaurant
+    );
 
-  //   if (decodedAccessToken) {
-  //     console.log("hit decodedAccessToken", decodedAccessToken);
+    if (decodedAccessToken) {
+      console.log("hit decodedAccessToken", decodedAccessToken);
 
-  //     currentOrder.setUserId(decodedAccessToken.sub);
-  //   }
+      currentOrder.setUserId(decodedAccessToken.sub);
+    }
 
-  //   if (!currentOrder.id_restaurant || id !== currentOrder.id_restaurant) {
-  //     currentOrder.clearOrder();
-  //     currentOrder.setRestaurantId(id);
-  //   }
-  // }, [currentOrder, decodedAccessToken, id]);
+    if (!currentOrder.id_restaurant || id !== currentOrder.id_restaurant) {
+      currentOrder.clearOrder();
+      currentOrder.setRestaurantId(id);
+    }
+  }, [currentOrder, decodedAccessToken, id]);
 
   return (
     <div className="space-y-6 w-full">
