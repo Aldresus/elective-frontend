@@ -13,7 +13,6 @@ import { currentOrderContext } from "@/contexts/currentOrderContext";
 import { AddressInput } from "./addressInput";
 
 interface AddressChoiceModalProps extends React.HTMLAttributes<HTMLDivElement> {
-  currentAddress: string;
   open: boolean;
   closed: () => void;
   opened: () => void;
