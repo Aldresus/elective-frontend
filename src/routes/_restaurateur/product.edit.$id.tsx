@@ -4,7 +4,7 @@ import { axiosInstance } from "@/lib/axiosConfig";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
-export const Route = createFileRoute("/_restaurateur/editProduct/$id")({
+export const Route = createFileRoute("/_restaurateur/product/edit/$id")({
   component: EditProduct,
 });
 

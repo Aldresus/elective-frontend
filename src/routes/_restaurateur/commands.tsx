@@ -10,7 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useContext } from "react";
 
-export const Route = createFileRoute("/_restaurateur/commandMonitoring")({
+export const Route = createFileRoute("/_restaurateur/commands")({
   component: CommandMonitoring,
 });
 

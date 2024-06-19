@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useContext } from "react";
 
-export const Route = createFileRoute("/_restaurateur/restaurantOfferings")({
+export const Route = createFileRoute("/_restaurateur/offerings")({
   component: RestaurantOfferings,
 });
 
