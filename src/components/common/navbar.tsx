@@ -39,7 +39,7 @@ export default function Navbar({
   return (
     <div
       className={cn(
-        "bg-slate-50 flex justify-between items-center h-[50px] py-2 px-6 z-[49]",
+        "flex justify-between items-center h-[50px] py-2 px-6 z-[49] bg-selago-100 shadow-sm",
         className
       )}
       {...props}

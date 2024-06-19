@@ -9,7 +9,7 @@ export default function Footer({ className, ...props }: FooterProps) {
   return (
     <div
       className={cn(
-        "bg-slate-50  h-[50px] py-2 px-6 flex items-center justify-between",
+        "h-[50px] py-2 px-6 flex items-center justify-between bg-selago-100 shadow-inner",
         className
       )}
       {...props}
