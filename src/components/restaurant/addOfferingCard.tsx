@@ -4,12 +4,12 @@ import { Card } from "../ui/card";
 import { Link } from "@tanstack/react-router";
 
 interface AddOfferingCardProps {
-  type: string;
+  type: "menu" | "produit";
 }
 
 export default function AddOfferingCard({ type }: AddOfferingCardProps) {
   return (
-    <Link to="">
+    <Link to={type === "produit" ? "/createProduct" : "/createMenu"}>
       {
         //todo dynamik to={type === "produit" ? "/editProduct/id" : "/editMenu/id"}
       }
