@@ -15,8 +15,7 @@ export const Route = createFileRoute("/_user")({
 function UserLayout() {
   const [localStorageCurrentOrder, setLocalStorageCurrentOrder] =
     useLocalStorage<CurrentOrderContext>("currentOrder");
-  const [decodedAccessToken, setDecodedAccessToken] =
-    useLocalStorage<DecodedAccessToken>("user");
+  const [decodedAccessToken] = useLocalStorage<DecodedAccessToken>("user");
 
   const [currentOrder, setCurrentOrder] = useState<CurrentOrderContext>({
     address: localStorageCurrentOrder?.address || "",

@@ -7,20 +7,20 @@ import { HorizontalMenuCard } from "./menu/horizontalMenuCard";
 
 interface RestaurantCategoryProps extends React.HTMLProps<HTMLDivElement> {
   categoryName: string;
-  items: Array<Product | Menu>;
+  categoryItems: Array<Product | Menu>;
 }
 
 export function RestaurantCategory({
-  categoryName: title,
-  items,
+  categoryName,
+  categoryItems,
   className,
   ...props
 }: RestaurantCategoryProps) {
   return (
     <div className={className} {...props}>
-      <H2>{title}</H2>
+      <H2>{categoryName}</H2>
       <div className="grid grid-cols-2 gap-3">
-        {items.map((item) => {
+        {categoryItems.map((item) => {
           if (isProduct(item)) {
             return (
               <HorizontalProductCard key={item.id_product} product={item} />

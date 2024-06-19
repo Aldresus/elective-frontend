@@ -64,7 +64,7 @@ function RestaurantPage() {
       currentOrder.clearOrder();
       currentOrder.setRestaurantId(id);
     }
-  }, [currentOrder, id]);
+  }, [currentOrder, decodedAccessToken, id]);
 
   return (
     <div className="space-y-6 w-full">
@@ -81,7 +81,7 @@ function RestaurantPage() {
           return (
             <ItemCarrousel
               key={category.name}
-              items={category.items}
+              carouselItems={category.items}
               categoryName={category.name}
             />
           );
@@ -90,7 +90,7 @@ function RestaurantPage() {
           <RestaurantCategory
             key={category.name}
             categoryName={category.name}
-            items={category.items}
+            categoryItems={category.items}
           />
         );
       })}

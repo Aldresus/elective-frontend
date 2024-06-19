@@ -38,8 +38,7 @@ export function BasketModal({ ...props }: BasketModalProps) {
 
   console.log("path", router.location.pathname);
 
-  const [decodedAccessToken, setDecodedAccessToken] =
-    useLocalStorage<DecodedAccessToken>("user");
+  const [decodedAccessToken] = useLocalStorage<DecodedAccessToken>("user");
 
   useEffect(() => {
     if (decodedAccessToken?.sub === currentOrder.id_user) {

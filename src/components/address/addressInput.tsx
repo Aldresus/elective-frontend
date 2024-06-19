@@ -79,7 +79,8 @@ export function AddressInput({
           id="address"
           autoComplete="address-line1"
           className={clsx({
-            "border-b-0 rounded-b-none": query.data?.features.length > 0,
+            "border-b-0 rounded-b-none":
+              query.isSuccess && query.data?.features.length > 0,
           })}
         />
 
