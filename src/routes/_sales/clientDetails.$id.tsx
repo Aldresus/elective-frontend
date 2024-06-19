@@ -8,14 +8,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Client } from "@/entities/client";
+import { axiosInstance } from "@/lib/axiosConfig";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Eye, EyeOff, Save } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export const Route = createFileRoute("/_sales/clientDetails")({
+export const Route = createFileRoute("/_sales/clientDetails/$id")({
   component: ClientDetails,
 });
 
@@ -73,6 +76,30 @@ function ClientDetails() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const navigate = useNavigate();
+
+  const { id } = Route.useParams();
+
+  //todo: get token dynamikly
+  const headers = {
+    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjZkOTk1NGNmOTY1ZDM0MGZjMGUyNmEiLCJ1c2VybmFtZSI6InNvcGhpYS5qb25lc0BleGFtcGxlLmNvbSIsInJvbGUiOiJDT01NRVJDSUFMIiwiaWF0IjoxNzE4NDgxNTY0LCJleHAiOjE3MTkzODE1NjR9.9U_4HSizx2BhJGVf1ByBdGwomvx0fQqTT9VRs_K5ODM`,
+  };
+
+  const query = useQuery({
+    queryKey: ["client"],
+    queryFn: async () => {
+      const response = await axiosInstance().get(`/user?id=${id}`, {
+        headers,
+      });
+      // console.log(response.data);
+      let finalData = response.data[0] as Client;
+
+      console.log(finalData);
+
+      return finalData;
+    },
+  });
+
   const form = useForm<z.infer<typeof clientSchema>>({
     resolver: zodResolver(clientSchema),
     defaultValues: {
@@ -82,14 +109,57 @@ function ClientDetails() {
       password: "",
       confirmPassword: "",
       phone: "",
-      birthDay: "", //use an empty string so the placeholder is shown
-      birthMonth: "", //use an empty string so the placeholder is shown
-      birthYear: "", //use an empty string so the placeholder is shown
+      birthDay: "",
+      birthMonth: "",
+      birthYear: "",
     },
   });
 
+  useEffect(() => {
+    if (query.isSuccess && query.data) {
+      const data = query.data;
+      const birthdateParts = data.birthday.split("-");
+      form.reset({
+        lastName: data.last_name,
+        firstName: data.first_name,
+        email: data.email,
+        password: "",
+        confirmPassword: "",
+        phone: data.phone,
+        birthDay: parseInt(birthdateParts[2]),
+        birthMonth: parseInt(birthdateParts[1]),
+        birthYear: parseInt(birthdateParts[0]),
+      });
+    }
+  }, [query.isSuccess]);
+
   const onSubmit = async (values: z.infer<typeof clientSchema>) => {
     console.log(values);
+
+    const dataToSend = {
+      last_name: values.lastName,
+      first_name: values.firstName,
+      email: values.email,
+      birthday: `${values.birthYear}-${values.birthMonth}-${values.birthDay}`,
+      phone: values.phone,
+      role: "CLIENT",
+      password: values.password,
+      id_restaurant: "000000000000000000000000",
+    };
+
+    axiosInstance()
+      .patch(`/user/${id}`, dataToSend, {
+        headers,
+      })
+      .then((res) => {
+        console.log("Insertion réussie");
+        console.log(res);
+        navigate({ to: "/allClients" });
+      })
+      .catch((err) => {
+        console.log("Failed");
+        console.log(err);
+      });
   };
 
   return (

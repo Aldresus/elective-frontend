@@ -29,7 +29,7 @@ export function HorizontalItemCard({
   return (
     <Card
       className={cn(
-        "flex bg-card shadow-none border-none h-[200px] w-full gap-4",
+        "flex shadow-none border-none h-[200px] w-full gap-4",
         className
       )}
       {...props}

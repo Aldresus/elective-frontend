@@ -1,46 +1,68 @@
 import { Check, X } from "lucide-react";
-import { H3, Large, Li, Ul } from "../typography";
+import { H3, H4, Large, Li, Ul } from "../typography";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
+import { Order } from "@/entities/order";
 
-export default function WaitingCommandCard() {
+interface WaitingCommandCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  order: Order;
+}
+
+export default function WaitingCommandCard({
+  order,
+  ...props
+}: WaitingCommandCardProps) {
   return (
-    <div className="rounded-[20px] bg-slate-100 p-4 pb-0">
-      <div className="flex items-center justify-between">
-        <H3>Nom du client</H3>
-        <H3>30.52€</H3>
-      </div>
-      <div className="flex items-center justify-between">
-        <Accordion type="single" collapsible className="flex-1">
-          <AccordionItem value="item-1">
-            <AccordionTrigger className="py-1">Menu A</AccordionTrigger>
-            <AccordionContent>
-              <Ul className="my-0">
-                <Li>Produit A</Li>
-                <Li>Produit B</Li>
-                <Li>Produit C</Li>
-              </Ul>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-        <Large className="pl-8">15.65€</Large>
-      </div>
-      <div className="flex items-center justify-between">
-        <Large>Produit A</Large>
-        <Large className="pl-8">7.84€</Large>
-      </div>
-      <div className="flex items-center justify-between">
-        <Large>Produit B</Large>
-        <Large className="pl-8">8.25€</Large>
-      </div>
-      <div className="flex items-center p-2">
-        <Check className="flex-1 hover:text-hungry-yellow-500" />
-        <X className="flex-1 hover:text-hungry-yellow-500" />
-      </div>
-    </div>
+    <Card className="space-y-4" {...props}>
+      <CardHeader>
+        <div className="flex items-end justify-between">
+          {/* need to get it from ms */}
+          <H3>Nom du client</H3>
+          <H4>{order.price}€</H4>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {order.menus.map((menu) => (
+          <div className="flex items-center justify-between">
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="item-1">
+                <AccordionTrigger>
+                  <Large>{menu.name}</Large>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <Ul className="my-0">
+                    {menu.products.map((product) => (
+                      <Li key={product.id_product}>{product.name}</Li>
+                    ))}
+                  </Ul>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+            <Large className="pl-8">{menu.price}€</Large>
+          </div>
+        ))}
+
+        {order.products.map((product) => (
+          <div className="flex items-center justify-between">
+            <Large>{product.name}</Large>
+            <Large className="pl-8">{product.price}€</Large>
+          </div>
+        ))}
+      </CardContent>
+      <CardFooter className="flex items-center justify-around">
+        <Button className="bg-green-500 hover:bg-green-600 text-white">
+          <Check />
+        </Button>
+        <Button variant="destructive">
+          <X />
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }

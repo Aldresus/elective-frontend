@@ -28,7 +28,7 @@ export function VerticalItemCard({
   return (
     <Card
       className={cn(
-        "w-[200px] aspect-[5/8] bg-card shadow-none border-none cursor-pointer",
+        "w-[200px] aspect-[5/8] shadow-none border-none cursor-pointer",
         className
       )}
       {...props}

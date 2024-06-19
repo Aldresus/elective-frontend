@@ -255,7 +255,7 @@ function UserLayout() {
   };
 
   return (
-    <div className="bg-yellow-500 min-h-screen">
+    <div>
       <currentOrderContext.Provider
         value={{
           ...currentOrder,
@@ -271,7 +271,7 @@ function UserLayout() {
         }}
       >
         <Navbar className="fixed top-0 left-0 w-full" />
-        <div className="bg-red-50 mt-[50px] p-9 w-[1280px] mx-auto">
+        <div className=" mt-[50px] p-9 w-[1280px] mx-auto min-h-screen">
           <Outlet />
         </div>
         <Footer />

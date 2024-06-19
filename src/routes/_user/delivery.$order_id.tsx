@@ -19,7 +19,7 @@ function DeliveryTracker() {
   const query = useQuery({
     queryKey: ["delivery", "order_id"],
     queryFn: async () => {
-      const response = await axiosInstance.get(`/order/${order_id}`);
+      const response = await axiosInstance().get(`/order/${order_id}`);
       console.log(response.data);
       return response.data as Order;
     },
