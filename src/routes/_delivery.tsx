@@ -3,7 +3,7 @@ import Footer from "@/components/common/footer";
 import Navbar from "@/components/common/navbar";
 
 export const Route = createFileRoute("/_delivery")({
-  beforeLoad: ({ context, location }) => {
+  beforeLoad: async ({ context, location }) => {
     if (!context.auth.isAuthenticated) {
       throw redirect({
         to: "/login",

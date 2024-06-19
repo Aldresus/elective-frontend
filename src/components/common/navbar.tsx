@@ -14,9 +14,15 @@ import {
 } from "../ui/dialog";
 import { Large } from "../typography";
 import { Route } from "@/routes/_user";
+import { useState } from "react";
+import { AddressChoiceModal } from "../address/addressChoiceModal";
+import { DecodedAccessToken } from "@/entities/login";
+import { useLocalStorage } from "@uidotdev/usehooks";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
   isAdress?: boolean;
+  isRestaurateur?: boolean;
 }
 
 export default function Navbar({
@@ -24,13 +30,16 @@ export default function Navbar({
   className,
   ...props
 }: NavbarProps) {
+  const [addressModalIsOpen, setAddressModalIsOpen] = useState(false);
+  const [user] = useLocalStorage<DecodedAccessToken>("user");
   const auth = useAuth();
   const navigate = Route.useNavigate();
+  console.log(auth);
 
   return (
     <div
       className={cn(
-        "bg-slate-50 flex justify-around items-center h-[50px] py-2 px-6",
+        "bg-slate-50 flex justify-between items-center h-[50px] py-2 px-6 z-[49]",
         className
       )}
       {...props}
@@ -38,14 +47,25 @@ export default function Navbar({
       <Link to="/" className="h-full">
         <Logo />
       </Link>
-      {isAdress && <div>l'adresse tmtc V</div>}
+      {isAdress && (
+        <AddressChoiceModal
+          opened={() => setAddressModalIsOpen(true)}
+          open={addressModalIsOpen}
+          closed={() => setAddressModalIsOpen(false)}
+          currentAddress="adresse test" //needs to come from the context
+        />
+      )}
       <Input className="w-full max-w-xs" placeholder="Rechercher" />
       <div className="flex items-center gap-2">
-        <Large>user.name</Large>
+          <><Large>user.name</Large>
         <Dialog>
           <DialogTrigger>
             <Button type="button" variant="ghost">
-              <CircleUser size={30} />
+               <Avatar>
+              <AvatarFallback>{`${user?.first_name.charAt(0)}${user?.last_name.charAt(
+                0
+              )}`}</AvatarFallback>
+            </Avatar>
             </Button>
           </DialogTrigger>
           <DialogPortal>
@@ -107,7 +127,7 @@ export default function Navbar({
             </DialogContent>
           </DialogPortal>
         </Dialog>
-      </div>
+             </div>
     </div>
     // </div>
   );

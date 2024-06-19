@@ -11,10 +11,7 @@ export function RestaurantCard({
 }: RestaurantCardProps) {
   return (
     <Card
-      className={cn(
-        "bg-transparent shrink-0 border-0 shadow-none lg:w-[300px]",
-        className
-      )}
+      className={cn("bg-transparent shrink-0 border-0 shadow-none", className)}
       {...props}
     >
       <div className="h-[150px] overflow-hidden rounded-[20px] ">

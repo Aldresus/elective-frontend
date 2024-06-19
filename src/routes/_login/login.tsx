@@ -21,32 +21,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Link,
-  createFileRoute,
-  redirect,
-  useRouter,
-} from "@tanstack/react-router";
+import { Link, createFileRoute, useRouter } from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import axios from "axios";
 import { sha256 } from "js-sha256";
-
-import { useAuth } from "@/lib/auth";
-
-const fallback = "/user" as const;
+import { useMutation } from "@tanstack/react-query";
+import { LoginResponse } from "@/entities/login";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/_login/login")({
-  validateSearch: z.object({
-    redirect: z.string().optional().catch(""),
-  }),
-  beforeLoad: ({ context, search }) => {
-    if (context.auth.isAuthenticated) {
-      throw redirect({ to: search.redirect ?? fallback });
-    }
-  },
   component: Login,
 });
 
@@ -58,7 +44,7 @@ const signinSchema = z.object({
 });
 
 const instance = axios.create({
-  baseURL: "http://localhost:3000/api/user/",
+  baseURL: "http://middleware.lihoco.fr/api/user/",
   timeout: 1000,
 });
 
@@ -77,23 +63,30 @@ function Login() {
   const auth = useAuth();
   const router = useRouter();
   const navigate = Route.useNavigate();
+  const fallback = "/user";
 
   const search = Route.useSearch();
 
+  const mutation = useMutation({
+    mutationFn: async (loginData: { email: string; password: string }) => {
+      const response = await instance.post("login", loginData);
+      return response.data as LoginResponse;
+    },
+    onSuccess: (data) => {
+      console.log("Insertion réussie");
+      router.invalidate();
+      //@ts-expect-error ts est fou
+      navigate({ to: search.redirect ?? fallback });
+      auth.login(data.access_token);
+    },
+    onError: (err) => {
+      console.log("Failed", err);
+    },
+  });
+
   const onSubmit = async (values: z.infer<typeof signinSchema>) => {
     const hash = sha256(values.password);
-    instance
-      .post("login", { email: values.email, password: hash })
-      .then(async (res) => {
-        console.log("Insertion réussie");
-        await auth.login(sha256(res.data.access_token));
-        await router.invalidate();
-        await navigate({ to: search.redirect ?? fallback });
-      })
-      .catch((err) => {
-        console.log("Failed");
-        console.log(err);
-      });
+    mutation.mutateAsync({ email: values.email, password: hash });
   };
 
   const resetPasswordHandler = (email: string) => {
@@ -153,46 +146,6 @@ function Login() {
                   </FormItem>
                 )}
               />
-              {/* <AlertDialog>
-                <AlertDialogTrigger>
-                  <Button type="button" variant="link" className="px-0 pt-0">
-                    Mot de passe oublié ?
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Mot de passe oublié ?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Entrez votre adresse email pour réinitialiser votre mot de
-                      passe.
-                      <form>
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input
-                              value={resetPasswordEmail}
-                              onInput={(e) =>
-                                setResetPasswordEmail(e.target.value)
-                              }
-                              placeholder="email"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      </form>
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel
-                      onClick={() => resetPasswordHandler(resetPasswordEmail)}
-                    >
-                      Cancel
-                    </AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog> */}
-
               <Dialog>
                 <DialogTrigger>
                   <Button type="button" variant="link" className="px-0 pt-0">
