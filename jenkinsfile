@@ -11,8 +11,10 @@ pipeline {
                 script {
                     sh "echo deleting existing image and container"
                     try {
-                        sh "docker kill frontend"
-                        sh "docker rm frontend"
+                        sh "docker kill frontend1"
+                        sh "docker rm frontend1"
+                        sh "docker kill frontend2"
+                        sh "docker rm frontend2"
                         sh "docker rmi frontend"
                     } catch (Exception e) {
                         echo "No existing image or container to remove"
@@ -46,7 +48,8 @@ pipeline {
         stage('deploy') {
             steps {
                 script {
-                    sh "docker run -d --name frontend -p 9015:80 --restart unless-stopped frontend"
+                    sh "docker run -d --name frontend1 --network elective_network --restart unless-stopped frontend"
+                    sh "docker run -d --name frontend2 --network elective_network --restart unless-stopped frontend"
                 }
             }
             post {
