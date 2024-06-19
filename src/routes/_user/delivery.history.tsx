@@ -48,7 +48,7 @@ function OrderHistory() {
   const orderQuery = useQuery({
     queryKey: ["delivery", "history"],
     queryFn: async () => {
-      const response = await axiosInstance(token).get("/order/");
+      const response = await axiosInstance(token as string).get("/order/");
       console.log(response.data);
 
       return response.data as Array<Order>;
@@ -68,7 +68,7 @@ function OrderHistory() {
 
       const response = await Promise.all(
         restaurantsId.map(async (restaurantId) => {
-          const res = await axiosInstance(token).get(
+          const res = await axiosInstance(token as string).get(
             `/restaurant/${restaurantId}`
           );
           console.log(res.data);
@@ -96,7 +96,9 @@ function OrderHistory() {
           <AccordionItem value={order.id_order}>
             <AccordionTrigger className="flex justify-start items-center gap-4">
               <Small>
-                {new Date(order.received_datetime).toLocaleDateString("fr-FR")}
+                {new Date(order.received_datetime as Date).toLocaleDateString(
+                  "fr-FR"
+                )}
               </Small>
               <Large>
                 {

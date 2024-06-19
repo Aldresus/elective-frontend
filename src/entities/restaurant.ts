@@ -21,6 +21,7 @@ export interface CreateEmptyRestaurant {
   business_hours?: string;
   city?: string;
   email?: string;
+  siret?: string;
   food_type?: string;
   name?: string;
   postal_code?: string;
