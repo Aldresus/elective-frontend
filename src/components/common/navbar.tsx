@@ -2,9 +2,7 @@ import { ChevronRight, CircleUser } from "lucide-react";
 import Logo from "./logo";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import { Link, Navigate } from "@tanstack/react-router";
-import { useAuth } from "@/lib/auth";
-import { Button } from "../ui/button";
+import { Link } from "@tanstack/react-router";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +17,8 @@ import { AddressChoiceModal } from "../address/addressChoiceModal";
 import { DecodedAccessToken } from "@/entities/login";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "../ui/button";
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
   isAdress?: boolean;
@@ -57,15 +57,16 @@ export default function Navbar({
       )}
       <Input className="w-full max-w-xs" placeholder="Rechercher" />
       <div className="flex items-center gap-2">
-          <><Large>user.name</Large>
+        <div></div>
         <Dialog>
           <DialogTrigger>
-            <Button type="button" variant="ghost">
-               <Avatar>
-              <AvatarFallback>{`${user?.first_name.charAt(0)}${user?.last_name.charAt(
-                0
-              )}`}</AvatarFallback>
-            </Avatar>
+            <Button variant="link">
+              {user?.first_name} {user?.last_name}
+              <Avatar>
+                <AvatarFallback>{`${user?.first_name.charAt(0)}${user?.last_name.charAt(
+                  0
+                )}`}</AvatarFallback>
+              </Avatar>
             </Button>
           </DialogTrigger>
           <DialogPortal>
@@ -118,7 +119,7 @@ export default function Navbar({
                 <Button
                   type="button"
                   className="mt-4 w-96"
-                  variant="link"
+                  variant="destructive"
                   onClick={() => auth.logout()}
                 >
                   Déconnexion
@@ -127,8 +128,7 @@ export default function Navbar({
             </DialogContent>
           </DialogPortal>
         </Dialog>
-             </div>
+      </div>
     </div>
-    // </div>
   );
 }
