@@ -67,7 +67,7 @@ export default function Navbar({
                   type="button"
                   variant="ghost"
                   className="w-96 flex flex-row justify-between"
-                  onClick={() => navigate({ to: "/editProfile" })}
+                  //   onClick={() => navigate({ to: `${context.user.id}` })}
                 >
                   <p>Refer</p>
                   <ChevronRight size={24} />
@@ -78,7 +78,7 @@ export default function Navbar({
                   type="button"
                   variant="ghost"
                   className="w-96 flex flex-row justify-between"
-                  onClick={() => navigate({ to: "/editProfile" })}
+                  //   onClick={() => navigate({ to: `${context.user.id}` })}
                 >
                   <p>Account settings</p>
                   <ChevronRight size={24} />
@@ -89,7 +89,6 @@ export default function Navbar({
                   type="button"
                   variant="ghost"
                   className="w-96 flex flex-row justify-between"
-                  onClick={() => navigate({ to: "/editProfile" })}
                 >
                   <p>Others</p>
                   <ChevronRight size={24} />
