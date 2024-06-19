@@ -17,7 +17,7 @@ function CreateProduct() {
       <ProductForm
         onSubmit={async (values) => {
           console.log("oui");
-          axiosInstance
+          axiosInstance()
             .post("product", {
               name: values.name,
               price: values.price,

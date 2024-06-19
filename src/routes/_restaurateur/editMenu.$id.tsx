@@ -97,7 +97,7 @@ function MenuManager() {
   useQuery({
     queryKey: ["getMenuCategories", id],
     queryFn: async () => {
-      const rawData = await axiosInstance.get(`/menu/${id}`);
+      const rawData = await axiosInstance().get(`/menu/${id}`);
 
       const finalData = (await rawData).data.Menu_Categories;
       console.log("finalData: ", finalData);
@@ -120,7 +120,7 @@ function MenuManager() {
   useQuery({
     queryKey: ["RestaurantProducts", idRestaurant],
     queryFn: async () => {
-      const rawData = axiosInstance.get(
+      const rawData = axiosInstance().get(
         `/product?id_restaurant=${idRestaurant}`
       );
 
@@ -177,7 +177,7 @@ function MenuManager() {
       ids_product: [],
     };
 
-    axiosInstance
+    axiosInstance()
       .post("/menu/category", createdCategory)
       .then((res) => {
         console.log("Category created");
@@ -198,7 +198,7 @@ function MenuManager() {
   };
 
   const onSubmit = async (values: z.infer<typeof menuSchema>) => {
-    axiosInstance
+    axiosInstance()
       .patch(
         `menu/${id}`,
         {
@@ -222,7 +222,7 @@ function MenuManager() {
       });
 
     categoriesEdited.map((editedCategory) => {
-      axiosInstance
+      axiosInstance()
         .patch(`/menu/productCategory`, editedCategory)
         .then((res) => {
           console.log("Successfull edited categories");
@@ -235,7 +235,7 @@ function MenuManager() {
     });
 
     categoriesDeleted.map((deletedCategory) => {
-      axiosInstance
+      axiosInstance()
         .delete(`/menu/category/${deletedCategory}`)
         .then((res) => {
           console.log("Successfull deleted category");

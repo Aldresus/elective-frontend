@@ -21,7 +21,7 @@ function AllClient() {
   const query = useQuery({
     queryKey: ["allClients"],
     queryFn: async () => {
-      const response = await axiosInstance.get(`/user/?role=CLIENT`, {
+      const response = await axiosInstance().get(`/user/?role=CLIENT`, {
         headers,
       });
       // console.log(response.data);

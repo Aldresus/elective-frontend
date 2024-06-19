@@ -88,7 +88,7 @@ function ClientDetails() {
   const query = useQuery({
     queryKey: ["client"],
     queryFn: async () => {
-      const response = await axiosInstance.get(`/user?id=${id}`, {
+      const response = await axiosInstance().get(`/user?id=${id}`, {
         headers,
       });
       // console.log(response.data);
@@ -147,7 +147,7 @@ function ClientDetails() {
       id_restaurant: "000000000000000000000000",
     };
 
-    axiosInstance
+    axiosInstance()
       .patch(`/user/${id}`, dataToSend, {
         headers,
       })

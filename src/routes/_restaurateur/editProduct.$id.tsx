@@ -18,7 +18,7 @@ function EditProduct() {
       <H1 className="pb-4">Créer un produit</H1>
       <ProductForm
         onSubmit={async (values) => {
-          axiosInstance
+          axiosInstance()
             .patch(`product/${id}`, {
               name: values.name,
               price: values.price,

@@ -72,20 +72,20 @@ interface addMenuCategoryType {
   };
 }
 
-function iscategoryType(
-  categoryToEdit: categoryType | addProductCategoryType | addMenuCategoryType
-): categoryToEdit is categoryType {
-  return (categoryToEdit as categoryType).id_category !== undefined;
-}
+// function iscategoryType(
+//   categoryToEdit: categoryType | addProductCategoryType | addMenuCategoryType
+// ): categoryToEdit is categoryType {
+//   return (categoryToEdit as categoryType).id_category !== undefined;
+// }
 
-function isAddMenuCategoryType(
-  categoryToEdit: categoryType | addProductCategoryType | addMenuCategoryType
-): categoryToEdit is addMenuCategoryType {
-  return (
-    (categoryToEdit as addMenuCategoryType).updateCategoryDto.ids_menu !==
-    undefined
-  );
-}
+// function isAddMenuCategoryType(
+//   categoryToEdit: categoryType | addProductCategoryType | addMenuCategoryType
+// ): categoryToEdit is addMenuCategoryType {
+//   return (
+//     (categoryToEdit as addMenuCategoryType).updateCategoryDto.ids_menu !==
+//     undefined
+//   );
+// }
 
 function isAddProductCategoryType(
   categoryToEdit: categoryType | addProductCategoryType | addMenuCategoryType
@@ -119,7 +119,7 @@ function RestaurantManager() {
   useQuery({
     queryKey: ["getRestaurantCategories", id],
     queryFn: async () => {
-      const rawData = await axiosInstance.get(`/restaurant/${id}`);
+      const rawData = await axiosInstance().get(`/restaurant/${id}`);
 
       const finalData = (await rawData).data.Restaurant_Categories;
       console.log("finalData :", finalData);
@@ -144,7 +144,7 @@ function RestaurantManager() {
   useQuery({
     queryKey: ["RestaurantProducts", idRestaurant],
     queryFn: async () => {
-      const rawData = axiosInstance.get(
+      const rawData = axiosInstance().get(
         `/product?id_restaurant=${idRestaurant}`
       );
 
@@ -170,7 +170,9 @@ function RestaurantManager() {
   useQuery({
     queryKey: ["RestaurantMenus", idRestaurant],
     queryFn: async () => {
-      const rawData = axiosInstance.get(`/menu?id_restaurant=${idRestaurant}`);
+      const rawData = axiosInstance().get(
+        `/menu?id_restaurant=${idRestaurant}`
+      );
 
       const menusData = (await rawData).data;
       console.log("menusData: ", menusData);
@@ -233,7 +235,7 @@ function RestaurantManager() {
       ids_menu: [],
     };
 
-    axiosInstance
+    axiosInstance()
       .post("/restaurant/restaurantCategory", createdCategory)
       .then((res) => {
         console.log("Category created");
@@ -250,7 +252,7 @@ function RestaurantManager() {
   };
 
   const onSubmit = async (values: z.infer<typeof restaurantSchema>) => {
-    axiosInstance
+    axiosInstance()
       .patch(`restaurant/${id}`, {
         name: values.name,
         siret: values.siret,
@@ -268,7 +270,7 @@ function RestaurantManager() {
 
     categoriesEdited.map((editedCategory) => {
       if (isAddProductCategoryType(editedCategory)) {
-        axiosInstance
+        axiosInstance()
           .patch(`/restaurant/addProductCategory`, editedCategory)
           .then((res) => {
             console.log("Successfull edited product category");
@@ -279,7 +281,7 @@ function RestaurantManager() {
             console.log(err);
           });
       } else {
-        axiosInstance
+        axiosInstance()
           .patch(`/restaurant/addMenuCategory`, editedCategory)
           .then((res) => {
             console.log("Successfull edited menu category");
@@ -293,7 +295,7 @@ function RestaurantManager() {
     });
 
     categoriesDeleted.map((deletedCategory) => {
-      axiosInstance
+      axiosInstance()
         .delete(`/restaurant/category/${deletedCategory}`)
         .then((res) => {
           console.log("Successfull deleted category");

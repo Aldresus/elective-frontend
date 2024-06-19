@@ -48,7 +48,10 @@ export function EditProfileModal() {
               <ChevronRight />
             </Button>
           </Link>
-          <Link to="/restaurant-manager">
+          <Link to="">
+            {
+              // todo get id restaurant dynamikly
+            }
             <Button
               className="w-full flex gap-1 justify-between"
               variant="outline"

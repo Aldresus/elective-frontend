@@ -71,30 +71,6 @@ interface addMenuCategoryType {
   };
 }
 
-function iscategoryType(
-  categoryToEdit: categoryType | addProductCategoryType | addMenuCategoryType
-): categoryToEdit is categoryType {
-  return (categoryToEdit as categoryType).id_category !== undefined;
-}
-
-function isAddMenuCategoryType(
-  categoryToEdit: categoryType | addProductCategoryType | addMenuCategoryType
-): categoryToEdit is addMenuCategoryType {
-  return (
-    (categoryToEdit as addMenuCategoryType).updateCategoryDto.ids_menu !==
-    undefined
-  );
-}
-
-function isAddProductCategoryType(
-  categoryToEdit: categoryType | addProductCategoryType | addMenuCategoryType
-): categoryToEdit is addProductCategoryType {
-  return (
-    (categoryToEdit as addProductCategoryType).updateCategoryDto.ids_product !==
-    undefined
-  );
-}
-
 interface CategoryManagerProps extends React.HTMLAttributes<HTMLDivElement> {
   category: CategoryContent | CategoryContentRestaurant;
   allItemsList: Array<Menu | Product>;
