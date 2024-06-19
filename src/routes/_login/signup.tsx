@@ -16,7 +16,7 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import { sha256 } from "js-sha256";
-import { RoleEnum, UpdateUserIdRestau, User } from "@/entities/user";
+import { RoleEnum, UpdateRoleUser, User } from "@/entities/user";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -27,6 +27,7 @@ import { axiosInstance } from "@/lib/axiosConfig";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { LoginResponse } from "@/entities/login";
+import { CreateEmptyRestaurant, Restaurant } from "@/entities/restaurant";
 
 export const Route = createFileRoute("/_login/signup")({
   component: Login,
@@ -98,10 +99,11 @@ function Login() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [psswd, setPsswd] = useState("");
   const [id_usr, setId_usr] = useState("");
-  const [id_usr_restaurant, setId_usr_restaurant] = useState("");
+  const [email_usr, setEmail_usr] = useState("");
+  const [toUpdate, setToUpdate] = useState(true);
 
   const roleContext = useRole();
-  const { token, login } = useAuth();
+  const { token, login, logout } = useAuth();
   const navigate = Route.useNavigate();
 
   const form = useForm<z.infer<typeof signupSchema>>({
@@ -125,33 +127,6 @@ function Login() {
   // créer un restaurant
   // navigate vers le restaurant
 
-  const loginMutation = useMutation({
-    mutationFn: async (loginData: { email: string; password: string }) => {
-      const response = await axiosInstance().post("/user/login", loginData);
-      return response.data as LoginResponse;
-    },
-    onSuccess: (data) => {
-      console.log("User est logged !");
-      console.log(data);
-      login(data.access_token);
-      if (roleContext.role === RoleEnum.RESTAURATEUR) {
-        updateUserMutation.mutate({
-          id_user: id_usr,
-          role: roleContext.role,
-        });
-        navigate({
-          to: "/restaurant/$id",
-          params: { id: id_usr_restaurant },
-        });
-      } else {
-        navigate({ to: "/user" });
-      }
-    },
-    onError: (err) => {
-      console.log("Failed", err);
-    },
-  });
-
   const userMutation = useMutation({
     mutationFn: async (user: User) => {
       return (await axiosInstance(token as string).post("/user/register", user))
@@ -160,7 +135,7 @@ function Login() {
     onSuccess(data) {
       console.log("success", data);
       setId_usr(data.id as string);
-      setId_usr_restaurant(data.id_restaurant as string);
+      setEmail_usr(data.email as string);
       console.log(data.email);
       console.log(data.password);
       console.log("User créé !");
@@ -176,8 +151,34 @@ function Login() {
     },
   });
 
-  const updateUserMutation = useMutation({
-    mutationFn: ({ id_user, role }: UpdateUserIdRestau) => {
+  const loginMutation = useMutation({
+    mutationFn: async (loginData: { email: string; password: string }) => {
+      const response = await axiosInstance().post("/user/login", loginData);
+      return response.data as LoginResponse;
+    },
+    onSuccess: (data) => {
+      console.log("User est logged !");
+      console.log(data);
+      login(data.access_token);
+      if (roleContext.role === RoleEnum.RESTAURATEUR && toUpdate) {
+        updateUserToRestaurateurMutation.mutate({
+          id_user: id_usr,
+          role: roleContext.role,
+        });
+      } else if (roleContext.role === RoleEnum.DELIVERYMAN && toUpdate) {
+        updateUserToLivreurMutation.mutate({
+          id_user: id_usr,
+          role: roleContext.role,
+        });
+      }
+    },
+    onError: (err) => {
+      console.log("Failed", err);
+    },
+  });
+
+  const updateUserToRestaurateurMutation = useMutation({
+    mutationFn: ({ id_user, role }: UpdateRoleUser) => {
       console.log("attempting to update user");
       console.log(token);
       return axiosInstance(token as string).patch(`user/${id_user}`, {
@@ -186,11 +187,79 @@ function Login() {
     },
     onSuccess(data) {
       console.log("success", data);
+      setToUpdate(false);
+      logout;
+      loginMutation
+        .mutateAsync({
+          email: email_usr,
+          password: psswd,
+        })
+        .then(() => {
+          createRestaurantMutation.mutate({
+            address: "test",
+            banner_url: "",
+            business_hours: "",
+            city: "",
+            email: "",
+            food_type: "",
+            siret: "",
+            name: "",
+            postal_code: "",
+            price_range: "",
+            rating: 0.0,
+          });
+        });
+    },
+    onError(error) {
+      console.log("error", error);
+      toast.error("Erreur lors de la mise à jour de l'utilisateur");
       //   toast.success("Votre profil a été mis à jour !");
-      console.log(data);
     },
   });
 
+  const updateUserToLivreurMutation = useMutation({
+    mutationFn: ({ id_user, role }: UpdateRoleUser) => {
+      console.log("attempting to update user");
+      console.log(token);
+      return axiosInstance(token as string).patch(`user/${id_user}`, {
+        role,
+      });
+    },
+    onSuccess(data) {
+      console.log("success", data);
+      setToUpdate(false);
+      logout;
+      loginMutation.mutateAsync({
+        email: email_usr,
+        password: psswd,
+      });
+    },
+    onError(error) {
+      console.log("error", error);
+      toast.error("Erreur lors de la mise à jour de l'utilisateur");
+      //   toast.success("Votre profil a été mis à jour !");
+    },
+  });
+
+  const createRestaurantMutation = useMutation({
+    mutationFn: async (restaurantData: CreateEmptyRestaurant) => {
+      return (
+        await axiosInstance(token as string).post("/restaurant", restaurantData)
+      ).data as Restaurant;
+    },
+    onSuccess(data) {
+      console.log("success", data);
+      toast.success("Restaurant créé !");
+      navigate({
+        to: "/restaurant/$id",
+        params: { id: data.id_restaurant },
+      });
+    },
+    onError(error) {
+      console.log("error", error);
+      toast.error("Erreur lors de la création de la commande");
+    },
+  });
   const onSubmit = async (values: z.infer<typeof signupSchema>) => {
     console.log(values);
     const hash = sha256(values.password);
@@ -203,7 +272,7 @@ function Login() {
       phone: values.phone,
       email: values.email,
       password: hash,
-      role: RoleEnum.CLIENT,
+      role: roleContext.role as RoleEnum,
       created_at: new Date(),
       edited_at: new Date(),
       id_users: [],
