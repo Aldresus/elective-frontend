@@ -29,6 +29,7 @@ export function AddressInput({
 }: AddressInputProps) {
   const [addressState, setAddressState] = useState(address || {});
   const [currentTimeout, setCurrentTimeout] = useState<NodeJS.Timeout>();
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const query = useQuery({
     queryKey: ["address", address],
@@ -51,6 +52,8 @@ export function AddressInput({
 
   const addressChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("addressChangeHandler", e.target.value);
+
+    setShowSuggestions(true);
 
     setAddressState((prev) => {
       return {
@@ -80,13 +83,15 @@ export function AddressInput({
           autoComplete="address-line1"
           className={clsx({
             "border-b-0 rounded-b-none":
-              query.isSuccess && query.data?.features.length > 0,
+              showSuggestions &&
+              query.isSuccess &&
+              query.data?.features.length > 0,
           })}
         />
 
         <Search className="absolute right-2 top-2 " />
         <div className="relative w-full h-0 ">
-          {query.isSuccess && (
+          {query.isSuccess && showSuggestions && (
             <div className="absolute flex flex-col w-full px-3 rounded-b  bg-secondary gap-2">
               {query.data?.features.map((feature) => (
                 <AddressSuggestion
@@ -100,6 +105,7 @@ export function AddressInput({
 
                     setAddressState(newAddress);
                     onAddressChange(newAddress);
+                    setShowSuggestions(false);
                   }}
                   feature={feature}
                   key={feature.properties.id}

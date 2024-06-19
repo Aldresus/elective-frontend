@@ -19,6 +19,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { currentOrderContext } from "@/contexts/currentOrderContext";
+import { toast } from "sonner";
 
 interface MenuConfigModalProps extends React.HTMLAttributes<HTMLDivElement> {
   open: boolean;
@@ -100,6 +101,7 @@ export function MenuConfigModal({
         orderProducts.push(orderProduct);
       }
     });
+    toast.success(`${menuContent.name} ajouté à votre commande`);
 
     console.log("orderProducts", orderProducts);
     currentOrder.addMenu({
