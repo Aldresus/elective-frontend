@@ -43,7 +43,9 @@ export function MenuConfigModal({
   const query = useQuery({
     queryKey: ["menu", menuContent.id_menu],
     queryFn: async () => {
-      const response = await axiosInstance.get(`/menu/${menuContent.id_menu}`);
+      const response = await axiosInstance().get(
+        `/menu/${menuContent.id_menu}`
+      );
       console.log("menu details", response.data);
 
       return response.data as FullMenu;

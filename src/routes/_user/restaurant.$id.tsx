@@ -28,7 +28,7 @@ function RestaurantPage() {
   const query = useQuery({
     queryKey: ["restaurant", id],
     queryFn: async () => {
-      const response = await axiosInstance.get(`/restaurant/${id}`);
+      const response = await axiosInstance().get(`/restaurant/${id}`);
       // console.log(response.data);
       let finalData = response.data as FullRestaurant;
 
