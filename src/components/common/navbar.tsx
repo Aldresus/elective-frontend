@@ -1,14 +1,24 @@
+import { ChevronRight, CircleUser } from "lucide-react";
 import Logo from "./logo";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import { Link } from "@tanstack/react-router";
+import { Link, Navigate } from "@tanstack/react-router";
+import { useAuth } from "@/lib/auth";
+import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogPortal,
+  DialogClose,
+} from "../ui/dialog";
+import { Large } from "../typography";
+import { Route } from "@/routes/_user";
 import { useState } from "react";
 import { AddressChoiceModal } from "../address/addressChoiceModal";
-import { useAuth } from "@/hooks/useAuth";
 import { DecodedAccessToken } from "@/entities/login";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { Avatar, AvatarFallback } from "../ui/avatar";
-import { Button } from "../ui/button";
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
   isAdress?: boolean;
@@ -23,6 +33,7 @@ export default function Navbar({
   const [addressModalIsOpen, setAddressModalIsOpen] = useState(false);
   const [user] = useLocalStorage<DecodedAccessToken>("user");
   const auth = useAuth();
+  const navigate = Route.useNavigate();
   console.log(auth);
 
   return (
@@ -46,26 +57,78 @@ export default function Navbar({
       )}
       <Input className="w-full max-w-xs" placeholder="Rechercher" />
       <div className="flex items-center gap-2">
-        {auth.isAuthenticated ? (
-          <>
-            <button
-              className="bg-slate-200 text-slate-500 hover:bg-slate-300 py-1 px-2 rounded-md"
-              onClick={() => auth.logout()}
-            >
-              Déconnexion
-            </button>
-            <Avatar>
+          <><Large>user.name</Large>
+        <Dialog>
+          <DialogTrigger>
+            <Button type="button" variant="ghost">
+               <Avatar>
               <AvatarFallback>{`${user?.first_name.charAt(0)}${user?.last_name.charAt(
                 0
               )}`}</AvatarFallback>
             </Avatar>
-          </>
-        ) : (
-          <Link to="/login">
-            <Button variant="link">Se connecter</Button>
-          </Link>
-        )}
-      </div>
+            </Button>
+          </DialogTrigger>
+          <DialogPortal>
+            <DialogContent className="flex flex-col items-center justify-center fixed overflow-y-auto">
+              <Large>Account information</Large>
+              <DialogClose>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-96 flex flex-row justify-between"
+                  onClick={() => navigate({ to: "/user" })}
+                >
+                  <p>Orders</p>
+                  <ChevronRight size={24} />
+                </Button>
+              </DialogClose>
+              <DialogClose>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-96 flex flex-row justify-between"
+                  //   onClick={() => navigate({ to: `${context.user.id}` })}
+                >
+                  <p>Refer</p>
+                  <ChevronRight size={24} />
+                </Button>
+              </DialogClose>
+              <DialogClose>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-96 flex flex-row justify-between"
+                  //   onClick={() => navigate({ to: `${context.user.id}` })}
+                >
+                  <p>Account settings</p>
+                  <ChevronRight size={24} />
+                </Button>
+              </DialogClose>
+              <DialogClose>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-96 flex flex-row justify-between"
+                >
+                  <p>Others</p>
+                  <ChevronRight size={24} />
+                </Button>
+              </DialogClose>
+              {auth.isAuthenticated && (
+                <Button
+                  type="button"
+                  className="mt-4 w-96"
+                  variant="link"
+                  onClick={() => auth.logout()}
+                >
+                  Déconnexion
+                </Button>
+              )}
+            </DialogContent>
+          </DialogPortal>
+        </Dialog>
+             </div>
     </div>
+    // </div>
   );
 }

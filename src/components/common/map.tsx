@@ -11,7 +11,11 @@ interface MapProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export default function Map({ x, y, className, ...props }: MapProps) {
   return (
-    <div className={cn("h-full w-full", className)} {...props} id="startMap">
+    <div
+      className={cn("h-full w-full z-0", className)}
+      {...props}
+      id="startMap"
+    >
       <MapContainer
         center={[x, y]}
         zoom={13}
