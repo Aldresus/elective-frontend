@@ -9,6 +9,7 @@ export interface Menu {
   menu_image_url: string;
   id_restaurant: string;
   ids_menu_category: Array<string>;
+  ids_restaurant_category: Array<string>;
 }
 
 export interface FullMenu extends Menu {

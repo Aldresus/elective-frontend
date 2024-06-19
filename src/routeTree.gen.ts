@@ -27,7 +27,6 @@ import { Route as SalesAcceptationsLivraisonsImport } from './routes/_sales/acce
 import { Route as SalesAcceptationsCommandesImport } from './routes/_sales/acceptationsCommandes'
 import { Route as RestaurateurRestaurateurImport } from './routes/_restaurateur/restaurateur'
 import { Route as RestaurateurRestaurantOfferingsImport } from './routes/_restaurateur/restaurantOfferings'
-import { Route as RestaurateurRestaurantManagerImport } from './routes/_restaurateur/restaurant-manager'
 import { Route as RestaurateurCreateProductImport } from './routes/_restaurateur/createProduct'
 import { Route as RestaurateurCreateEditProductImport } from './routes/_restaurateur/create-edit-product'
 import { Route as RestaurateurCommandMonitoringImport } from './routes/_restaurateur/commandMonitoring'
@@ -38,6 +37,7 @@ import { Route as DeliveryDeliveriesHistoryImport } from './routes/_delivery/del
 import { Route as DeliveryDeliveriesImport } from './routes/_delivery/deliveries'
 import { Route as UserRestaurantIdImport } from './routes/_user/restaurant.$id'
 import { Route as SalesClientDetailsIdImport } from './routes/_sales/clientDetails.$id'
+import { Route as RestaurateurEditRestaurantIdImport } from './routes/_restaurateur/editRestaurant.$id'
 import { Route as RestaurateurEditProductIdImport } from './routes/_restaurateur/editProduct.$id'
 import { Route as RestaurateurEditMenuIdImport } from './routes/_restaurateur/editMenu.$id'
 
@@ -128,12 +128,6 @@ const RestaurateurRestaurantOfferingsRoute =
     getParentRoute: () => RestaurateurRoute,
   } as any)
 
-const RestaurateurRestaurantManagerRoute =
-  RestaurateurRestaurantManagerImport.update({
-    path: '/restaurant-manager',
-    getParentRoute: () => RestaurateurRoute,
-  } as any)
-
 const RestaurateurCreateProductRoute = RestaurateurCreateProductImport.update({
   path: '/createProduct',
   getParentRoute: () => RestaurateurRoute,
@@ -185,6 +179,12 @@ const SalesClientDetailsIdRoute = SalesClientDetailsIdImport.update({
   path: '/clientDetails/$id',
   getParentRoute: () => SalesRoute,
 } as any)
+
+const RestaurateurEditRestaurantIdRoute =
+  RestaurateurEditRestaurantIdImport.update({
+    path: '/editRestaurant/$id',
+    getParentRoute: () => RestaurateurRoute,
+  } as any)
 
 const RestaurateurEditProductIdRoute = RestaurateurEditProductIdImport.update({
   path: '/editProduct/$id',
@@ -298,13 +298,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RestaurateurCreateProductImport
       parentRoute: typeof RestaurateurImport
     }
-    '/_restaurateur/restaurant-manager': {
-      id: '/_restaurateur/restaurant-manager'
-      path: '/restaurant-manager'
-      fullPath: '/restaurant-manager'
-      preLoaderRoute: typeof RestaurateurRestaurantManagerImport
-      parentRoute: typeof RestaurateurImport
-    }
     '/_restaurateur/restaurantOfferings': {
       id: '/_restaurateur/restaurantOfferings'
       path: '/restaurantOfferings'
@@ -389,6 +382,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RestaurateurEditProductIdImport
       parentRoute: typeof RestaurateurImport
     }
+    '/_restaurateur/editRestaurant/$id': {
+      id: '/_restaurateur/editRestaurant/$id'
+      path: '/editRestaurant/$id'
+      fullPath: '/editRestaurant/$id'
+      preLoaderRoute: typeof RestaurateurEditRestaurantIdImport
+      parentRoute: typeof RestaurateurImport
+    }
     '/_sales/clientDetails/$id': {
       id: '/_sales/clientDetails/$id'
       path: '/clientDetails/$id'
@@ -420,11 +420,11 @@ export const routeTree = rootRoute.addChildren({
     RestaurateurCommandMonitoringRoute,
     RestaurateurCreateEditProductRoute,
     RestaurateurCreateProductRoute,
-    RestaurateurRestaurantManagerRoute,
     RestaurateurRestaurantOfferingsRoute,
     RestaurateurRestaurateurRoute,
     RestaurateurEditMenuIdRoute,
     RestaurateurEditProductIdRoute,
+    RestaurateurEditRestaurantIdRoute,
   }),
   SalesRoute: SalesRoute.addChildren({
     SalesAcceptationsCommandesRoute,
@@ -480,11 +480,11 @@ export const routeTree = rootRoute.addChildren({
         "/_restaurateur/commandMonitoring",
         "/_restaurateur/create-edit-product",
         "/_restaurateur/createProduct",
-        "/_restaurateur/restaurant-manager",
         "/_restaurateur/restaurantOfferings",
         "/_restaurateur/restaurateur",
         "/_restaurateur/editMenu/$id",
-        "/_restaurateur/editProduct/$id"
+        "/_restaurateur/editProduct/$id",
+        "/_restaurateur/editRestaurant/$id"
       ]
     },
     "/_sales": {
@@ -538,10 +538,6 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_restaurateur/createProduct.tsx",
       "parent": "/_restaurateur"
     },
-    "/_restaurateur/restaurant-manager": {
-      "filePath": "_restaurateur/restaurant-manager.tsx",
-      "parent": "/_restaurateur"
-    },
     "/_restaurateur/restaurantOfferings": {
       "filePath": "_restaurateur/restaurantOfferings.tsx",
       "parent": "/_restaurateur"
@@ -587,6 +583,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_restaurateur/editProduct/$id": {
       "filePath": "_restaurateur/editProduct.$id.tsx",
+      "parent": "/_restaurateur"
+    },
+    "/_restaurateur/editRestaurant/$id": {
+      "filePath": "_restaurateur/editRestaurant.$id.tsx",
       "parent": "/_restaurateur"
     },
     "/_sales/clientDetails/$id": {

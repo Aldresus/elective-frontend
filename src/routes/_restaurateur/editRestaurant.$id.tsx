@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
 import {
   CategoryContent,
   CategoryContentRestaurant,
@@ -27,19 +26,27 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export const Route = createFileRoute("/_restaurateur/editMenu/$id")({
-  component: MenuManager,
+export const Route = createFileRoute("/_restaurateur/editRestaurant/$id")({
+  component: RestaurantManager,
 });
 
-const menuSchema = z.object({
+const restaurantSchema = z.object({
   name: z.string().min(1, { message: "Veillez renseigner le champ." }),
-  description: z.string(),
-  image: z.any(),
-  price: z.coerce.number().min(0, {
-    message: "Veuillez indiquer un prix pour votre produit.",
+  siret: z.string().length(14, {
+    message: "Le numéro de SIRET doit faire exactement 14 caractères.",
   }),
+  image: z.any(),
+  price_range: z.string().min(1, { message: "Veillez renseigner le champ." }),
 });
 
+interface restaurantDataType {
+  name: string;
+  siret: string;
+  banner_url: string;
+  price_range: string;
+}
+
+// should never use it
 interface categoryType {
   id_product: string;
   id_category: string;
@@ -65,58 +72,75 @@ interface addMenuCategoryType {
   };
 }
 
-interface menuDataType {
-  id_menu: string;
-  name: string;
-  description: string;
-  menu_image_url: string;
-  price: number;
+function iscategoryType(
+  categoryToEdit: categoryType | addProductCategoryType | addMenuCategoryType
+): categoryToEdit is categoryType {
+  return (categoryToEdit as categoryType).id_category !== undefined;
 }
 
-function MenuManager() {
+function isAddMenuCategoryType(
+  categoryToEdit: categoryType | addProductCategoryType | addMenuCategoryType
+): categoryToEdit is addMenuCategoryType {
+  return (
+    (categoryToEdit as addMenuCategoryType).updateCategoryDto.ids_menu !==
+    undefined
+  );
+}
+
+function isAddProductCategoryType(
+  categoryToEdit: categoryType | addProductCategoryType | addMenuCategoryType
+): categoryToEdit is addProductCategoryType {
+  return (
+    (categoryToEdit as addProductCategoryType).updateCategoryDto.ids_product !==
+    undefined
+  );
+}
+
+function RestaurantManager() {
   const [data, setData] = useState<
     Array<CategoryContent | CategoryContentRestaurant>
   >([]);
-  const [itemsList, setItemsList] = useState<Array<Product | Menu>>([]);
-  const [menuData, setMenuData] = useState<menuDataType>({
-    id_menu: "",
+  const [itemsList, setItemsList] = useState<Array<Menu | Product>>([]);
+  const [restaurantData, setRestaurantData] = useState<restaurantDataType>({
     name: "",
-    description: "",
-    menu_image_url: "",
-    price: 0,
+    siret: "",
+    banner_url: "",
+    price_range: "",
   });
   const [displayCategory, setdisplayCategory] = useState<Boolean>(false);
   const [categoryName, setCategoryName] = useState("");
   const [categoriesEdited, setCategoriesEdited] = useState<
-    Array<categoryType | addProductCategoryType | addMenuCategoryType>
+    Array<addProductCategoryType | addMenuCategoryType | categoryType>
   >([]);
   const [categoriesDeleted, setCategoriesDeleted] = useState<Array<string>>([]);
 
   const { id } = Route.useParams();
 
   useQuery({
-    queryKey: ["getMenuCategories", id],
+    queryKey: ["getRestaurantCategories", id],
     queryFn: async () => {
-      const rawData = await axiosInstance.get(`/menu/${id}`);
+      const rawData = await axiosInstance.get(`/restaurant/${id}`);
 
-      const finalData = (await rawData).data.Menu_Categories;
-      console.log("finalData: ", finalData);
+      const finalData = (await rawData).data.Restaurant_Categories;
+      console.log("finalData :", finalData);
+
+      console.log(rawData.data);
 
       setData(finalData);
 
-      setMenuData({
-        id_menu: rawData.data.id_menu,
+      setRestaurantData({
         name: rawData.data.name,
-        description: rawData.data.description,
-        menu_image_url: rawData.data.menu_image_url,
-        price: rawData.data.price,
+        siret: rawData.data.siret,
+        banner_url: rawData.data.banner_url,
+        price_range: rawData.data.price_range,
       });
 
       return finalData;
     },
   });
 
-  const idRestaurant: string = "6671ed6ebc8bbd71f1ad0285";
+  const idRestaurant: string = "6671ed6ebc8bbd71f1ad0285"; // todo: dynamik
+  //Get all products of restaurant
   useQuery({
     queryKey: ["RestaurantProducts", idRestaurant],
     queryFn: async () => {
@@ -124,9 +148,9 @@ function MenuManager() {
         `/product?id_restaurant=${idRestaurant}`
       );
 
-      const finalData = (await rawData).data;
+      const productsData = (await rawData).data;
 
-      for (var product of finalData) {
+      for (var product of productsData) {
         const itemInList: Product = {
           id_product: product.id_product,
           name: product.name,
@@ -138,30 +162,61 @@ function MenuManager() {
         };
         setItemsList((itemsList) => [...itemsList, itemInList]);
       }
-      return finalData;
+      return productsData;
     },
   });
 
-  const form = useForm<z.infer<typeof menuSchema>>({
-    resolver: zodResolver(menuSchema),
+  //Get all menus of restaurant
+  useQuery({
+    queryKey: ["RestaurantMenus", idRestaurant],
+    queryFn: async () => {
+      const rawData = axiosInstance.get(`/menu?id_restaurant=${idRestaurant}`);
+
+      const menusData = (await rawData).data;
+      console.log("menusData: ", menusData);
+
+      for (var product of menusData) {
+        const itemInList: Menu = {
+          id_menu: product.id_menu,
+          name: product.name,
+          price: product.price,
+          description: product.description,
+          menu_image_url: product.menu_image_url,
+          id_restaurant: product.id_restaurant,
+          ids_menu_category: product.ids_menu_category,
+          ids_restaurant_category: product.ids_restaurant_category,
+        };
+        setItemsList((itemsList) => [...itemsList, itemInList]);
+      }
+      return menusData;
+    },
+  });
+
+  useEffect(() => {
+    console.log("itemsList: ", itemsList);
+  }, [itemsList]);
+
+  const form = useForm<z.infer<typeof restaurantSchema>>({
+    resolver: zodResolver(restaurantSchema),
     defaultValues: {
-      name: menuData?.name,
-      description: menuData?.description,
-      image: menuData?.menu_image_url,
-      price: menuData?.price,
+      name: restaurantData.name,
+      siret: restaurantData.siret,
+      image: restaurantData.banner_url,
+      price_range: restaurantData.price_range,
     },
   });
 
   const { reset } = form;
 
   useEffect(() => {
+    console.log(restaurantData);
     reset({
-      name: menuData.name,
-      description: menuData.description,
+      name: restaurantData.name,
+      siret: restaurantData.siret,
       image: "",
-      price: menuData.price,
+      price_range: restaurantData.price_range,
     });
-  }, [menuData]);
+  }, [restaurantData]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCategoryName(e.target.value);
@@ -173,12 +228,13 @@ function MenuManager() {
 
     const createdCategory = {
       name: categoryName,
-      ids_menu: [menuData.id_menu],
+      id_restaurant: id,
       ids_product: [],
+      ids_menu: [],
     };
 
     axiosInstance
-      .post("/menu/category", createdCategory)
+      .post("/restaurant/restaurantCategory", createdCategory)
       .then((res) => {
         console.log("Category created");
         console.log(res);
@@ -193,25 +249,14 @@ function MenuManager() {
     setdisplayCategory(false);
   };
 
-  const headers = {
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjZkOTk1NGNmOTY1ZDM0MGZjMGUyNmEiLCJ1c2VybmFtZSI6InNvcGhpYS5qb25lc0BleGFtcGxlLmNvbSIsInJvbGUiOiJDT01NRVJDSUFMIiwiaWF0IjoxNzE4NDgxNTY0LCJleHAiOjE3MTkzODE1NjR9.9U_4HSizx2BhJGVf1ByBdGwomvx0fQqTT9VRs_K5ODM`,
-  };
-
-  const onSubmit = async (values: z.infer<typeof menuSchema>) => {
+  const onSubmit = async (values: z.infer<typeof restaurantSchema>) => {
     axiosInstance
-      .patch(
-        `menu/${id}`,
-        {
-          name: values.name,
-          description: values.description,
-          price: values.price,
-          menu_image_url: values.image,
-          id_restaurant: "111111111111111111111111", //todo dynamik
-        },
-        {
-          headers,
-        }
-      )
+      .patch(`restaurant/${id}`, {
+        name: values.name,
+        siret: values.siret,
+        banner_url: "",
+        price_range: values.price_range,
+      })
       .then((res) => {
         console.log("Insertion réussie");
         console.log(res);
@@ -222,21 +267,34 @@ function MenuManager() {
       });
 
     categoriesEdited.map((editedCategory) => {
-      axiosInstance
-        .patch(`/menu/productCategory`, editedCategory)
-        .then((res) => {
-          console.log("Successfull edited categories");
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log("Categories Failed");
-          console.log(err);
-        });
+      if (isAddProductCategoryType(editedCategory)) {
+        axiosInstance
+          .patch(`/restaurant/addProductCategory`, editedCategory)
+          .then((res) => {
+            console.log("Successfull edited product category");
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log("Categories Failed");
+            console.log(err);
+          });
+      } else {
+        axiosInstance
+          .patch(`/restaurant/addMenuCategory`, editedCategory)
+          .then((res) => {
+            console.log("Successfull edited menu category");
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log("Categories Failed");
+            console.log(err);
+          });
+      }
     });
 
     categoriesDeleted.map((deletedCategory) => {
       axiosInstance
-        .delete(`/menu/category/${deletedCategory}`)
+        .delete(`/restaurant/category/${deletedCategory}`)
         .then((res) => {
           console.log("Successfull deleted category");
           console.log(res);
@@ -248,10 +306,11 @@ function MenuManager() {
     });
   };
 
+  console.log("data :", data);
   return (
     <div className="h-full w-full">
-      <H1>Modifier un menu</H1>
-      <div className="h-full w-full flex flex-col gap-4 pb-40 overflow-auto">
+      <H1 className="pb-2">Restaurant Manager</H1>
+      <div className="h-full w-full flex flex-col gap-4 pb-52 overflow-auto">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
             <FormField
@@ -259,7 +318,7 @@ function MenuManager() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Menu Name</FormLabel>
+                  <FormLabel>Restaurant Name</FormLabel>
                   <FormControl>
                     <Input
                       type="text"
@@ -274,13 +333,14 @@ function MenuManager() {
             />
             <FormField
               control={form.control}
-              name="description"
+              name="siret"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Menu Description</FormLabel>
+                  <FormLabel>SIRET</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Description"
+                    <Input
+                      type="text"
+                      placeholder="SIRET"
                       className="w-full"
                       {...field}
                     />
@@ -309,25 +369,31 @@ function MenuManager() {
             />
             <FormField
               control={form.control}
-              name="price"
+              name="price_range"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>Prix</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="Price (€)" {...field} />
+                    <Input
+                      type="text"
+                      placeholder="Prix moyen (€)"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button className="fixed bottom-14 w-[82%]" type="submit">
+            <Button className="w-[82%] fixed bottom-14" type="submit">
               <Save />
               Enregistrer
             </Button>
           </form>
         </Form>
         {data.map((category) => (
-          <div key={category.id_category}>
+          <div
+            key={(category as CategoryContentRestaurant).id_restaurant_category}
+          >
             <Separator />
             <CategoryManager
               category={category}
