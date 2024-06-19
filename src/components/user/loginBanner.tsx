@@ -4,8 +4,8 @@ import { LoginCard } from "./loginCard";
 import { Large } from "../typography";
 import { Button } from "../ui/button";
 import { Link } from "@tanstack/react-router";
-import { Role } from "@/entities/user";
-import { useRole } from "@/lib/role";
+import { useRole } from "@/hooks/useRole";
+import { RoleEnum } from "@/entities/user";
 
 interface LoginBannerProps extends React.HTMLAttributes<HTMLDivElement> {
   onclose?: () => void;
@@ -25,14 +25,14 @@ export function LoginBanner({ onclose, ...props }: LoginBannerProps) {
         </Button>
       </div>
       <div className="flex justify-around mb-10">
-        <Link to="/signup" onClick={() => role.setRole(Role.RESTAURATEUR)}>
+        <Link to="/signup" onClick={() => role.setRole(RoleEnum.RESTAURATEUR)}>
           <LoginCard>
             <Large className="pt-2">
               Vous êtes un <b>livreur</b> ?
             </Large>
           </LoginCard>
         </Link>
-        <Link to="/signup" onClick={() => role.setRole(Role.RESTAURATEUR)}>
+        <Link to="/signup" onClick={() => role.setRole(RoleEnum.RESTAURATEUR)}>
           <LoginCard>
             <Large>
               Vous êtes un <b>restaurateur</b> ?

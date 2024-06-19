@@ -17,12 +17,12 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
 import { sha256 } from "js-sha256";
-import { Role } from "@/entities/user";
+import { RoleEnum } from "@/entities/user";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { useRole } from "@/lib/role";
+import { useRole } from "@/hooks/useRole";
 
 export const Route = createFileRoute("/_login/signup")({
   component: Login,
@@ -144,7 +144,7 @@ function Login() {
         console.log("Insertion réussie");
         console.log(`user inséré ${id}`);
         console.log(res.data);
-        if (roleContext.role === Role.RESTAURATEUR) {
+        if (roleContext.role === RoleEnum.RESTAURATEUR) {
           instance
             .post("/restaurant", {
               name: values.firstName,
@@ -178,7 +178,6 @@ function Login() {
                   console.log("Update réussie");
                   console.log(`user updated ${id}`);
                   console.log(res.data);
-                  // navigate("/");
                 })
                 .catch((err) => {
                   console.log("Failed");
@@ -200,7 +199,7 @@ function Login() {
   };
 
   const [isRadioDisabled, setIsRadioDisabled] = useState(
-    roleContext.role === Role.CLIENT
+    roleContext.role === RoleEnum.CLIENT
   );
 
   const [isFirstRadioChecked, setIsFirstRadioChecked] = useState(true);
@@ -316,17 +315,17 @@ function Login() {
                     <Separator />
                     <div className="flex items-center gap-4 pt-4 pb-2">
                       <Switch
-                        defaultChecked={roleContext.role !== Role.CLIENT}
+                        defaultChecked={roleContext.role !== RoleEnum.CLIENT}
                         onCheckedChange={(checked) => {
                           // if the switch is checked and the first radio is checked, the role is set to DELIVERYMAN
                           // if the switch is checked and the first radio is not checked, the role is set to RESTAURATEUR
                           // if the switch is not checked, the role is set to CLIENT
                           if (checked && isFirstRadioChecked) {
-                            roleContext.setRole(Role.DELIVERYMAN);
+                            roleContext.setRole(RoleEnum.DELIVERYMAN);
                           } else if (checked && !isFirstRadioChecked) {
-                            roleContext.setRole(Role.RESTAURATEUR);
+                            roleContext.setRole(RoleEnum.RESTAURATEUR);
                           } else {
-                            roleContext.setRole(Role.CLIENT);
+                            roleContext.setRole(RoleEnum.CLIENT);
                           }
                           setIsRadioDisabled(!checked);
                         }}
@@ -345,7 +344,7 @@ function Login() {
                               value="option-one"
                               id="option-one"
                               onClick={() => {
-                                roleContext.setRole(Role.DELIVERYMAN);
+                                roleContext.setRole(RoleEnum.DELIVERYMAN);
                                 setIsFirstRadioChecked(true);
                               }}
                             />
@@ -358,7 +357,7 @@ function Login() {
                               value="option-two"
                               id="option-two"
                               onClick={() => {
-                                roleContext.setRole(Role.RESTAURATEUR);
+                                roleContext.setRole(RoleEnum.RESTAURATEUR);
                                 setIsFirstRadioChecked(false);
                               }}
                             />
@@ -436,8 +435,8 @@ function Login() {
                       </FormItem>
                     )}
                   />
-                  {roleContext.role === Role.DELIVERYMAN ||
-                    (roleContext.role === Role.RESTAURATEUR && (
+                  {roleContext.role === RoleEnum.DELIVERYMAN ||
+                    (roleContext.role === RoleEnum.RESTAURATEUR && (
                       <FormField
                         control={form.control}
                         name="siret"
