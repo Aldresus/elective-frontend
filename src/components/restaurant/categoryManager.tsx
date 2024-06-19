@@ -74,8 +74,6 @@ export default function CategoryManager({
   categoriesDeleted,
   setCategoriesDeleted,
 }: CategoryManagerProps) {
-  const [itemsList, setitemsList] =
-    useState<Array<Menu | Product>>(allItemsList);
   const [items, setItems] = useState<Array<Menu | Product>>(
     category.Product || []
   );
@@ -100,8 +98,8 @@ export default function CategoryManager({
     // if item is not in the category, we add it, else do nothing
     if (!checkValue) {
       //get the item from the list with all items
-      console.log("itemslist :", itemsList);
-      const newItem = itemsList.find((item) => {
+      console.log("itemslist :", allItemsList);
+      const newItem = allItemsList.find((item) => {
         if (isProduct(item)) {
           return item.id_product === newId;
         } else {
@@ -207,8 +205,6 @@ export default function CategoryManager({
     setCategoriesEdited([...categoriesEdited, categoryToEdit]);
   }
 
-  console.log("items");
-  console.log(items);
   return (
     <div className="w-full flex flex-col gap-5">
       <div className="flex items-center pt-2">
@@ -238,7 +234,7 @@ export default function CategoryManager({
             <SelectValue placeholder="Ajouter Item" />
           </SelectTrigger>
           <SelectContent>
-            {itemsList.map((item) => (
+            {allItemsList.map((item) => (
               <SelectItem key={getItemId(item)} value={getItemId(item)}>
                 {item.name}
               </SelectItem>

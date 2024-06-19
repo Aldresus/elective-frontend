@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { CategoryContent } from "@/entities/categoryContent";
+import { Menu } from "@/entities/menu";
+import { Product } from "@/entities/product";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
@@ -57,6 +59,7 @@ interface menuDataType {
 
 function MenuManager() {
   const [data, setData] = useState<Array<CategoryContent>>([]);
+  const [itemsList, setItemsList] = useState<Array<Menu | Product>>([]);
   const [menuData, setMenuData] = useState<menuDataType>({
     id_menu: "",
     name: "",
@@ -78,7 +81,7 @@ function MenuManager() {
     queryFn: async () => {
       const rawData = await axiosInstance.get(`/menu/${id}`);
 
-      const finalData = rawData.data.Menu_Categories;
+      const finalData = (await rawData).data.Menu_Categories;
 
       setData(finalData);
 
@@ -90,19 +93,35 @@ function MenuManager() {
         price: rawData.data.price,
       });
 
-      console.log(menuData);
-      console.log("everything");
-      console.log(rawData.data);
-      console.log("final data");
-      console.log(finalData);
-      console.log("data before");
-      console.log(data);
-
       return finalData;
     },
   });
-  console.log("data after");
-  console.log(data);
+
+  const idRestaurant: string = "6671ed6ebc8bbd71f1ad0285";
+  useQuery({
+    queryKey: ["RestaurantProducts", idRestaurant],
+    queryFn: async () => {
+      const rawData = axiosInstance.get(
+        `/product?id_restaurant=${idRestaurant}`
+      );
+
+      const finalData = (await rawData).data;
+
+      for (var product of finalData) {
+        const itemInList: Product = {
+          id_product: product.id_product,
+          name: product.name,
+          price: product.price,
+          description: product.description,
+          product_image_url: product.product_image_url,
+          id_restaurant: product.id_restaurant,
+          ids_menu_category: product.ids_menu_category,
+        };
+        setItemsList((itemsList) => [...itemsList, itemInList]);
+      }
+      return finalData;
+    },
+  });
 
   const form = useForm<z.infer<typeof menuSchema>>({
     resolver: zodResolver(menuSchema),
@@ -293,7 +312,7 @@ function MenuManager() {
             <Separator />
             <CategoryManager
               category={category}
-              allItemsList={itemsData}
+              allItemsList={itemsList}
               categoriesEdited={categoriesEdited}
               setCategoriesEdited={setCategoriesEdited}
               data={data}

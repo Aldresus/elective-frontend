@@ -31,7 +31,7 @@ export const itemsData: Array<Menu | Product> = [
     ids_menu_category: ["667051e44258d9eaef63dd94"],
   },
   {
-    id_product: "66712c58568c4946317e52aa",
+    id_product: "6671ed6ebc8bbd71f1ad0289",
     name: "French Fries",
     price: 3,
     description: "Crispy golden fries",
@@ -40,7 +40,7 @@ export const itemsData: Array<Menu | Product> = [
     ids_menu_category: ["667051e44258d9eaef63dd95"],
   },
   {
-    id_product: "66712c58568c4946317e52ab",
+    id_product: "6671ed6ebc8bbd71f1ad028a",
     name: "Onion Rings",
     price: 4,
     description: "Breaded and fried onion rings",
