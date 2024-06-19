@@ -49,17 +49,8 @@ function RestaurantPage() {
   useEffect(() => {
     //reset the basket when the restaurant changes
     //set the userid to the current user inside the order
-    console.log("useEffect", currentOrder);
-    console.log(
-      "useEffect",
-      id,
-      currentOrder.id_restaurant,
-      id !== currentOrder.id_restaurant
-    );
 
-    if (decodedAccessToken) {
-      console.log("hit decodedAccessToken", decodedAccessToken);
-
+    if (decodedAccessToken && !currentOrder.id_user) {
       currentOrder.setUserId(decodedAccessToken.sub);
     }
 
