@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogTrigger,
   DialogPortal,
-  DialogClose,
 } from "../ui/dialog";
 import { Large } from "../typography";
 import { Route } from "@/routes/_user";
