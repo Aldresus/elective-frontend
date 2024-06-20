@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Client } from "@/entities/client";
+import { useAuth } from "@/hooks/useAuth";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
@@ -80,21 +81,32 @@ function ClientDetails() {
 
   const { id } = Route.useParams();
 
-  //todo: get token dynamikly
-  const headers = {
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjZkOTk1NGNmOTY1ZDM0MGZjMGUyNmEiLCJ1c2VybmFtZSI6InNvcGhpYS5qb25lc0BleGFtcGxlLmNvbSIsInJvbGUiOiJDT01NRVJDSUFMIiwiaWF0IjoxNzE4NDgxNTY0LCJleHAiOjE3MTkzODE1NjR9.9U_4HSizx2BhJGVf1ByBdGwomvx0fQqTT9VRs_K5ODM`,
-  };
+  const { token } = useAuth();
 
   const query = useQuery({
     queryKey: ["client"],
     queryFn: async () => {
-      const response = await axiosInstance().get(`/user?id=${id}`, {
-        headers,
-      });
+      const response = await axiosInstance(token).get(`/user?id=${id}`);
       // console.log(response.data);
       let finalData = response.data[0] as Client;
 
       console.log(finalData);
+
+      if (response !== undefined) {
+        const data = finalData;
+        const birthdateParts = data.birthday.split("-");
+        form.reset({
+          lastName: data.last_name,
+          firstName: data.first_name,
+          email: data.email,
+          password: "",
+          confirmPassword: "",
+          phone: data.phone,
+          birthDay: parseInt(birthdateParts[0]),
+          birthMonth: parseInt(birthdateParts[1]),
+          birthYear: parseInt(birthdateParts[2]),
+        });
+      }
 
       return finalData;
     },
@@ -115,24 +127,6 @@ function ClientDetails() {
     },
   });
 
-  useEffect(() => {
-    if (query.isSuccess && query.data) {
-      const data = query.data;
-      const birthdateParts = data.birthday.split("-");
-      form.reset({
-        lastName: data.last_name,
-        firstName: data.first_name,
-        email: data.email,
-        password: "",
-        confirmPassword: "",
-        phone: data.phone,
-        birthDay: parseInt(birthdateParts[2]),
-        birthMonth: parseInt(birthdateParts[1]),
-        birthYear: parseInt(birthdateParts[0]),
-      });
-    }
-  }, [query.isSuccess]);
-
   const onSubmit = async (values: z.infer<typeof clientSchema>) => {
     console.log(values);
 
@@ -140,17 +134,15 @@ function ClientDetails() {
       last_name: values.lastName,
       first_name: values.firstName,
       email: values.email,
-      birthday: `${values.birthYear}-${values.birthMonth}-${values.birthDay}`,
+      birthday: `${values.birthDay}-${values.birthMonth}-${values.birthYear}`,
       phone: values.phone,
       role: "CLIENT",
       password: values.password,
       id_restaurant: "000000000000000000000000",
     };
 
-    axiosInstance()
-      .patch(`/user/${id}`, dataToSend, {
-        headers,
-      })
+    axiosInstance(token)
+      .patch(`/user/${id}`, dataToSend)
       .then((res) => {
         console.log("Insertion réussie");
         console.log(res);

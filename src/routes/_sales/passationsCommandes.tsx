@@ -17,38 +17,31 @@ function PassationsCommandes() {
       <SearchBar />
       <div className="h-full flex flex-col gap-2 overflow-auto pb-20">
         <SalesDataCard
-          type="passation"
-          value1="Kebabouche"
-          value2="Jean-Michel"
-          orderId="452158877féf"
+          type="acceptCom"
+          value1="Le Gourmet Épicurien"
+          value2="Jean-Michel Dupont"
+          orderId="ddgcsc80y8s1pnntg6loq0ol"
           date="15/05/2024"
         />
         <SalesDataCard
-          type="passation"
-          value1="Kebabouche"
-          value2="Jean-Michel"
-          orderId="452158877féf"
+          type="acceptCom"
+          value1="La Table des Délices"
+          value2="Martin Emma"
+          orderId="vy5xb531rh4ncvzlxphpdmsj"
           date="15/05/2024"
         />
         <SalesDataCard
-          type="passation"
-          value1="Kebabouche"
-          value2="Jean-Michel"
-          orderId="452158877féf"
+          type="acceptCom"
+          value1="Bistro de la Gare"
+          value2="Michel Nathan"
+          orderId="j5gfp2fqac0uep62ba0dwg87"
           date="15/05/2024"
         />
         <SalesDataCard
-          type="passation"
-          value1="Kebabouche"
-          value2="Jean-Michel"
-          orderId="452158877féf"
-          date="15/05/2024"
-        />
-        <SalesDataCard
-          type="passation"
-          value1="Kebabouche"
-          value2="Jean-Michel"
-          orderId="452158877féf"
+          type="acceptCom"
+          value1="L'Auberge du Rhin"
+          value2="Lefebvre Lucie"
+          orderId="ro2fdyvxddaefg0kteeposoc"
           date="15/05/2024"
         />
       </div>
