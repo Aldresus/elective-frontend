@@ -261,7 +261,7 @@ function Login() {
     },
     onError(error) {
       console.log("error", error);
-      toast.error("Erreur lors de la création de la commande");
+      toast.error("Erreur lors de la création du restaurant");
     },
   });
   const onSubmit = async (values: z.infer<typeof signupSchema>) => {
