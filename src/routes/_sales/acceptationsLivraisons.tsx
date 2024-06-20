@@ -11,7 +11,7 @@ function AcceptationsLivraisons() {
   return (
     <div className="w-full flex flex-col gap-3 h-full">
       <div>
-        <H1>Passations livraisons</H1>
+        <H1>Acceptations livraisons</H1>
         <p>Lorsqu'un livreur accepte d'effectuer une livraison.</p>
       </div>
       <SearchBar />
