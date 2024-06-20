@@ -19,7 +19,7 @@ export function RestaurantCategory({
   return (
     <div className={className} {...props}>
       <H2>{categoryName}</H2>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid sm:grid-cols-2 gap-3">
         {categoryItems.map((item) => {
           if (isProduct(item)) {
             return (
