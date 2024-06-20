@@ -393,10 +393,6 @@ function Login() {
                       )}
                     />
                   </div>
-
-                  <div>
-                    Vous êtes parrainé par <b>dskqlmdkqslmd</b>
-                  </div>
                   <FormItem>
                     <Separator />
                     <div className="flex items-center gap-4 pt-4 pb-2">
