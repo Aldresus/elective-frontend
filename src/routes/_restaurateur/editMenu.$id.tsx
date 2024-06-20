@@ -18,6 +18,7 @@ import {
 } from "@/entities/categoryContent";
 import { Menu } from "@/entities/menu";
 import { Product } from "@/entities/product";
+import { useAuth } from "@/hooks/useAuth";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
@@ -94,10 +95,12 @@ function MenuManager() {
 
   const { id } = Route.useParams();
 
+  const { token } = useAuth();
+
   useQuery({
     queryKey: ["getMenuCategories", id],
     queryFn: async () => {
-      const rawData = await axiosInstance().get(`/menu/${id}`);
+      const rawData = await axiosInstance(token).get(`/menu/${id}`);
 
       const finalData = (await rawData).data.Menu_Categories;
       console.log("finalData: ", finalData);
@@ -120,7 +123,7 @@ function MenuManager() {
   useQuery({
     queryKey: ["RestaurantProducts", idRestaurant],
     queryFn: async () => {
-      const rawData = axiosInstance().get(
+      const rawData = axiosInstance(token).get(
         `/product?id_restaurant=${idRestaurant}`
       );
 
@@ -177,7 +180,7 @@ function MenuManager() {
       ids_product: [],
     };
 
-    axiosInstance()
+    axiosInstance(token)
       .post("/menu/category", createdCategory)
       .then((res) => {
         console.log("Category created");
@@ -193,25 +196,15 @@ function MenuManager() {
     setdisplayCategory(false);
   };
 
-  const headers = {
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjZkOTk1NGNmOTY1ZDM0MGZjMGUyNmEiLCJ1c2VybmFtZSI6InNvcGhpYS5qb25lc0BleGFtcGxlLmNvbSIsInJvbGUiOiJDT01NRVJDSUFMIiwiaWF0IjoxNzE4NDgxNTY0LCJleHAiOjE3MTkzODE1NjR9.9U_4HSizx2BhJGVf1ByBdGwomvx0fQqTT9VRs_K5ODM`,
-  };
-
   const onSubmit = async (values: z.infer<typeof menuSchema>) => {
-    axiosInstance()
-      .patch(
-        `menu/${id}`,
-        {
-          name: values.name,
-          description: values.description,
-          price: values.price,
-          menu_image_url: values.image,
-          id_restaurant: "111111111111111111111111", //todo dynamik
-        },
-        {
-          headers,
-        }
-      )
+    axiosInstance(token)
+      .patch(`menu/${id}`, {
+        name: values.name,
+        description: values.description,
+        price: values.price,
+        menu_image_url: values.image,
+        id_restaurant: "6671ed6ebc8bbd71f1ad0285", //todo dynamik
+      })
       .then((res) => {
         console.log("Insertion réussie");
         console.log(res);
@@ -222,7 +215,7 @@ function MenuManager() {
       });
 
     categoriesEdited.map((editedCategory) => {
-      axiosInstance()
+      axiosInstance(token)
         .patch(`/menu/productCategory`, editedCategory)
         .then((res) => {
           console.log("Successfull edited categories");
@@ -235,7 +228,7 @@ function MenuManager() {
     });
 
     categoriesDeleted.map((deletedCategory) => {
-      axiosInstance()
+      axiosInstance(token)
         .delete(`/menu/category/${deletedCategory}`)
         .then((res) => {
           console.log("Successfull deleted category");

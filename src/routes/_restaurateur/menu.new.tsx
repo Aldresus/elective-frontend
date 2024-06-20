@@ -34,6 +34,8 @@ const menuSchema = z.object({
 
 function NewMenu() {
   const { token } = useAuth();
+  const navigate = Route.useNavigate();
+
   const form = useForm<z.infer<typeof menuSchema>>({
     resolver: zodResolver(menuSchema),
     defaultValues: {
@@ -51,13 +53,17 @@ function NewMenu() {
         price: values.price,
         description: values.description,
         menu_image_url: "",
-        id_restaurant: "6671ed6ebc8bbd71f1ad0285", // todo: dynamic  todo: header authorization
+        id_restaurant: "6671ed6ebc8bbd71f1ad0285", // todo: dynamic
         ids_menu_category: [],
         ids_restaurant_category: [],
       })
       .then((res) => {
         console.log("Insertion réussie");
         console.log(res);
+        navigate({
+          to: "/editMenu/$id",
+          params: { id: res.data.id_menu },
+        });
       })
       .catch((err) => {
         console.log("Failed");
