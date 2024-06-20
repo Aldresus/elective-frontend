@@ -103,6 +103,7 @@ function MenuManager() {
   useQuery({
     queryKey: ["getMenuCategories", menuId],
     queryFn: async () => {
+
       const rawData = await axiosInstance(token).get(`/menu/${menuId}`);
 
       const finalData = (await rawData).data.Menu_Categories;

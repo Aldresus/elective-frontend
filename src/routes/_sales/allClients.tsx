@@ -2,6 +2,7 @@ import SearchBar from "@/components/common/searchBar";
 import { H1, Large } from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import { Client } from "@/entities/client";
+import { useAuth } from "@/hooks/useAuth";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
@@ -14,16 +15,11 @@ export const Route = createFileRoute("/_sales/allClients")({
 function AllClient() {
   const alphabetList = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-  //todo: get token dynamikly
-  const headers = {
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjZkOTk1NGNmOTY1ZDM0MGZjMGUyNmEiLCJ1c2VybmFtZSI6InNvcGhpYS5qb25lc0BleGFtcGxlLmNvbSIsInJvbGUiOiJDT01NRVJDSUFMIiwiaWF0IjoxNzE4NDgxNTY0LCJleHAiOjE3MTkzODE1NjR9.9U_4HSizx2BhJGVf1ByBdGwomvx0fQqTT9VRs_K5ODM`,
-  };
+  const { token } = useAuth();
   const query = useQuery({
     queryKey: ["allClients"],
     queryFn: async () => {
-      const response = await axiosInstance().get(`/user/?role=CLIENT`, {
-        headers,
-      });
+      const response = await axiosInstance(token).get(`/user/?role=CLIENT`);
       // console.log(response.data);
       let finalData = response.data as Array<Client>;
 
@@ -42,7 +38,12 @@ function AllClient() {
           <Large>{letter}-</Large>
           {query.data
             ?.filter(function (el) {
-              return el.last_name.startsWith(letter);
+              if (
+                el.last_name.startsWith(letter) ||
+                el.last_name.startsWith(letter.toLowerCase())
+              ) {
+                return true;
+              }
             })
             .map((client) => (
               <Link to={`/clientDetails/${client.id}`} key={client.id}>
