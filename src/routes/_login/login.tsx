@@ -198,7 +198,9 @@ function Login() {
 
               <div className="flex gap-4 justify-end">
                 <Link to="/signup">
-                  <Button variant="link">Créer un compte</Button>
+                  <Button variant="link" type="button">
+                    Créer un compte
+                  </Button>
                 </Link>
                 <Button type="submit">Se connecter</Button>
               </div>
