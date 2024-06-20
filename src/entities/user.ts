@@ -19,6 +19,13 @@ export interface UpdateRoleUser {
   role?: RoleEnum.CLIENT | RoleEnum.RESTAURATEUR | RoleEnum.DELIVERYMAN;
 }
 
+export interface UpdateUser {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+}
+
 export enum RoleEnum {
   USER = "USER",
   ADMIN = "ADMIN",
