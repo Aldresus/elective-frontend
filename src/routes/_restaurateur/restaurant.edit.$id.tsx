@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { restaurateurContext } from "@/contexts/restaurateurContext";
 import {
   CategoryContent,
   CategoryContentRestaurant,
@@ -23,7 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Minus, Plus, Save } from "lucide-react";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -120,8 +121,11 @@ function RestaurantManager() {
 
   const { id } = Route.useParams();
 
+  const restaurateur = useContext(restaurateurContext);
+
   useQuery({
     queryKey: ["getRestaurantCategories", id],
+    enabled: !!restaurateur.restaurant.id_restaurant,
     queryFn: async () => {
       const rawData = await axiosInstance(token).get(`/restaurant/${id}`);
 
@@ -143,13 +147,13 @@ function RestaurantManager() {
     },
   });
 
-  const idRestaurant: string = "6671ed6ebc8bbd71f1ad0285"; // todo: dynamik
   //Get all products of restaurant
   useQuery({
-    queryKey: ["RestaurantProducts", idRestaurant],
+    queryKey: ["RestaurantProducts", restaurateur.restaurant.id_restaurant],
+    enabled: !!restaurateur.restaurant.id_restaurant,
     queryFn: async () => {
       const rawData = axiosInstance(token).get(
-        `/product?id_restaurant=${idRestaurant}`
+        `/product?id_restaurant=${restaurateur.restaurant.id_restaurant}`
       );
 
       const productsData = (await rawData).data;
@@ -170,12 +174,15 @@ function RestaurantManager() {
     },
   });
 
+  console.log("ITEMSLIST: ", itemsList);
+
   //Get all menus of restaurant
   useQuery({
-    queryKey: ["RestaurantMenus", idRestaurant],
+    queryKey: ["RestaurantMenus", restaurateur.restaurant.id_restaurant],
+    enabled: !!restaurateur.restaurant.id_restaurant,
     queryFn: async () => {
       const rawData = axiosInstance(token).get(
-        `/menu?id_restaurant=${idRestaurant}`
+        `/menu?id_restaurant=${restaurateur.restaurant.id_restaurant}`
       );
 
       const menusData = (await rawData).data;
@@ -198,9 +205,9 @@ function RestaurantManager() {
     },
   });
 
-  useEffect(() => {
-    console.log("itemsList: ", itemsList);
-  }, [itemsList]);
+  // useEffect(() => {
+  //   console.log("itemsList: ", itemsList);
+  // }, [itemsList]);
 
   const form = useForm<z.infer<typeof restaurantSchema>>({
     resolver: zodResolver(restaurantSchema),
@@ -257,6 +264,7 @@ function RestaurantManager() {
   };
 
   const onSubmit = async (values: z.infer<typeof restaurantSchema>) => {
+    console.log();
     axiosInstance(token)
       .patch(`restaurant/${id}`, {
         name: values.name,

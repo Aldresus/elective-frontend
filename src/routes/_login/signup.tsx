@@ -148,6 +148,15 @@ function Login() {
         email: data.email as string,
         password: psswd,
       });
+      if (roleContext.role === RoleEnum.CLIENT) {
+        navigate({
+          to: `/user`,
+        });
+      } else if (roleContext.role === RoleEnum.DELIVERYMAN) {
+        navigate({
+          to: `/deliveries`,
+        });
+      }
     },
     onError(error) {
       console.log("error", error);
