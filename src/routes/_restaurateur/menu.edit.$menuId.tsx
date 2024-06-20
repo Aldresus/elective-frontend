@@ -12,19 +12,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { restaurateurContext } from "@/contexts/restaurateurContext";
 import {
   CategoryContent,
   CategoryContentRestaurant,
 } from "@/entities/categoryContent";
 import { Menu } from "@/entities/menu";
 import { Product } from "@/entities/product";
+import { useAuth } from "@/hooks/useAuth";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Minus, Plus, Save } from "lucide-react";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 export const Route = createFileRoute("/_restaurateur/menu/edit/$menuId")({
@@ -85,19 +88,22 @@ function MenuManager() {
     menu_image_url: "",
     price: 0,
   });
-  const [displayCategory, setdisplayCategory] = useState<Boolean>(false);
+  const [displayCategory, setdisplayCategory] = useState<boolean>(false);
   const [categoryName, setCategoryName] = useState("");
   const [categoriesEdited, setCategoriesEdited] = useState<
     Array<categoryType | addProductCategoryType | addMenuCategoryType>
   >([]);
   const [categoriesDeleted, setCategoriesDeleted] = useState<Array<string>>([]);
 
-  const { id } = Route.useParams();
+  const { menuId } = Route.useParams();
+  const restaurateur = useContext(restaurateurContext);
+
+  const { token } = useAuth();
 
   useQuery({
-    queryKey: ["getMenuCategories", id],
+    queryKey: ["getMenuCategories", menuId],
     queryFn: async () => {
-      const rawData = await axiosInstance().get(`/menu/${id}`);
+      const rawData = await axiosInstance(token).get(`/menu/${menuId}`);
 
       const finalData = (await rawData).data.Menu_Categories;
       console.log("finalData: ", finalData);
@@ -116,17 +122,16 @@ function MenuManager() {
     },
   });
 
-  const idRestaurant: string = "6671ed6ebc8bbd71f1ad0285";
   useQuery({
-    queryKey: ["RestaurantProducts", idRestaurant],
+    queryKey: ["RestaurantProducts", restaurateur.restaurant.id_restaurant],
     queryFn: async () => {
-      const rawData = axiosInstance().get(
-        `/product?id_restaurant=${idRestaurant}`
+      const rawData = axiosInstance(token).get(
+        `/product?id_restaurant=${restaurateur.restaurant.id_restaurant}`
       );
 
       const finalData = (await rawData).data;
 
-      for (var product of finalData) {
+      for (const product of finalData) {
         const itemInList: Product = {
           id_product: product.id_product,
           name: product.name,
@@ -161,7 +166,7 @@ function MenuManager() {
       image: "",
       price: menuData.price,
     });
-  }, [menuData]);
+  }, [menuData, reset]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCategoryName(e.target.value);
@@ -177,56 +182,51 @@ function MenuManager() {
       ids_product: [],
     };
 
-    axiosInstance()
+    axiosInstance(token)
       .post("/menu/category", createdCategory)
       .then((res) => {
         console.log("Category created");
         console.log(res);
         window.location.reload();
+        toast.success("Catégorie créée");
       })
       .catch((err) => {
         console.log("Failed creation category");
         console.log(err);
+        toast.error("Une erreur est survenue");
       });
 
     setCategoryName("");
     setdisplayCategory(false);
   };
 
-  const headers = {
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjZkOTk1NGNmOTY1ZDM0MGZjMGUyNmEiLCJ1c2VybmFtZSI6InNvcGhpYS5qb25lc0BleGFtcGxlLmNvbSIsInJvbGUiOiJDT01NRVJDSUFMIiwiaWF0IjoxNzE4NDgxNTY0LCJleHAiOjE3MTkzODE1NjR9.9U_4HSizx2BhJGVf1ByBdGwomvx0fQqTT9VRs_K5ODM`,
-  };
-
   const onSubmit = async (values: z.infer<typeof menuSchema>) => {
-    axiosInstance()
-      .patch(
-        `menu/${id}`,
-        {
-          name: values.name,
-          description: values.description,
-          price: values.price,
-          menu_image_url: values.image,
-          id_restaurant: "111111111111111111111111", //todo dynamik
-        },
-        {
-          headers,
-        }
-      )
+    axiosInstance(token)
+      .patch(`menu/${menuId}`, {
+        name: values.name,
+        description: values.description,
+        price: values.price,
+        menu_image_url: values.image,
+        id_restaurant: restaurateur.restaurant.id_restaurant,
+      })
       .then((res) => {
         console.log("Insertion réussie");
         console.log(res);
+        toast.success("Menu modifié avec succès");
       })
       .catch((err) => {
         console.log("Failed");
         console.log(err);
+        toast.error("Une erreur est survenue");
       });
 
     categoriesEdited.map((editedCategory) => {
-      axiosInstance()
+      axiosInstance(token)
         .patch(`/menu/productCategory`, editedCategory)
         .then((res) => {
           console.log("Successfull edited categories");
           console.log(res);
+          toast.success("Catégorie modifiée");
         })
         .catch((err) => {
           console.log("Categories Failed");
@@ -235,7 +235,7 @@ function MenuManager() {
     });
 
     categoriesDeleted.map((deletedCategory) => {
-      axiosInstance()
+      axiosInstance(token)
         .delete(`/menu/category/${deletedCategory}`)
         .then((res) => {
           console.log("Successfull deleted category");
