@@ -42,7 +42,12 @@ function AllClient() {
           <Large>{letter}-</Large>
           {query.data
             ?.filter(function (el) {
-              return el.last_name.startsWith(letter);
+              if (
+                el.last_name.startsWith(letter) ||
+                el.last_name.startsWith(letter.toLowerCase())
+              ) {
+                return true;
+              }
             })
             .map((client) => (
               <Link to={`/clientDetails/${client.id}`} key={client.id}>
