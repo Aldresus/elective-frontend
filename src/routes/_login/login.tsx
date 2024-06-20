@@ -72,7 +72,6 @@ function Login() {
     onSuccess: (data) => {
       console.log("Insertion réussie");
       router.invalidate();
-      //@ts-expect-error ts est fou
       navigate({
         to: "/user",
       });
