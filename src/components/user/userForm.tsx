@@ -5,6 +5,7 @@ import { Input } from "../ui/input";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 
 interface UserFormProps {
   onSubmit: SubmitHandler<z.infer<typeof userSchema>>;
@@ -19,6 +20,8 @@ const userSchema = z.object({
 });
 
 export default function UserForm({ onSubmit, defaultValues }: UserFormProps) {
+  const [resetForm, setResetForm] = useState(false);
+
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -32,12 +35,18 @@ export default function UserForm({ onSubmit, defaultValues }: UserFormProps) {
     },
   });
 
-  console.log(form.getValues());
+  const { reset } = form;
+
+  useEffect(() => {
+    resetForm && reset();
+    setResetForm(false);
+  }, [reset, resetForm]);
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-5"
       >
         <FormField
           control={form.control}
@@ -88,9 +97,18 @@ export default function UserForm({ onSubmit, defaultValues }: UserFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full gap-2">
-          <Save /> Modifier mon profil
-        </Button>
+        <div className="flex flex-row text-center justify-center gap-4 mt-2">
+          <Button type="submit" variant="default">
+            <Save /> Modifier mon profil
+          </Button>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={() => setResetForm(true)}
+          >
+            Réinitialiser
+          </Button>
+        </div>
       </form>
     </Form>
   );

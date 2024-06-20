@@ -5,14 +5,23 @@ import { useQuery } from "@tanstack/react-query";
 import { UpdateUser } from "@/entities/user";
 import { useAuth } from "@/hooks/useAuth";
 import UserForm from "@/components/user/userForm";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Check, Copy } from "lucide-react";
+import { useCopyToClipboard } from "@uidotdev/usehooks";
+import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_user/editUser/$id")({
   component: EditUser,
 });
 
 function EditUser() {
-  const { id } = Route.useParams();
   const { token } = useAuth();
+  const [showCode, setShowCode] = useState(false);
+  const [copiedText, copyToClipboard] = useCopyToClipboard();
+  const hasCopiedText = Boolean(copiedText);
+  const { id } = Route.useParams();
 
   const query = useQuery({
     queryKey: ["user", id],
@@ -21,10 +30,8 @@ function EditUser() {
         `/user/?id=${id}`
       );
       const finalData = { ...response.data[0] } as UpdateUser;
-      console.log("finalData", finalData);
       return finalData;
     },
-    // refetchInterval: 1000 * 60, // refresh every minute
   });
 
   return (
@@ -50,6 +57,45 @@ function EditUser() {
               });
           }}
         />
+        <Separator className="w-full mt-8" />
+        <div className="flex flex-col space-y-2 mt-6">
+          <div className="flex items-center space-x-2">
+            <div className="flex flex-row gap-2 min-w-[500px] items-center">
+              Code de parrainage:
+              {showCode ? (
+                <div className="flex flex-row items-center bg-slate-200 rounded gap-2">
+                  <span className="font-bold bg-slate-100 p-2 rounded-l">
+                    {id}
+                  </span>
+                  {hasCopiedText ? (
+                    <Check
+                      className="cursor-pointer mr-2"
+                      onClick={() => copyToClipboard(id)}
+                    />
+                  ) : (
+                    <Copy
+                      className="cursor-pointer mr-2"
+                      onClick={() => {
+                        copyToClipboard(id);
+                        toast.info("copié dans le presse papier");
+                      }}
+                    />
+                  )}
+                </div>
+              ) : (
+                <span className="font-bold">************</span>
+              )}
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setShowCode(!showCode)}
+              className="w-[200px]"
+            >
+              Voir le code de parrainage
+            </Button>
+          </div>
+        </div>
       </div>
     </>
   );

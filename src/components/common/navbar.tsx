@@ -97,7 +97,7 @@ export default function Navbar({
                   type="button"
                   variant="ghost"
                   className="w-96 flex flex-row justify-between"
-                  //   onClick={() => navigate({ to: `${context.user.id}` })}
+                  onClick={() => navigate({ to: `/editUser/${user.sub}` })}
                 >
                   Parrainage
                   <ChevronRight size={24} />
