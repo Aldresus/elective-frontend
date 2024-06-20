@@ -9,12 +9,22 @@ import { UsersRestaurants } from "@/entities/usersRestaurants";
 import { useAuth } from "@/hooks/useAuth";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { useQuery } from "@tanstack/react-query";
-import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { useState } from "react";
 
 export const Route = createFileRoute("/_restaurateur")({
   component: RestaurateurLayout,
+  beforeLoad: async ({ context, location }) => {
+    if (!context.auth.isAuthenticated) {
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
 });
 
 function RestaurateurLayout() {
