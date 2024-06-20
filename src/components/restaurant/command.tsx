@@ -29,7 +29,9 @@ export default function Command({
           <div className="flex flex-col w-3/5">
             <Large className="flex">{clientName}</Large>
             <Large className="flex">{deliveryPersonName}</Large>
-            <p className="flex">{order.order_date.toLocaleDateString()}</p>
+            <p className="flex">
+              {new Date(order.order_date).toLocaleString()}
+            </p>
           </div>
           <div className="flex flex-1 flex-col justify-around">
             <p className="flex">{OrderStatus[order.status]}</p>
