@@ -102,6 +102,7 @@ function Login() {
   const [psswd, setPsswd] = useState("");
   const [id_usr, setId_usr] = useState("");
   const [email_usr, setEmail_usr] = useState("");
+  const [siret, setSiret] = useState("");
   const [toUpdate, setToUpdate] = useState(true);
   const restauContext = useContext(restaurateurContext);
 
@@ -199,13 +200,13 @@ function Login() {
         })
         .then(() => {
           createRestaurantMutation.mutate({
-            address: "test",
+            address: "",
             banner_url: "",
             business_hours: "",
             city: "",
             email: "",
             food_type: "",
-            siret: "",
+            siret: siret,
             name: "",
             postal_code: "",
             price_range: "",
@@ -267,6 +268,7 @@ function Login() {
     console.log(values);
     const hash = sha256(values.password);
     setPsswd(hash);
+    setSiret(values.siret as string);
     userMutation.mutateAsync({
       first_name: values.firstName,
       last_name: values.lastName,
