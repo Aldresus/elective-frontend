@@ -83,53 +83,50 @@ export default function Navbar({
           <DialogPortal>
             <DialogContent className="flex flex-col items-center justify-center fixed overflow-y-auto">
               <Large>Informations du compte</Large>
-              <DialogClose>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-96 flex flex-row justify-between"
-                  onClick={() => navigate({ to: "/user" })}
-                >
-                  Commandes
-                  <ChevronRight size={24} />
-                </Button>
-              </DialogClose>
-              <DialogClose>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-96 flex flex-row justify-between"
-                  onClick={() => navigate({ to: `/editUser/${user.sub}` })}
-                >
-                  Parrainage
-                  <ChevronRight size={24} />
-                </Button>
-              </DialogClose>
-              <DialogClose>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-96 flex flex-row justify-between"
-                  onClick={() => navigate({ to: `/editUser/${user.sub}` })}
-                >
-                  Paramètres du compte
-                  <ChevronRight size={24} />
-                </Button>
-              </DialogClose>
-              <DialogClose>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-96 flex flex-row justify-between"
-                >
-                  Autre
-                  <ChevronRight size={24} />
-                </Button>
-              </DialogClose>
+
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full flex flex-row justify-between"
+                onClick={() => navigate({ to: "/user" })}
+              >
+                Commandes
+                <ChevronRight size={24} />
+              </Button>
+
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full flex flex-row justify-between"
+                onClick={() => navigate({ to: `/editUser/${user.sub}` })}
+              >
+                Parrainage
+                <ChevronRight size={24} />
+              </Button>
+
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full flex flex-row justify-between"
+                onClick={() => navigate({ to: `/editUser/${user.sub}` })}
+              >
+                Paramètres du compte
+                <ChevronRight size={24} />
+              </Button>
+
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full flex flex-row justify-between"
+              >
+                Autre
+                <ChevronRight size={24} />
+              </Button>
+
               {auth.isAuthenticated && (
                 <Button
                   type="button"
-                  className="mt-4 w-96"
+                  className="mt-4 w-full"
                   variant="destructive"
                   onClick={() => auth.logout()}
                 >
