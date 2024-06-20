@@ -11,7 +11,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Fragment, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
@@ -29,6 +29,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { LoginResponse } from "@/entities/login";
 import { CreateEmptyRestaurant, Restaurant } from "@/entities/restaurant";
+import { restaurateurContext } from "@/contexts/restaurateurContext";
 
 export const Route = createFileRoute("/_login/signup")({
   component: Login,
@@ -102,6 +103,7 @@ function Login() {
   const [id_usr, setId_usr] = useState("");
   const [email_usr, setEmail_usr] = useState("");
   const [toUpdate, setToUpdate] = useState(true);
+  const restauContext = useContext(restaurateurContext);
 
   const roleContext = useRole();
   const { token, login, logout } = useAuth();
@@ -251,9 +253,9 @@ function Login() {
     onSuccess(data) {
       console.log("success", data);
       toast.success("Restaurant créé !");
+      restauContext.restaurant.id_restaurant = data.id_restaurant;
       navigate({
-        to: "/restaurant/$id",
-        params: { id: data.id_restaurant },
+        to: "/restaurateur",
       });
     },
     onError(error) {

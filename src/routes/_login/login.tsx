@@ -63,9 +63,6 @@ function Login() {
   const auth = useAuth();
   const router = useRouter();
   const navigate = Route.useNavigate();
-  const fallback = "/user";
-
-  const search = Route.useSearch();
 
   const mutation = useMutation({
     mutationFn: async (loginData: { email: string; password: string }) => {
@@ -75,8 +72,9 @@ function Login() {
     onSuccess: (data) => {
       console.log("Insertion réussie");
       router.invalidate();
-      //@ts-expect-error ts est fou
-      navigate({ to: search.redirect ?? fallback });
+      navigate({
+        to: "/user",
+      });
       auth.login(data.access_token);
     },
     onError: (err) => {
