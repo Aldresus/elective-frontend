@@ -58,7 +58,7 @@ function RestaurantOfferings() {
       <H2>Menus</H2>
       <div className="flex flex-col gap-2">
         {menusQuery.data?.map((menu) => (
-          <Link to="/product/edit/$id" params={{ id: menu.id_menu }}>
+          <Link to="/menu/edit/$menuId" params={{ menuId: menu.id_menu }}>
             <HorizontalItemCard
               cardDescription={menu.description}
               cardPrice={menu.price}
@@ -74,7 +74,10 @@ function RestaurantOfferings() {
       <H2>Produits</H2>
       <div className="flex flex-col gap-2">
         {productsQuery.data?.map((product) => (
-          <Link to="/product/edit/$id" params={{ id: product.id_product }}>
+          <Link
+            to="/product/edit/$productId"
+            params={{ productId: product.id_product }}
+          >
             <HorizontalItemCard
               cardDescription={product.description}
               cardPrice={product.price}
