@@ -15,7 +15,6 @@ import { Fragment, useState } from "react";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
-import axios from "axios";
 import { sha256 } from "js-sha256";
 import { RoleEnum } from "@/entities/user";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -141,7 +140,7 @@ function Login() {
         console.log(`user inséré ${id}`);
         console.log(res.data);
         if (roleContext.role === RoleEnum.RESTAURATEUR) {
-          instance
+          axiosInstance()
             .post("/restaurant", {
               name: values.firstName,
               siret: values.siret,
@@ -161,7 +160,7 @@ function Login() {
               console.log("Insertion réussie");
               console.log(`restaurant inséré ${id}`);
               console.log(res.data);
-              instance
+              axiosInstance()
                 .patch("/user/", {
                   where: {
                     id: id,

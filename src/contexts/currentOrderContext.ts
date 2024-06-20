@@ -12,7 +12,7 @@ export const currentOrderContext = createContext<CurrentOrderContext>({
   order_date: new Date(),
   restaurant_accepted_datetime: undefined,
   restaurant_to_delivery_datetime: undefined,
-  received_datetime: undefined,
+  received_datetime: new Date(),
   delivery_accepted_datetime: undefined,
   id_order: undefined,
 

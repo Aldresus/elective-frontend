@@ -2,14 +2,12 @@ import WaitingCommandCard from "@/components/restaurant/waitingCommandCard";
 import { H1, H2, Large } from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import { restaurateurContext } from "@/contexts/restaurateurContext";
-import { DecodedAccessToken } from "@/entities/login";
 import { Order } from "@/entities/order";
 import { OrderStatusEnum } from "@/enums/orderStatus";
 import { useAuth } from "@/hooks/useAuth";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useLocalStorage } from "@uidotdev/usehooks";
 import { useContext } from "react";
 
 export const Route = createFileRoute("/_restaurateur/restaurateur")({

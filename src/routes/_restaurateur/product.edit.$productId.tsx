@@ -15,7 +15,6 @@ export const Route = createFileRoute("/_restaurateur/product/edit/$productId")({
 
 function ProductEditor() {
   const [resetForm, setResetForm] = useState<boolean>(false);
-  const [product, setProduct] = useState<EditProduct>();
   const { token } = useAuth();
   const restaurateur = useContext(restaurateurContext);
 

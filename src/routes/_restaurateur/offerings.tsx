@@ -1,8 +1,6 @@
 import SearchBar from "@/components/common/searchBar";
 import AddOfferingCard from "@/components/restaurant/addOfferingCard";
-import { HorizontalMenuCard } from "@/components/restaurant/menu/horizontalMenuCard";
 import { HorizontalItemCard } from "@/components/restaurant/primitives/horizontalItemCard";
-import { HorizontalProductCard } from "@/components/restaurant/product/horizontalProductCard";
 import { H1, H2 } from "@/components/typography";
 import { restaurateurContext } from "@/contexts/restaurateurContext";
 import { Menu } from "@/entities/menu";

@@ -28,7 +28,7 @@ export function EditProfileModal() {
           </Button>
         </div>
         <div className="w-full flex flex-col gap-2 pt-4">
-          <Link to="/commandMonitoring">
+          <Link to="/commands">
             <Button
               className="w-full flex gap-1 justify-between"
               variant="outline"

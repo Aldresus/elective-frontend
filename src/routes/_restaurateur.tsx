@@ -11,7 +11,7 @@ import { axiosInstance } from "@/lib/axiosConfig";
 import { useQuery } from "@tanstack/react-query";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { useLocalStorage } from "@uidotdev/usehooks";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 export const Route = createFileRoute("/_restaurateur")({
   component: RestaurateurLayout,
@@ -38,20 +38,14 @@ function RestaurateurLayout() {
       },
     });
 
-  const setRestaurateur = (restaurant: RestaurateurContext) => {
-    setRestaurateur(restaurant);
-  };
-
-  const restaurateur = useContext(restaurateurContext);
-
-  const queryUserRestaurant = useQuery({
+  useQuery({
     queryKey: ["userRestaurant", decodedAccessToken.sub],
     queryFn: async () => {
       const response = await axiosInstance(token).get(
         `/restaurant/user/${decodedAccessToken.sub}`
       );
 
-      let responseData = response.data as UsersRestaurants;
+      const responseData = response.data as UsersRestaurants;
 
       setRestaurateurState((prev) => {
         return {
