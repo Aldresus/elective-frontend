@@ -21,6 +21,7 @@ import { AddressInput, AddressInputType } from "../address/addressInput";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { DecodedAccessToken } from "@/entities/login";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 interface BasketModalProps extends React.HTMLProps<HTMLDivElement> {}
 
@@ -41,6 +42,8 @@ export function BasketModal({ ...props }: BasketModalProps) {
 
   const [decodedAccessToken] = useLocalStorage<DecodedAccessToken>("user");
 
+  const { token } = useAuth();
+
   useEffect(() => {
     if (decodedAccessToken?.sub !== currentOrder.id_user) {
       currentOrder.setUserId(decodedAccessToken?.sub);
@@ -49,7 +52,7 @@ export function BasketModal({ ...props }: BasketModalProps) {
 
   const mutation = useMutation({
     mutationFn: (currentOrder: CreateOrder) => {
-      return axiosInstance().post("/order", currentOrder);
+      return axiosInstance(token).post("/order", currentOrder);
     },
     onSuccess(data) {
       console.log("success", data);

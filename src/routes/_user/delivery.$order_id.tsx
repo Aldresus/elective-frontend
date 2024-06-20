@@ -4,6 +4,7 @@ import { H1, H2, Large } from "@/components/typography";
 import { Separator } from "@/components/ui/separator";
 import { Order } from "@/entities/order";
 import { OrderStatus } from "@/enums/orderStatus";
+import { useAuth } from "@/hooks/useAuth";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
@@ -14,12 +15,13 @@ export const Route = createFileRoute("/_user/delivery/$order_id")({
 
 function DeliveryTracker() {
   const { order_id } = Route.useParams();
+  const { token } = useAuth();
   let totalPrice = 0;
 
   const query = useQuery({
     queryKey: ["delivery", "order_id"],
     queryFn: async () => {
-      const response = await axiosInstance().get(`/order/${order_id}`);
+      const response = await axiosInstance(token).get(`/order/${order_id}`);
       console.log(response.data);
       return response.data as Order;
     },
