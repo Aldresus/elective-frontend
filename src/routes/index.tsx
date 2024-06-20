@@ -1,7 +1,26 @@
 import { H1 } from "@/components/typography";
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { RoleEnum } from "@/entities/user";
+import { Link, createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: async ({ context, location }) => {
+    if (!context.auth.isAuthenticated) {
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+    switch (context.roleContext.role) {
+      case RoleEnum.RESTAURATEUR:
+        throw redirect({ to: "/restaurateur" });
+      case RoleEnum.CLIENT:
+        throw redirect({ to: "/user" });
+      case RoleEnum.DELIVERYMAN:
+        throw redirect({ to: "/deliveries" });
+    }
+  },
   component: IndexComponent,
 });
 
