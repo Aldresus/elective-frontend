@@ -38,7 +38,7 @@ export function LogsTable() {
   const totalPages = Math.ceil(totalLogs / limit);
 
   return (
-    <div className="p-0 bg-slate-600 text-white rounded-lg">
+    <div className="p-0 bg-selago-900 text-white rounded-lg p-6">
       {query.isLoading ? (
         <p>Loading logs...</p>
       ) : query.isError ? (

@@ -8,9 +8,9 @@ export const Route = createFileRoute("/_logs")({
 
 function LogsLayout() {
   return (
-    <div className="bg-yellow-500 min-h-screen">
+    <div>
       <Navbar className="fixed top-0 left-0 w-full" />
-      <div className="bg-red-50 mt-[50px] p-9 w-[1280px] mx-auto">
+      <div className=" mt-[50px] p-9 sm:w-[1280px] mx-auto min-h-screen">
         <Outlet />
       </div>
       <Footer />
