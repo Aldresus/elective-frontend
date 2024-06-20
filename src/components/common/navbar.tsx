@@ -11,13 +11,15 @@ import {
 } from "../ui/dialog";
 import { Large } from "../typography";
 import { Route } from "@/routes/_user";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AddressChoiceModal } from "../address/addressChoiceModal";
 import { DecodedAccessToken } from "@/entities/login";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "../ui/button";
+import { restaurateurContext } from "@/contexts/restaurateurContext";
+import { RoleEnum } from "@/entities/user";
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
   isAdress?: boolean;
@@ -34,6 +36,7 @@ export default function Navbar({
   const auth = useAuth();
   const navigate = Route.useNavigate();
   console.log(auth);
+  const restaurateur = useContext(restaurateurContext);
 
   return (
     <div
@@ -83,44 +86,80 @@ export default function Navbar({
             <DialogContent className="flex flex-col items-center justify-center fixed overflow-y-auto">
               <Large>Informations du compte</Large>
 
-              <Button
-                type="button"
-                variant="ghost"
-                className="w-full flex flex-row justify-between"
-                onClick={() => navigate({ to: "/user" })}
-              >
-                Commandes
-                <ChevronRight size={24} />
-              </Button>
+              {user.role === RoleEnum.RESTAURATEUR && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-full flex flex-row justify-between"
+                  onClick={() => navigate({ to: "/commands" })}
+                >
+                  Commandes
+                  <ChevronRight size={24} />
+                </Button>
+              )}
+              {user.role === RoleEnum.CLIENT && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-full flex flex-row justify-between"
+                  onClick={() => navigate({ to: "/delivery/history" })}
+                >
+                  Commandes
+                  <ChevronRight size={24} />
+                </Button>
+              )}
 
-              <Button
-                type="button"
-                variant="ghost"
-                className="w-full flex flex-row justify-between"
-                onClick={() => navigate({ to: `/editUser/${user.sub}` })}
-              >
-                Parrainage
-                <ChevronRight size={24} />
-              </Button>
+              {user.role === RoleEnum.RESTAURATEUR && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-full flex flex-row justify-between"
+                  onClick={() => navigate({ to: `/offerings` })}
+                >
+                  Inventaire
+                  <ChevronRight size={24} />
+                </Button>
+              )}
 
-              <Button
-                type="button"
-                variant="ghost"
-                className="w-full flex flex-row justify-between"
-                onClick={() => navigate({ to: `/editUser/${user.sub}` })}
-              >
-                Paramètres du compte
-                <ChevronRight size={24} />
-              </Button>
+              {user.role === RoleEnum.CLIENT && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-full flex flex-row justify-between"
+                  onClick={() => navigate({ to: `/editUser/${user.sub}` })}
+                >
+                  Parrainage
+                  <ChevronRight size={24} />
+                </Button>
+              )}
 
-              <Button
-                type="button"
-                variant="ghost"
-                className="w-full flex flex-row justify-between"
-              >
-                Autre
-                <ChevronRight size={24} />
-              </Button>
+              {user.role === RoleEnum.RESTAURATEUR && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-full flex flex-row justify-between"
+                  onClick={() =>
+                    navigate({
+                      to: `/restaurant/edit/${restaurateur.restaurant.id_restaurant}`,
+                    })
+                  }
+                >
+                  Paramètres du compte
+                  <ChevronRight size={24} />
+                </Button>
+              )}
+
+              {user.role === RoleEnum.CLIENT && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-full flex flex-row justify-between"
+                  onClick={() => navigate({ to: `/editUser/${user.sub}` })}
+                >
+                  Paramètres du compte
+                  <ChevronRight size={24} />
+                </Button>
+              )}
 
               {auth.isAuthenticated && (
                 <Button
