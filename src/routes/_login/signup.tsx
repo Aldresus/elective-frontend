@@ -256,7 +256,7 @@ function Login() {
       toast.success("Restaurant créé !");
       restauContext.restaurant.id_restaurant = data.id_restaurant;
       navigate({
-        to: "/restaurateur",
+        to: `/restaurant/edit/${restauContext.restaurant.id_restaurant}`,
       });
     },
     onError(error) {
