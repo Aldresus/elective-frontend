@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { restaurateurContext } from "@/contexts/restaurateurContext";
 import {
   CategoryContent,
   CategoryContentRestaurant,
@@ -24,11 +25,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Minus, Plus, Save } from "lucide-react";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
-export const Route = createFileRoute("/_restaurateur/editMenu/$id")({
+export const Route = createFileRoute("/_restaurateur/menu/edit/$menuId")({
   component: MenuManager,
 });
 
@@ -86,21 +88,23 @@ function MenuManager() {
     menu_image_url: "",
     price: 0,
   });
-  const [displayCategory, setdisplayCategory] = useState<Boolean>(false);
+  const [displayCategory, setdisplayCategory] = useState<boolean>(false);
   const [categoryName, setCategoryName] = useState("");
   const [categoriesEdited, setCategoriesEdited] = useState<
     Array<categoryType | addProductCategoryType | addMenuCategoryType>
   >([]);
   const [categoriesDeleted, setCategoriesDeleted] = useState<Array<string>>([]);
 
-  const { id } = Route.useParams();
+  const { menuId } = Route.useParams();
+  const restaurateur = useContext(restaurateurContext);
 
   const { token } = useAuth();
 
   useQuery({
-    queryKey: ["getMenuCategories", id],
+    queryKey: ["getMenuCategories", menuId],
     queryFn: async () => {
-      const rawData = await axiosInstance(token).get(`/menu/${id}`);
+
+      const rawData = await axiosInstance(token).get(`/menu/${menuId}`);
 
       const finalData = (await rawData).data.Menu_Categories;
       console.log("finalData: ", finalData);
@@ -119,17 +123,16 @@ function MenuManager() {
     },
   });
 
-  const idRestaurant: string = "6671ed6ebc8bbd71f1ad0285";
   useQuery({
-    queryKey: ["RestaurantProducts", idRestaurant],
+    queryKey: ["RestaurantProducts", restaurateur.restaurant.id_restaurant],
     queryFn: async () => {
       const rawData = axiosInstance(token).get(
-        `/product?id_restaurant=${idRestaurant}`
+        `/product?id_restaurant=${restaurateur.restaurant.id_restaurant}`
       );
 
       const finalData = (await rawData).data;
 
-      for (var product of finalData) {
+      for (const product of finalData) {
         const itemInList: Product = {
           id_product: product.id_product,
           name: product.name,
@@ -164,7 +167,7 @@ function MenuManager() {
       image: "",
       price: menuData.price,
     });
-  }, [menuData]);
+  }, [menuData, reset]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCategoryName(e.target.value);
@@ -186,10 +189,12 @@ function MenuManager() {
         console.log("Category created");
         console.log(res);
         window.location.reload();
+        toast.success("Catégorie créée");
       })
       .catch((err) => {
         console.log("Failed creation category");
         console.log(err);
+        toast.error("Une erreur est survenue");
       });
 
     setCategoryName("");
@@ -198,20 +203,22 @@ function MenuManager() {
 
   const onSubmit = async (values: z.infer<typeof menuSchema>) => {
     axiosInstance(token)
-      .patch(`menu/${id}`, {
+      .patch(`menu/${menuId}`, {
         name: values.name,
         description: values.description,
         price: values.price,
         menu_image_url: values.image,
-        id_restaurant: "6671ed6ebc8bbd71f1ad0285", //todo dynamik
+        id_restaurant: restaurateur.restaurant.id_restaurant,
       })
       .then((res) => {
         console.log("Insertion réussie");
         console.log(res);
+        toast.success("Menu modifié avec succès");
       })
       .catch((err) => {
         console.log("Failed");
         console.log(err);
+        toast.error("Une erreur est survenue");
       });
 
     categoriesEdited.map((editedCategory) => {
@@ -220,6 +227,7 @@ function MenuManager() {
         .then((res) => {
           console.log("Successfull edited categories");
           console.log(res);
+          toast.success("Catégorie modifiée");
         })
         .catch((err) => {
           console.log("Categories Failed");

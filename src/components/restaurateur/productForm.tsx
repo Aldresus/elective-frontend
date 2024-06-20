@@ -7,8 +7,10 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction, useEffect } from "react";
+import { EditProduct } from "@/entities/product";
 
 interface ProductFormProps {
+  product?: EditProduct;
   onSubmit: SubmitHandler<z.infer<typeof productSchema>>;
   resetForm: boolean;
   setResetForm: Dispatch<SetStateAction<boolean>>;
@@ -22,21 +24,22 @@ const productSchema = z.object({
   price: z.coerce
     .number()
     .min(0.01, { message: "Indiquez un prix supérieur à 0." }),
-  image: z.any(),
+  product_image_url: z.any(),
 });
 
 export default function ProductForm({
   onSubmit,
   resetForm,
   setResetForm,
+  product,
 }: ProductFormProps) {
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      image: "",
-      price: 0,
+      name: product?.name || "",
+      description: product?.description || "",
+      product_image_url: "",
+      price: product?.price || 0,
     },
   });
 
@@ -45,7 +48,7 @@ export default function ProductForm({
   useEffect(() => {
     resetForm && reset();
     setResetForm(false);
-  }, [resetForm]);
+  }, [reset, resetForm, setResetForm]);
 
   return (
     <Form {...form}>
@@ -77,7 +80,7 @@ export default function ProductForm({
         />
         <FormField
           control={form.control}
-          name="image"
+          name="product_image_url"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Image</FormLabel>
