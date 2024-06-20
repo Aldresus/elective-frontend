@@ -59,8 +59,10 @@ export default function Navbar({
         <Dialog>
           <DialogTrigger>
             {auth.isAuthenticated ? (
-              <Button variant="link">
-                {user?.first_name} {user?.last_name}
+              <Button variant="link" className="gap-2">
+                <div>
+                  {user?.first_name} {user?.last_name}
+                </div>
                 <Avatar>
                   <AvatarFallback>{`${user?.first_name.charAt(0)}${user?.last_name.charAt(
                     0
