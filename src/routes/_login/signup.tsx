@@ -207,7 +207,7 @@ function Login() {
             email: "",
             food_type: "",
             siret: siret,
-            name: "",
+            name: "Nom du restaurant",
             postal_code: "",
             price_range: "",
             rating: 0.0,
