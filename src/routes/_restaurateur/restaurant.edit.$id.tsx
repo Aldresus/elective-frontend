@@ -26,7 +26,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export const Route = createFileRoute("/_restaurateur/editRestaurant/$id")({
+export const Route = createFileRoute("/_restaurateur/restaurant/edit/$id")({
   component: RestaurantManager,
 });
 

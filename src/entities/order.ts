@@ -52,3 +52,15 @@ export function productToOrderProduct(product: Product): OrderProduct {
     quantity: 1,
   };
 }
+
+export const calculateOrderTotal = (order: Order) => {
+  let total = 0;
+  order.products.forEach((product) => {
+    total += product.price * product.quantity;
+  });
+  order.menus.forEach((menu) => {
+    total += menu.price;
+  });
+  
+  return total;
+};

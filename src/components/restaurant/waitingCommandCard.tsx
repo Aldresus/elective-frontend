@@ -28,8 +28,11 @@ export default function WaitingCommandCard({
         </div>
       </CardHeader>
       <CardContent>
-        {order.menus.map((menu) => (
-          <div className="flex items-center justify-between">
+        {order.menus.map((menu, i) => (
+          <div
+            key={`${menu.id_menu}${i}`}
+            className="flex items-center justify-between"
+          >
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
                 <AccordionTrigger>
@@ -37,8 +40,8 @@ export default function WaitingCommandCard({
                 </AccordionTrigger>
                 <AccordionContent>
                   <Ul className="my-0">
-                    {menu.products.map((product) => (
-                      <Li key={product.id_product}>{product.name}</Li>
+                    {menu.products.map((product, i) => (
+                      <Li key={`${product.id_product}${i}`}>{product.name}</Li>
                     ))}
                   </Ul>
                 </AccordionContent>
@@ -49,7 +52,10 @@ export default function WaitingCommandCard({
         ))}
 
         {order.products.map((product) => (
-          <div className="flex items-center justify-between">
+          <div
+            key={product.id_product}
+            className="flex items-center justify-between"
+          >
             <Large>{product.name}</Large>
             <Large className="pl-8">{product.price}€</Large>
           </div>
