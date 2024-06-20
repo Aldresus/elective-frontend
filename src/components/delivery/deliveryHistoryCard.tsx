@@ -9,11 +9,7 @@ interface DeliveryHistoryCardProps {
   user: User;
 }
 
-export function DeliveryHistoryCard({
-  order,
-  user,
-  ...props
-}: DeliveryHistoryCardProps) {
+export function DeliveryHistoryCard({ order, user }: DeliveryHistoryCardProps) {
   return (
     <div className="flex items-center justify-around w-full h-1/8 bg-gray-200 rounded-lg py-2">
       <div>

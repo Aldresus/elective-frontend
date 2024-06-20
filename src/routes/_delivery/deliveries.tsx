@@ -2,8 +2,6 @@ import Map from "@/components/common/map";
 import { DeliveryChoice } from "@/components/delivery/deliveryChoice";
 import { H1, H2 } from "@/components/typography";
 import { Separator } from "@/components/ui/separator";
-import { Order } from "@/entities/order";
-import { User } from "@/entities/user";
 import { OrderStatusEnum } from "@/enums/orderStatus";
 import { createFileRoute } from "@tanstack/react-router";
 

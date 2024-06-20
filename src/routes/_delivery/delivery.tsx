@@ -15,9 +15,10 @@ import {
 } from "react";
 import ReactModal from "react-modal";
 import QrScanner from "qr-scanner";
-import DeliveryEntity from "@/entities/delivery";
 import { User } from "@/entities/user";
 import { Order } from "@/entities/order";
+import { Restaurant } from "@/entities/restaurant";
+import { OrderStatus, OrderStatusEnum } from "@/enums/orderStatus";
 
 export const Route = createFileRoute("/_delivery/delivery")({
   component: Delivery,
@@ -32,21 +33,6 @@ const DeliveriesContext = createContext<IDeliveriesContext>({
   modalIsOpen: false,
   setIsOpen: () => {},
 });
-
-interface IDelivery extends DeliveryEntity, Order, User {
-  order_id: string;
-  status?: string;
-  price?: string;
-  restaurant_name?: string;
-  restaurant_address?: string;
-  restaurant_city?: string;
-  restaurant_postal_code?: string;
-  user_last_name?: string;
-  user_first_name?: string;
-  user_address?: string;
-  user_city?: string;
-  user_postal_code?: string;
-}
 
 function Delivery() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -128,19 +114,40 @@ function Delivery() {
     last_name: "Dupont",
   };
 
-  const restaurantData: RestaurantEntity = {
+  const restaurantData: Restaurant = {
     name: "KFC",
     address: "Rue de la Paix",
     city: "Strasbourg",
     postal_code: "67000",
+    banner_url: "",
+    business_hours: "",
+    email: "",
+    food_type: "",
+    id_restaurant: "1",
+    price_range: "",
+    rating: 0,
   };
 
-  const orderData: OrderEntity = {
-    status: "Terminée",
-    price: "100",
+  const orderData: Order = {
+    address: "Rue de la Paix",
+    city: "Paris",
+    postal_code: "75001",
+    price: 10,
+    status: OrderStatusEnum.ON_THE_WAY,
+    id_order: "1",
+    id_user: "1",
+    id_restaurant: "1",
+    menus: [],
+    notes: "",
+    order_date: new Date(),
+    products: [],
+    delivery_accepted_datetime: new Date(),
+    received_datetime: new Date(),
+    restaurant_accepted_datetime: new Date(),
+    restaurant_to_delivery_datetime: new Date(),
   };
 
-  const delivery: IDelivery | null = {
+  const delivery = {
     order_id: Math.random().toString(36).substring(2),
     status: orderData?.status,
     price: orderData?.price,
@@ -165,7 +172,7 @@ function Delivery() {
             </div>
             <Separator className="w-full" />
             <div className="w-full flex justify-between items-center">
-              <H2>{delivery?.status}</H2>
+              <H2>{OrderStatus[delivery?.status]}</H2>
               <Large>
                 {delivery?.price} {delivery?.price ? "€" : ""}
               </Large>
@@ -175,17 +182,15 @@ function Delivery() {
                 <Large>{delivery?.restaurant_name}</Large>
                 <p>{delivery?.restaurant_address}</p>
                 <p>
-                  {delivery?.restaurant_city} {delivery?.restaurant_postal_code}
+                  {delivery?.restaurant_postal_code} {delivery?.restaurant_city}
                 </p>
               </div>
               <div className="flex-1">
                 <Large>
                   {delivery?.user_last_name} {delivery?.user_first_name}
                 </Large>
-                <p>{delivery?.user_address}</p>
-                <p>
-                  {delivery?.user_city} {delivery?.user_postal_code}
-                </p>
+                <p>rue de la Paix</p>
+                <p>67000 Strasbourg</p>
               </div>
               <Button className="flex gap-1 items-center" onClick={openModal}>
                 <QrCode />

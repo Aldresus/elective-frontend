@@ -9,7 +9,7 @@ interface DeliveryChoiceProps {
   user: User;
 }
 
-export function DeliveryChoice({ order, user, ...props }: DeliveryChoiceProps) {
+export function DeliveryChoice({ order, user }: DeliveryChoiceProps) {
   return (
     <Card className="py-3 px-6 rounded-xl bg-slate-100">
       <div className="flex justify-between items-center mb-2">
