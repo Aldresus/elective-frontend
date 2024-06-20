@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogTrigger,
   DialogPortal,
-  DialogClose,
 } from "../ui/dialog";
 import { Large } from "../typography";
 import { Route } from "@/routes/_user";
@@ -44,8 +43,8 @@ export default function Navbar({
       )}
       {...props}
     >
-      <Link to="/" className="h-full">
-        <Logo />
+      <Link to="/" className="h-full flex items-center">
+        <Logo className="h-2/3 sm:h-full" />
       </Link>
       {isAdress && (
         <AddressChoiceModal
@@ -54,13 +53,15 @@ export default function Navbar({
           closed={() => setAddressModalIsOpen(false)}
         />
       )}
-      <Input className="w-full max-w-xs" placeholder="Rechercher" />
+      <Input className="w-full max-w-40 sm:max-w-xs" placeholder="Rechercher" />
       <div className="flex items-center gap-2">
         <Dialog>
           <DialogTrigger>
             {auth.isAuthenticated ? (
-              <Button variant="link">
-                {user?.first_name} {user?.last_name}
+              <Button variant="link" className="gap-2">
+                <div className="hidden sm:block">
+                  {user?.first_name} {user?.last_name}
+                </div>
                 <Avatar>
                   <AvatarFallback>{`${user?.first_name.charAt(0)}${user?.last_name.charAt(
                     0
@@ -81,53 +82,50 @@ export default function Navbar({
           <DialogPortal>
             <DialogContent className="flex flex-col items-center justify-center fixed overflow-y-auto">
               <Large>Informations du compte</Large>
-              <DialogClose>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-96 flex flex-row justify-between"
-                  onClick={() => navigate({ to: "/user" })}
-                >
-                  Commandes
-                  <ChevronRight size={24} />
-                </Button>
-              </DialogClose>
-              <DialogClose>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-96 flex flex-row justify-between"
-                  onClick={() => navigate({ to: `/editUser/${user.sub}` })}
-                >
-                  Parrainage
-                  <ChevronRight size={24} />
-                </Button>
-              </DialogClose>
-              <DialogClose>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-96 flex flex-row justify-between"
-                  onClick={() => navigate({ to: `/editUser/${user.sub}` })}
-                >
-                  Paramètres du compte
-                  <ChevronRight size={24} />
-                </Button>
-              </DialogClose>
-              <DialogClose>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-96 flex flex-row justify-between"
-                >
-                  Autre
-                  <ChevronRight size={24} />
-                </Button>
-              </DialogClose>
+
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full flex flex-row justify-between"
+                onClick={() => navigate({ to: "/user" })}
+              >
+                Commandes
+                <ChevronRight size={24} />
+              </Button>
+
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full flex flex-row justify-between"
+                onClick={() => navigate({ to: `/editUser/${user.sub}` })}
+              >
+                Parrainage
+                <ChevronRight size={24} />
+              </Button>
+
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full flex flex-row justify-between"
+                onClick={() => navigate({ to: `/editUser/${user.sub}` })}
+              >
+                Paramètres du compte
+                <ChevronRight size={24} />
+              </Button>
+
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full flex flex-row justify-between"
+              >
+                Autre
+                <ChevronRight size={24} />
+              </Button>
+
               {auth.isAuthenticated && (
                 <Button
                   type="button"
-                  className="mt-4 w-96"
+                  className="mt-4 w-full"
                   variant="destructive"
                   onClick={() => auth.logout()}
                 >

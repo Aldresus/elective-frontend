@@ -35,7 +35,7 @@ function EditUser() {
   });
 
   return (
-    <>
+    <div className="max-w-[500px] mx-auto">
       <div className="space-y-6 w-full">
         <H1 className="text-center">Votre compte</H1>
       </div>
@@ -50,53 +50,52 @@ function EditUser() {
               .then((res) => {
                 console.log("Insertion réussie");
                 console.log(res);
+                toast.success("Votre compte a été mis à jour");
               })
               .catch((err) => {
                 console.log("Failed");
                 console.log(err);
+                toast.error("Une erreur est survenue");
               });
           }}
         />
         <Separator className="w-full mt-8" />
-        <div className="flex flex-col space-y-2 mt-6">
-          <div className="flex items-center space-x-2">
-            <div className="flex flex-row gap-2 min-w-[500px] items-center">
-              Code de parrainage:
-              {showCode ? (
-                <div className="flex flex-row items-center bg-slate-200 rounded gap-2">
-                  <span className="font-bold bg-slate-100 p-2 rounded-l">
-                    {id}
-                  </span>
-                  {hasCopiedText ? (
-                    <Check
-                      className="cursor-pointer mr-2"
-                      onClick={() => copyToClipboard(id)}
-                    />
-                  ) : (
-                    <Copy
-                      className="cursor-pointer mr-2"
-                      onClick={() => {
-                        copyToClipboard(id);
-                        toast.info("copié dans le presse papier");
-                      }}
-                    />
-                  )}
-                </div>
-              ) : (
-                <span className="font-bold">************</span>
-              )}
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setShowCode(!showCode)}
-              className="w-[200px]"
-            >
-              Voir le code de parrainage
-            </Button>
+
+        <div className="flex flex-col gap-2 items-center">
+          Code de parrainage:
+          {/* {showCode ? ( */}
+          <div className="flex flex-row items-center bg-slate-200 rounded gap-2">
+            <span className="font-bold font-mono bg-slate-100 p-2 rounded-l">
+              {showCode ? id : "************************"}
+            </span>
+            {hasCopiedText ? (
+              <Check
+                className="cursor-pointer mr-2"
+                onClick={() => copyToClipboard(id)}
+              />
+            ) : (
+              <Copy
+                className="cursor-pointer mr-2"
+                onClick={() => {
+                  copyToClipboard(id);
+                  toast.info("Code copié dans le presse papier");
+                }}
+              />
+            )}
           </div>
+          {/* ) : (
+            <span className="font-bold">************</span>
+          )} */}
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setShowCode(!showCode)}
+            className="w-[200px]"
+          >
+            Voir le code de parrainage
+          </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -1,49 +1,46 @@
-// import { CircleDashed, CircleDot } from "lucide-react";
-// import { Large } from "../typography";
-// import { User } from "@/entities/user";
-// import { Order } from "@/entities/order";
+import { CircleDashed, CircleDot } from "lucide-react";
+import { Large } from "../typography";
+import { User } from "@/entities/user";
+import { Order } from "@/entities/order";
+import { OrderStatusEnum } from "@/enums/orderStatus";
 
-// interface IDeliveries extends Order, User {
-//   price?: string;
-//   order_name?: string;
-//   status?: string;
-//   user_first_name?: string;
-//   user_last_name?: string;
-//   received_datetime?: Date;
-//   restaurant_to_delivery_datetime?: Date;
-// }
+interface DeliveryHistoryCardProps {
+  order: Order;
+  user: User;
+}
 
-// export default function DeliveryHistoryCard(props: IDeliveries) {
-//   return (
-//     <div className="flex items-center justify-around w-full h-1/8 bg-gray-200 rounded-lg py-2">
-//       <div>
-//         <Large>{props.order_name}</Large>
-//         <Large>
-//           {props.user_first_name} {props.user_last_name}
-//         </Large>
-//         <p>
-//           {props.status === "Terminée"
-//             ? props.received_datetime?.toLocaleDateString()
-//             : props.restaurant_to_delivery_datetime?.toLocaleDateString()}
-//         </p>
-//       </div>
-//       <div className="flex flex-col justify-around items-center gap-2">
-//         <Large>{props.price} €</Large>
-//         <div className="flex">
-//           {props.status === "Terminée" ? (
-//             <CircleDot className="text-red-500 mr-1" />
-//           ) : (
-//             <CircleDashed className="text-green-500 mr-1" />
-//           )}
-//           <p
-//             className={
-//               props.status === "Terminée" ? "text-red-500" : "text-green-500"
-//             }
-//           >
-//             {props.status}
-//           </p>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
+export function DeliveryHistoryCard({ order, user }: DeliveryHistoryCardProps) {
+  return (
+    <div className="flex items-center justify-around w-full h-1/8 bg-gray-200 rounded-lg py-2">
+      <div>
+        <Large>
+          {user.first_name} {user.last_name}
+        </Large>
+        <p>
+          {order.status === OrderStatusEnum.DELIVERED
+            ? order.received_datetime?.toLocaleDateString()
+            : order.restaurant_to_delivery_datetime?.toLocaleDateString()}
+        </p>
+      </div>
+      <div className="flex flex-col justify-around items-center gap-2">
+        <Large>{order.price} €</Large>
+        <div className="flex">
+          {order.status === OrderStatusEnum.DELIVERED ? (
+            <CircleDot className="text-red-500 mr-1" />
+          ) : (
+            <CircleDashed className="text-green-500 mr-1" />
+          )}
+          <p
+            className={
+              order.status === OrderStatusEnum.DELIVERED
+                ? "text-red-500"
+                : "text-green-500"
+            }
+          >
+            {order.status}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

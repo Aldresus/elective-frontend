@@ -38,7 +38,7 @@ function UserComponent() {
       {!isAuthenticated && !hideBanner && (
         <LoginBanner className="mb-6" onclose={() => setHideBanner(true)} />
       )}
-      <div className="w-full flex justify-center gap-9">
+      <div className="w-full flex flex-wrap justify-center gap-9">
         <FilterButton>
           <Pizza size={35} />
         </FilterButton>
@@ -62,17 +62,11 @@ function UserComponent() {
         </FilterButton>
         <FilterButton>
           <Beer size={35} />
-        </FilterButton>
-        <FilterButton>
-          <Sandwich size={35} />
-        </FilterButton>
-        <FilterButton>
-          <Vegan size={35} />
         </FilterButton>
       </div>
       <div>
-        <H2>En ce moment</H2>
-        <div className="flex justify-between w-full gap-6">
+        <H2>Catégorie 0</H2>
+        <div className="flex justify-between w-full gap-6 flex-wrap sm:flex-nowrap">
           {/* <RestaurantCard className="flex-1">La mie tah caline</RestaurantCard>
           <RestaurantCard className="flex-1">La mie tah caline</RestaurantCard>
           <RestaurantCard className="flex-1">La mie tah caline</RestaurantCard> */}
@@ -93,7 +87,7 @@ function UserComponent() {
         <Separator />
       </div>
       <div>
-        <H2>Restaurants italiens</H2>
+        <H2>Catégorie 1</H2>
         <div className="flex w-full gap-6 overflow-x-scroll">
           {query.data?.slice(3, 9).map((restaurant) => (
             <Link
@@ -112,7 +106,7 @@ function UserComponent() {
         <Separator />
       </div>
       <div>
-        <H2>Bon grec sa mère</H2>
+        <H2>Catégorie 2</H2>
         <div className="flex w-full gap-6 overflow-x-scroll">
           {query.data?.slice(9, 15).map((restaurant) => (
             <Link
@@ -130,42 +124,6 @@ function UserComponent() {
         </div>
         <Separator />
       </div>
-
-      {/* <div>
-        <H2>Restaurants italiens</H2>
-        <div className="flex w-full gap-6 overflow-x-scroll">
-          <RestaurantCard className="max-w-[300px]">
-            La mie tah caline
-          </RestaurantCard>
-          <RestaurantCard>La mie tah caline</RestaurantCard>
-          <RestaurantCard>La mie tah caline</RestaurantCard>
-          <RestaurantCard>La mie tah caline</RestaurantCard>
-          <RestaurantCard>La mie tah caline</RestaurantCard>
-          <RestaurantCard>La mie tah caline</RestaurantCard>
-        </div>
-        <Separator />
-      </div>
-      <div>
-        <H2>Bon grec sa mère</H2>
-        <div className="flex w-full gap-6 overflow-x-scroll">
-          <RestaurantCard> La mie tah caline</RestaurantCard>
-          <RestaurantCard> La mie tah caline</RestaurantCard>
-          <RestaurantCard> La mie tah caline</RestaurantCard>
-          <RestaurantCard> La mie tah caline</RestaurantCard>
-          <RestaurantCard> La mie tah caline</RestaurantCard>
-        </div>
-        <Separator />
-      </div>
-      <div>
-        <H2>j'adore les pates</H2>
-        <div className="flex w-full gap-6 overflow-x-scroll">
-          <RestaurantCard> La mie tah caline</RestaurantCard>
-          <RestaurantCard> La mie tah caline</RestaurantCard>
-          <RestaurantCard> La mie tah caline</RestaurantCard>
-          <RestaurantCard> La mie tah caline</RestaurantCard>
-        </div>
-        <Separator />
-      </div> */}
     </div>
   );
 }
