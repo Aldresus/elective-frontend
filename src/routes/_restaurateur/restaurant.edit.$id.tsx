@@ -17,6 +17,7 @@ import {
 } from "@/entities/categoryContent";
 import { Menu } from "@/entities/menu";
 import { Product } from "@/entities/product";
+import { useAuth } from "@/hooks/useAuth";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
@@ -24,6 +25,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Minus, Plus, Save } from "lucide-react";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 export const Route = createFileRoute("/_restaurateur/restaurant/edit/$id")({
@@ -114,12 +116,14 @@ function RestaurantManager() {
   >([]);
   const [categoriesDeleted, setCategoriesDeleted] = useState<Array<string>>([]);
 
+  const { token } = useAuth();
+
   const { id } = Route.useParams();
 
   useQuery({
     queryKey: ["getRestaurantCategories", id],
     queryFn: async () => {
-      const rawData = await axiosInstance().get(`/restaurant/${id}`);
+      const rawData = await axiosInstance(token).get(`/restaurant/${id}`);
 
       const finalData = (await rawData).data.Restaurant_Categories;
       console.log("finalData :", finalData);
@@ -144,7 +148,7 @@ function RestaurantManager() {
   useQuery({
     queryKey: ["RestaurantProducts", idRestaurant],
     queryFn: async () => {
-      const rawData = axiosInstance().get(
+      const rawData = axiosInstance(token).get(
         `/product?id_restaurant=${idRestaurant}`
       );
 
@@ -170,7 +174,7 @@ function RestaurantManager() {
   useQuery({
     queryKey: ["RestaurantMenus", idRestaurant],
     queryFn: async () => {
-      const rawData = axiosInstance().get(
+      const rawData = axiosInstance(token).get(
         `/menu?id_restaurant=${idRestaurant}`
       );
 
@@ -235,11 +239,12 @@ function RestaurantManager() {
       ids_menu: [],
     };
 
-    axiosInstance()
+    axiosInstance(token)
       .post("/restaurant/restaurantCategory", createdCategory)
       .then((res) => {
         console.log("Category created");
         console.log(res);
+        toast.success("Catégorie ajoutée !");
         window.location.reload();
       })
       .catch((err) => {
@@ -252,7 +257,7 @@ function RestaurantManager() {
   };
 
   const onSubmit = async (values: z.infer<typeof restaurantSchema>) => {
-    axiosInstance()
+    axiosInstance(token)
       .patch(`restaurant/${id}`, {
         name: values.name,
         siret: values.siret,
@@ -262,6 +267,7 @@ function RestaurantManager() {
       .then((res) => {
         console.log("Insertion réussie");
         console.log(res);
+        toast.success("Restaurant modifiée !");
       })
       .catch((err) => {
         console.log("Failed");
@@ -270,22 +276,24 @@ function RestaurantManager() {
 
     categoriesEdited.map((editedCategory) => {
       if (isAddProductCategoryType(editedCategory)) {
-        axiosInstance()
+        axiosInstance(token)
           .patch(`/restaurant/addProductCategory`, editedCategory)
           .then((res) => {
             console.log("Successfull edited product category");
             console.log(res);
+            toast.success("Catégorie modifiée !");
           })
           .catch((err) => {
             console.log("Categories Failed");
             console.log(err);
           });
       } else {
-        axiosInstance()
+        axiosInstance(token)
           .patch(`/restaurant/addMenuCategory`, editedCategory)
           .then((res) => {
             console.log("Successfull edited menu category");
             console.log(res);
+            toast.success("Catégorie modifiée !");
           })
           .catch((err) => {
             console.log("Categories Failed");
@@ -295,11 +303,12 @@ function RestaurantManager() {
     });
 
     categoriesDeleted.map((deletedCategory) => {
-      axiosInstance()
+      axiosInstance(token)
         .delete(`/restaurant/category/${deletedCategory}`)
         .then((res) => {
           console.log("Successfull deleted category");
           console.log(res);
+          toast.success("Catégorie supprimée !");
         })
         .catch((err) => {
           console.log("Failed deleted category");
@@ -308,7 +317,6 @@ function RestaurantManager() {
     });
   };
 
-  console.log("data :", data);
   return (
     <div className="h-full w-full">
       <H1 className="pb-2">Restaurant Manager</H1>
