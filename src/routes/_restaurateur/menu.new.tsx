@@ -61,8 +61,8 @@ function NewMenu() {
         console.log("Insertion réussie");
         console.log(res);
         navigate({
-          to: "/editMenu/$id",
-          params: { id: res.data.id_menu },
+          to: "/menu/edit/$menuId",
+          params: { menuId: res.data.id_menu },
         });
       })
       .catch((err) => {
