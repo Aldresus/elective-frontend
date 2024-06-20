@@ -1,6 +1,7 @@
 import SearchBar from "@/components/common/searchBar";
 import AddOfferingCard from "@/components/restaurant/addOfferingCard";
 import { HorizontalMenuCard } from "@/components/restaurant/menu/horizontalMenuCard";
+import { HorizontalItemCard } from "@/components/restaurant/primitives/horizontalItemCard";
 import { HorizontalProductCard } from "@/components/restaurant/product/horizontalProductCard";
 import { H1, H2 } from "@/components/typography";
 import { restaurateurContext } from "@/contexts/restaurateurContext";
@@ -9,6 +10,7 @@ import { Product } from "@/entities/product";
 import { useAuth } from "@/hooks/useAuth";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
 import { useContext } from "react";
 
@@ -35,37 +37,55 @@ function RestaurantOfferings() {
   });
 
   const productsQuery = useQuery({
-    queryKey: ["menu", restaurateur.restaurant.id_restaurant],
+    queryKey: ["product", restaurateur.restaurant.id_restaurant],
     queryFn: async () => {
-      const response = await axiosInstance(token).get(`/produit/`, {
+      const response = await axiosInstance(token).get(`/product/`, {
         params: {
           id_restaurant: restaurateur.restaurant.id_restaurant,
         },
       });
-      console.log(response.data);
+      console.log("products", response.data);
 
       return response.data as Array<Product>;
     },
   });
 
   return (
-    <div>
-      <H1>Nom du restaurant</H1>
+    <div className="flex flex-col gap-4">
+      <H1>{restaurateur.restaurant.name}</H1>
       <SearchBar />
-      <div>
-        <H2>Menus</H2>
+
+      <H2>Menus</H2>
+      <div className="flex flex-col gap-2">
         {menusQuery.data?.map((menu) => (
-          <HorizontalMenuCard key={menu.id_menu} menuContent={menu} />
+          <Link to="/product/edit/$id" params={{ id: menu.id_menu }}>
+            <HorizontalItemCard
+              cardDescription={menu.description}
+              cardPrice={menu.price}
+              cardTitle={menu.name}
+              imgUrl={menu.menu_image_url}
+              addButton={false}
+            />
+          </Link>
         ))}
-        <AddOfferingCard type="menu" />
       </div>
-      <div>
-        <H2>Produits</H2>
+      <AddOfferingCard type="menu" />
+
+      <H2>Produits</H2>
+      <div className="flex flex-col gap-2">
         {productsQuery.data?.map((product) => (
-          <HorizontalProductCard key={product.id_product} product={product} />
-        ))}
-        <AddOfferingCard type="produit" />
+          <Link to="/product/edit/$id" params={{ id: product.id_product }}>
+            <HorizontalItemCard
+              cardDescription={product.description}
+              cardPrice={product.price}
+              cardTitle={product.name}
+              imgUrl={product.product_image_url}
+              addButton={false}
+            />
+          </Link>
+        ))}{" "}
       </div>
+      <AddOfferingCard type="produit" />
     </div>
   );
 }

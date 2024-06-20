@@ -67,20 +67,24 @@ function RestaurateurLayout() {
   const [modalIsOpen, setmodalIsOpen] = useState<boolean>(false);
   return (
     <ModalContext.Provider value={{ modalIsOpen, setmodalIsOpen }}>
-      <div className=" h-screen overflow-hidden mx-auto">
-        <Navbar isAdress={false} isRestaurateur={true} />
-        <div className="p-9 w-full h-full">
-          <restaurateurContext.Provider
-            value={{
-              ...restaurateurState,
-            }}
-          >
+      <restaurateurContext.Provider
+        value={{
+          ...restaurateurState,
+        }}
+      >
+        <div className="h-screen">
+          <Navbar
+            isAdress={false}
+            isRestaurateur={true}
+            className="fixed top-0 left-0 w-full"
+          />
+          <div className="mt-[50px] p-9 w-full mx-auto min-h-screen">
             <Outlet />
-          </restaurateurContext.Provider>
+          </div>
+          <EditProfileModal />
+          <Footer className=" w-full" />
         </div>
-        <EditProfileModal />
-        <Footer className="absolute bottom-0 left-0 w-full" />
-      </div>
+      </restaurateurContext.Provider>
     </ModalContext.Provider>
   );
 }

@@ -9,11 +9,13 @@ import { toast } from "sonner";
 
 interface HorizontalProductCardProps extends React.HTMLProps<HTMLDivElement> {
   product: Product;
+  addButton?: boolean;
 }
 
 export function HorizontalProductCard({
   className,
   product,
+  addButton = true,
   ...props
 }: HorizontalProductCardProps) {
   const [open, setOpen] = useState(false);
@@ -29,6 +31,7 @@ export function HorizontalProductCard({
         }}
       />
       <HorizontalItemCard
+        addButton={addButton}
         onClick={() => setOpen(true)}
         onAddClick={(e) => {
           e.stopPropagation();
