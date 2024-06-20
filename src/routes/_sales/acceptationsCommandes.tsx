@@ -18,37 +18,30 @@ function AcceptationsCommandes() {
       <div className="h-full flex flex-col gap-2 overflow-auto pb-20">
         <SalesDataCard
           type="acceptCom"
-          value1="Kebabouche"
-          value2="le client lo"
-          orderId="452158877féf"
+          value1="Le Gourmet Épicurien"
+          value2="Leroy Arthur"
+          orderId="ddgcsc80y8s1pnntg6loq0ol"
           date="15/05/2024"
         />
         <SalesDataCard
           type="acceptCom"
-          value1="Kebabouche"
-          value2="le client lo"
-          orderId="452158877féf"
+          value1="La Table des Délices"
+          value2="Bernard Léa"
+          orderId="vy5xb531rh4ncvzlxphpdmsj"
           date="15/05/2024"
         />
         <SalesDataCard
           type="acceptCom"
-          value1="Kebabouche"
-          value2="le client lo"
-          orderId="452158877féf"
+          value1="Bistro de la Gare"
+          value2="Moreau Juliette"
+          orderId="j5gfp2fqac0uep62ba0dwg87"
           date="15/05/2024"
         />
         <SalesDataCard
           type="acceptCom"
-          value1="Kebabouche"
-          value2="le client lo"
-          orderId="452158877féf"
-          date="15/05/2024"
-        />
-        <SalesDataCard
-          type="acceptCom"
-          value1="Kebabouche"
-          value2="le client lo"
-          orderId="452158877féf"
+          value1="L'Auberge du Rhin"
+          value2="Martin Thomas"
+          orderId="ro2fdyvxddaefg0kteeposoc"
           date="15/05/2024"
         />
       </div>

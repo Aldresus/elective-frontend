@@ -11,45 +11,38 @@ function AcceptationsLivraisons() {
   return (
     <div className="w-full flex flex-col gap-3 h-full">
       <div>
-        <H1>Passations livraisons</H1>
+        <H1>Acceptations livraisons</H1>
         <p>Lorsqu'un livreur accepte d'effectuer une livraison.</p>
       </div>
       <SearchBar />
       <div className="h-full flex flex-col gap-2 overflow-auto pb-20">
         <SalesDataCard
           type="acceptLiv"
-          value1="le livreur lo"
-          value2="le client lo"
-          orderId="452158877féf"
-          date="15/05/2024"
+          value1="Jean-Michel Dupont"
+          value2="Leroy Arthur"
+          orderId="ddgcsc80y8s1pnntg6loq0ol"
+          date="19/05/2024"
         />
         <SalesDataCard
           type="acceptLiv"
-          value1="le livreur lo"
-          value2="le client lo"
-          orderId="452158877féf"
-          date="15/05/2024"
+          value1="Martin Emma"
+          value2="Bernard Léa"
+          orderId="vy5xb531rh4ncvzlxphpdmsj"
+          date="18/05/2024"
         />
         <SalesDataCard
           type="acceptLiv"
-          value1="le livreur lo"
-          value2="le client lo"
-          orderId="452158877féf"
-          date="15/05/2024"
+          value1="Michel Nathan"
+          value2="Moreau Juliette"
+          orderId="j5gfp2fqac0uep62ba0dwg87"
+          date="17/05/2024"
         />
         <SalesDataCard
           type="acceptLiv"
-          value1="le livreur lo"
-          value2="le client lo"
-          orderId="452158877féf"
-          date="15/05/2024"
-        />
-        <SalesDataCard
-          type="acceptLiv"
-          value1="le livreur lo"
-          value2="le client lo"
-          orderId="452158877féf"
-          date="15/05/2024"
+          value1="Lefebvre Lucie"
+          value2="Martin Thomas"
+          orderId="ro2fdyvxddaefg0kteeposoc "
+          date="16/05/2024"
         />
       </div>
     </div>
