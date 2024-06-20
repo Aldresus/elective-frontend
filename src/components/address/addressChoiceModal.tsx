@@ -12,6 +12,7 @@ import { H1 } from "../typography";
 import { currentOrderContext } from "@/contexts/currentOrderContext";
 import { AddressInput } from "./addressInput";
 import { toast } from "sonner";
+import { Map } from "lucide-react";
 
 interface AddressChoiceModalProps extends React.HTMLAttributes<HTMLDivElement> {
   open: boolean;
@@ -66,10 +67,13 @@ export function AddressChoiceModal({
           console.log("open");
         }}
       >
-        <Button variant="link" className="underline">
+        <Button variant="link" className="underline hidden sm:block">
           {currentOrder.address === ""
             ? "Entrez votre adresse de livraison"
             : `${currentOrder.address} ${currentOrder.city} ${currentOrder.postal_code}`}
+        </Button>
+        <Button variant="link" className="underline block sm:hidden">
+          <Map />
         </Button>
       </DialogTrigger>
       <DialogContent className="space-y-4 z-[10000]">

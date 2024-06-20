@@ -44,8 +44,8 @@ export default function Navbar({
       )}
       {...props}
     >
-      <Link to="/" className="h-full">
-        <Logo />
+      <Link to="/" className="h-full flex items-center">
+        <Logo className="h-2/3 sm:h-full" />
       </Link>
       {isAdress && (
         <AddressChoiceModal
