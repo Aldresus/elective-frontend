@@ -55,17 +55,19 @@ function RestaurateurLayout() {
         `/restaurant/user/${decodedAccessToken.sub}`
       );
 
-      const responseData = response.data as UsersRestaurants;
+      const responseData = response.data as Array<UsersRestaurants>;
 
+      console.log("responseData", responseData);
       setRestaurateurState((prev) => {
         return {
           ...prev,
-          restaurant: responseData.restaurant,
+          restaurant: responseData[0].restaurant,
         };
       });
 
       return response.data;
     },
+    refetchInterval: 60000,
   });
 
   const [modalIsOpen, setmodalIsOpen] = useState<boolean>(false);
@@ -73,7 +75,7 @@ function RestaurateurLayout() {
     <ModalContext.Provider value={{ modalIsOpen, setmodalIsOpen }}>
       <restaurateurContext.Provider
         value={{
-          ...restaurateurState,
+          restaurant: restaurateurState.restaurant,
         }}
       >
         <div className="h-screen">

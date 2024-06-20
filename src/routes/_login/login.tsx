@@ -29,8 +29,10 @@ import { z } from "zod";
 import axios from "axios";
 import { sha256 } from "js-sha256";
 import { useMutation } from "@tanstack/react-query";
-import { LoginResponse } from "@/entities/login";
+import { DecodedAccessToken, LoginResponse } from "@/entities/login";
 import { useAuth } from "@/hooks/useAuth";
+import { useLocalStorage } from "@uidotdev/usehooks";
+import { RoleEnum } from "@/entities/user";
 
 export const Route = createFileRoute("/_login/login")({
   component: Login,
@@ -63,6 +65,7 @@ function Login() {
   const auth = useAuth();
   const router = useRouter();
   const navigate = Route.useNavigate();
+  const [user] = useLocalStorage<DecodedAccessToken>("user");
 
   const mutation = useMutation({
     mutationFn: async (loginData: { email: string; password: string }) => {
@@ -72,10 +75,17 @@ function Login() {
     onSuccess: (data) => {
       console.log("Insertion réussie");
       router.invalidate();
-      navigate({
-        to: "/user",
-      });
       auth.login(data.access_token);
+
+      if (user.role === RoleEnum.RESTAURATEUR) {
+        navigate({
+          to: "/restaurateur",
+        });
+      } else {
+        navigate({
+          to: "/user",
+        });
+      }
     },
     onError: (err) => {
       console.log("Failed", err);

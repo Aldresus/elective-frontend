@@ -21,8 +21,9 @@ function Restaurant() {
   console.log(restaurateur);
 
   const orderQuery = useQuery({
-    queryKey: ["order", restaurateur.restaurant.id_restaurant],
+    queryKey: ["order", restaurateur],
     queryFn: async () => {
+      console.log("restaurateur", restaurateur);
       const response = await axiosInstance(token).get(`/order/`, {
         params: {
           status: OrderStatusEnum.CREATED,
