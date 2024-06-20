@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Eye, EyeOff, Save } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -83,7 +83,7 @@ function ClientDetails() {
 
   const { token } = useAuth();
 
-  const query = useQuery({
+  useQuery({
     queryKey: ["client"],
     queryFn: async () => {
       const response = await axiosInstance(token).get(`/user?id=${id}`);
