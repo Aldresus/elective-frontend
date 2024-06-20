@@ -54,13 +54,13 @@ export default function Navbar({
           closed={() => setAddressModalIsOpen(false)}
         />
       )}
-      <Input className="w-full max-w-xs" placeholder="Rechercher" />
+      <Input className="w-full max-w-40 sm:max-w-xs" placeholder="Rechercher" />
       <div className="flex items-center gap-2">
         <Dialog>
           <DialogTrigger>
             {auth.isAuthenticated ? (
               <Button variant="link" className="gap-2">
-                <div>
+                <div className="hidden sm:block">
                   {user?.first_name} {user?.last_name}
                 </div>
                 <Avatar>
