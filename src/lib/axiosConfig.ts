@@ -12,6 +12,7 @@ const axiosInstance = (jwt?: string | null) =>
       Authorization: jwt ? `Bearer ${jwt}` : "",
     },
     //   headers: { "X-Custom-Header": "foobar" },
+
   });
 
 export { axiosInstance };

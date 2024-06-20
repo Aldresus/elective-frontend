@@ -16,13 +16,19 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import { sha256 } from "js-sha256";
-import { RoleEnum } from "@/entities/user";
+import { RoleEnum, UpdateRoleUser, User } from "@/entities/user";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { useRole } from "@/hooks/useRole";
+
+import { useMutation } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axiosConfig";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { LoginResponse } from "@/entities/login";
+import { CreateEmptyRestaurant, Restaurant } from "@/entities/restaurant";
 
 export const Route = createFileRoute("/_login/signup")({
   component: Login,
@@ -92,9 +98,14 @@ function Login() {
   const [currentStep, setCurrentStep] = useState<1 | 2>(1);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [psswd, setPsswd] = useState("");
+  const [id_usr, setId_usr] = useState("");
+  const [email_usr, setEmail_usr] = useState("");
+  const [toUpdate, setToUpdate] = useState(true);
 
   const roleContext = useRole();
-  console.log(`role: ${roleContext.role}`);
+  const { token, login, logout } = useAuth();
+  const navigate = Route.useNavigate();
 
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
@@ -111,86 +122,164 @@ function Login() {
     },
   });
 
+  // Register un user avec role client forcé
+  // login le user avec le token
+  // update le user avec bon role
+  // créer un restaurant
+  // navigate vers le restaurant
+
+  const userMutation = useMutation({
+    mutationFn: async (user: User) => {
+      return (await axiosInstance(token as string).post("/user/register", user))
+        .data as User;
+    },
+    onSuccess(data) {
+      console.log("success", data);
+      setId_usr(data.id as string);
+      setEmail_usr(data.email as string);
+      console.log(data.email);
+      console.log(data.password);
+      console.log("User créé !");
+      toast.success("User créé !");
+      loginMutation.mutateAsync({
+        email: data.email as string,
+        password: psswd,
+      });
+    },
+    onError(error) {
+      console.log("error", error);
+      toast.error("Erreur lors de la création de la commande");
+    },
+  });
+
+  const loginMutation = useMutation({
+    mutationFn: async (loginData: { email: string; password: string }) => {
+      const response = await axiosInstance().post("/user/login", loginData);
+      return response.data as LoginResponse;
+    },
+    onSuccess: (data) => {
+      console.log("User est logged !");
+      console.log(data);
+      login(data.access_token);
+      if (roleContext.role === RoleEnum.RESTAURATEUR && toUpdate) {
+        updateUserToRestaurateurMutation.mutate({
+          id_user: id_usr,
+          role: roleContext.role,
+        });
+      } else if (roleContext.role === RoleEnum.DELIVERYMAN && toUpdate) {
+        updateUserToLivreurMutation.mutate({
+          id_user: id_usr,
+          role: roleContext.role,
+        });
+      }
+    },
+    onError: (err) => {
+      console.log("Failed", err);
+    },
+  });
+
+  const updateUserToRestaurateurMutation = useMutation({
+    mutationFn: ({ id_user, role }: UpdateRoleUser) => {
+      console.log("attempting to update user");
+      console.log(token);
+      return axiosInstance(token as string).patch(`user/${id_user}`, {
+        role,
+      });
+    },
+    onSuccess(data) {
+      console.log("success", data);
+      setToUpdate(false);
+      logout;
+      loginMutation
+        .mutateAsync({
+          email: email_usr,
+          password: psswd,
+        })
+        .then(() => {
+          createRestaurantMutation.mutate({
+            address: "test",
+            banner_url: "",
+            business_hours: "",
+            city: "",
+            email: "",
+            food_type: "",
+            siret: "",
+            name: "",
+            postal_code: "",
+            price_range: "",
+            rating: 0.0,
+          });
+        });
+    },
+    onError(error) {
+      console.log("error", error);
+      toast.error("Erreur lors de la mise à jour de l'utilisateur");
+      //   toast.success("Votre profil a été mis à jour !");
+    },
+  });
+
+  const updateUserToLivreurMutation = useMutation({
+    mutationFn: ({ id_user, role }: UpdateRoleUser) => {
+      console.log("attempting to update user");
+      console.log(token);
+      return axiosInstance(token as string).patch(`user/${id_user}`, {
+        role,
+      });
+    },
+    onSuccess(data) {
+      console.log("success", data);
+      setToUpdate(false);
+      logout;
+      loginMutation.mutateAsync({
+        email: email_usr,
+        password: psswd,
+      });
+    },
+    onError(error) {
+      console.log("error", error);
+      toast.error("Erreur lors de la mise à jour de l'utilisateur");
+      //   toast.success("Votre profil a été mis à jour !");
+    },
+  });
+
+  const createRestaurantMutation = useMutation({
+    mutationFn: async (restaurantData: CreateEmptyRestaurant) => {
+      return (
+        await axiosInstance(token as string).post("/restaurant", restaurantData)
+      ).data as Restaurant;
+    },
+    onSuccess(data) {
+      console.log("success", data);
+      toast.success("Restaurant créé !");
+      navigate({
+        to: "/restaurant/$id",
+        params: { id: data.id_restaurant },
+      });
+    },
+    onError(error) {
+      console.log("error", error);
+      toast.error("Erreur lors de la création de la commande");
+    },
+  });
   const onSubmit = async (values: z.infer<typeof signupSchema>) => {
     console.log(values);
-    // hash the password
     const hash = sha256(values.password);
+    setPsswd(hash);
+    userMutation.mutateAsync({
+      first_name: values.firstName,
+      last_name: values.lastName,
+      birthday:
+        values.birthDay + "-" + values.birthMonth + "-" + values.birthYear,
+      phone: values.phone,
+      email: values.email,
+      password: hash,
+      role: roleContext.role as RoleEnum,
+      created_at: new Date(),
+      edited_at: new Date(),
+      id_users: [],
+    });
+
     console.log(hash);
-    axiosInstance()
-      .post("user/register", {
-        first_name: values.firstName,
-        last_name: values.lastName,
-        birthday:
-          values.birthDay + "-" + values.birthMonth + "-" + values.birthYear,
-        phone: values.phone,
-        email: values.email,
-        password: hash,
-        postal_code: "",
-        city: "",
-        address: "",
-        role: roleContext.role,
-        created_at: new Date().toISOString(),
-        edited_at: new Date().toISOString(),
-        // id_restaurant: "",
-        id_users: [],
-      })
-      .then((res) => {
-        const id = res.data.id;
-        console.log("Insertion réussie");
-        console.log(`user inséré ${id}`);
-        console.log(res.data);
-        if (roleContext.role === RoleEnum.RESTAURATEUR) {
-          axiosInstance()
-            .post("/restaurant", {
-              name: values.firstName,
-              siret: values.siret,
-              email: values.email,
-              food_type: "",
-              price_range: "",
-              address: "",
-              postal_code: "",
-              city: "omg c un test",
-              rating: 0.0,
-              banner_url: "",
-              business_hours: "",
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            })
-            .then((res) => {
-              console.log("Insertion réussie");
-              console.log(`restaurant inséré ${id}`);
-              console.log(res.data);
-              axiosInstance()
-                .patch("/user/", {
-                  where: {
-                    id: id,
-                  },
-                  data: {
-                    id_restaurant: res.data.id,
-                  },
-                })
-                .then((res) => {
-                  console.log("Update réussie");
-                  console.log(`user updated ${id}`);
-                  console.log(res.data);
-                })
-                .catch((err) => {
-                  console.log("Failed");
-                  console.log(err);
-                });
-              console.log(res);
-            })
-            .catch((err) => {
-              console.log("Failed");
-              console.log(err);
-            });
-        }
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log("Failed");
-        console.log(err);
-      });
   };
 
   const [isRadioDisabled, setIsRadioDisabled] = useState(
