@@ -9,12 +9,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { restaurateurContext } from "@/contexts/restaurateurContext";
 import { useAuth } from "@/hooks/useAuth";
 import { axiosInstance } from "@/lib/axiosConfig";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute } from "@tanstack/react-router";
 import { Save } from "lucide-react";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 export const Route = createFileRoute("/_restaurateur/menu/new")({
@@ -36,6 +39,8 @@ function NewMenu() {
   const { token } = useAuth();
   const navigate = Route.useNavigate();
 
+  const restaurateur = useContext(restaurateurContext);
+
   const form = useForm<z.infer<typeof menuSchema>>({
     resolver: zodResolver(menuSchema),
     defaultValues: {
@@ -53,16 +58,16 @@ function NewMenu() {
         price: values.price,
         description: values.description,
         menu_image_url: "",
-        id_restaurant: "6671ed6ebc8bbd71f1ad0285", // todo: dynamic
+        id_restaurant: restaurateur.restaurant.id_restaurant,
         ids_menu_category: [],
         ids_restaurant_category: [],
       })
       .then((res) => {
         console.log("Insertion réussie");
         console.log(res);
+        toast.success("Menu créé !");
         navigate({
-          to: "/menu/edit/$menuId",
-          params: { menuId: res.data.id_menu },
+          to: "/offerings",
         });
       })
       .catch((err) => {

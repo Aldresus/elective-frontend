@@ -15,6 +15,7 @@ function CreateProduct() {
   const [resetForm, setResetForm] = useState<boolean>(false);
   const restaurateur = useContext(restaurateurContext);
   const { token } = useAuth();
+  const navigate = Route.useNavigate();
 
   return (
     <div className="h-full w-full">
@@ -35,6 +36,9 @@ function CreateProduct() {
               console.log(res);
               setResetForm(true);
               toast.success("Le produit a été créé");
+              navigate({
+                to: "/offerings",
+              });
             })
             .catch((err) => {
               console.log("Failed");
