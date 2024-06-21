@@ -108,7 +108,7 @@ function UserComponent() {
       <div>
         <H2>Catégorie 2</H2>
         <div className="flex w-full gap-6 overflow-x-scroll">
-          {query.data?.slice(9, 15).map((restaurant) => (
+          {query.data?.map((restaurant) => (
             <Link
               to={`/restaurant/${restaurant.id_restaurant}`}
               key={restaurant.id_restaurant}

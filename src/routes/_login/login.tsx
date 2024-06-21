@@ -33,6 +33,7 @@ import { DecodedAccessToken, LoginResponse } from "@/entities/login";
 import { useAuth } from "@/hooks/useAuth";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { RoleEnum } from "@/entities/user";
+import { jwtDecode } from "jwt-decode";
 
 export const Route = createFileRoute("/_login/login")({
   component: Login,
@@ -76,8 +77,9 @@ function Login() {
       console.log("Insertion réussie");
       router.invalidate();
       auth.login(data.access_token);
-
-      if (user.role === RoleEnum.RESTAURATEUR) {
+      const token = jwtDecode(data.access_token) as DecodedAccessToken;
+      console.log("ROLE", user.role);
+      if (token.role === RoleEnum.RESTAURATEUR) {
         navigate({
           to: "/restaurateur",
         });

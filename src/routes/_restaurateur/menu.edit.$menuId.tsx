@@ -103,7 +103,6 @@ function MenuManager() {
   useQuery({
     queryKey: ["getMenuCategories", menuId],
     queryFn: async () => {
-
       const rawData = await axiosInstance(token).get(`/menu/${menuId}`);
 
       const finalData = (await rawData).data.Menu_Categories;
@@ -125,6 +124,7 @@ function MenuManager() {
 
   useQuery({
     queryKey: ["RestaurantProducts", restaurateur.restaurant.id_restaurant],
+    enabled: !!restaurateur.restaurant.id_restaurant,
     queryFn: async () => {
       const rawData = axiosInstance(token).get(
         `/product?id_restaurant=${restaurateur.restaurant.id_restaurant}`
@@ -147,6 +147,8 @@ function MenuManager() {
       return finalData;
     },
   });
+
+  console.log("ITEMSLIST", itemsList);
 
   const form = useForm<z.infer<typeof menuSchema>>({
     resolver: zodResolver(menuSchema),
