@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogTrigger,
   DialogPortal,
+  DialogClose,
 } from "../ui/dialog";
 import { Large } from "../typography";
 import { Route } from "@/routes/_user";
@@ -87,89 +88,103 @@ export default function Navbar({
               <Large>Informations du compte</Large>
 
               {user.role === RoleEnum.RESTAURATEUR && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-full flex flex-row justify-between"
-                  onClick={() => navigate({ to: "/commands" })}
-                >
-                  Commandes
-                  <ChevronRight size={24} />
-                </Button>
+                <DialogClose>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="w-full flex flex-row justify-between"
+                    onClick={() => navigate({ to: "/commands" })}
+                  >
+                    Commandes
+                    <ChevronRight size={24} />
+                  </Button>
+                </DialogClose>
               )}
               {user.role === RoleEnum.CLIENT && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-full flex flex-row justify-between"
-                  onClick={() => navigate({ to: "/delivery/history" })}
-                >
-                  Commandes
-                  <ChevronRight size={24} />
-                </Button>
+                <DialogClose>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="w-full flex flex-row justify-between"
+                    onClick={() => navigate({ to: "/delivery/history" })}
+                  >
+                    Commandes
+                    <ChevronRight size={24} />
+                  </Button>
+                </DialogClose>
               )}
 
               {user.role === RoleEnum.RESTAURATEUR && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-full flex flex-row justify-between"
-                  onClick={() => navigate({ to: `/offerings` })}
-                >
-                  Inventaire
-                  <ChevronRight size={24} />
-                </Button>
+                <DialogClose>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="w-full flex flex-row justify-between"
+                    onClick={() => navigate({ to: `/offerings` })}
+                  >
+                    Inventaire
+                    <ChevronRight size={24} />
+                  </Button>
+                </DialogClose>
               )}
 
               {user.role === RoleEnum.CLIENT && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-full flex flex-row justify-between"
-                  onClick={() => navigate({ to: `/editUser/${user.sub}` })}
-                >
-                  Parrainage
-                  <ChevronRight size={24} />
-                </Button>
+                <DialogClose>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="w-full flex flex-row justify-between"
+                    onClick={() => navigate({ to: `/editUser/${user.sub}` })}
+                  >
+                    Parrainage
+                    <ChevronRight size={24} />
+                  </Button>
+                </DialogClose>
               )}
 
               {user.role === RoleEnum.RESTAURATEUR && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-full flex flex-row justify-between"
-                  onClick={() =>
-                    navigate({
-                      to: `/restaurant/edit/${restaurateur.restaurant.id_restaurant}`,
-                    })
-                  }
-                >
-                  Paramètres du compte
-                  <ChevronRight size={24} />
-                </Button>
+                <DialogClose>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="w-full flex flex-row justify-between"
+                    onClick={() =>
+                      navigate({
+                        to: `/restaurant/edit/${restaurateur.restaurant.id_restaurant}`,
+                      })
+                    }
+                  >
+                    Paramètres du compte
+                    <ChevronRight size={24} />
+                  </Button>
+                </DialogClose>
               )}
 
               {user.role === RoleEnum.CLIENT && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-full flex flex-row justify-between"
-                  onClick={() => navigate({ to: `/editUser/${user.sub}` })}
-                >
-                  Paramètres du compte
-                  <ChevronRight size={24} />
-                </Button>
+                <DialogClose>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="w-full flex flex-row justify-between"
+                    onClick={() => navigate({ to: `/editUser/${user.sub}` })}
+                  >
+                    Paramètres du compte
+                    <ChevronRight size={24} />
+                  </Button>
+                </DialogClose>
               )}
 
               {auth.isAuthenticated && (
-                <Button
-                  type="button"
-                  className="mt-4 w-full"
-                  variant="destructive"
-                  onClick={() => auth.logout()}
-                >
-                  Déconnexion
-                </Button>
+                <DialogClose>
+                  <Button
+                    type="button"
+                    className="mt-4 w-full"
+                    variant="destructive"
+                    onClick={() => auth.logout()}
+                  >
+                    Déconnexion
+                  </Button>
+                </DialogClose>
               )}
             </DialogContent>
           </DialogPortal>

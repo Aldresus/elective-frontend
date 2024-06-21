@@ -83,6 +83,14 @@ function Login() {
         navigate({
           to: "/restaurateur",
         });
+      } else if (token.role === RoleEnum.COMMERCIAL) {
+        navigate({
+          to: "/sales",
+        });
+      } else if (token.role === RoleEnum.TECHNICIAN) {
+        navigate({
+          to: "/logs",
+        });
       } else {
         navigate({
           to: "/user",

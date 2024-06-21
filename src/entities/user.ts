@@ -27,7 +27,7 @@ export interface UpdateUser {
 }
 
 export enum RoleEnum {
-  USER = "USER",
+  COMMERCIAL = "COMMERCIAL",
   ADMIN = "ADMIN",
   RESTAURATEUR = "RESTAURATEUR",
   DELIVERYMAN = "DELIVERYMAN",
